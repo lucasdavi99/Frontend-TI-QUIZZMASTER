@@ -3,7 +3,7 @@ body {
     padding: 0;
   }
 
-  .container-terminal{
+  .container-terminal {
     display: flex;
   }
   
@@ -21,7 +21,7 @@ body {
     
 
 
-  .pergunta{
+  .pergunta {
     color: #00D300;
     text-align: center;
     font-size: 30px;
@@ -33,12 +33,12 @@ body {
   .grid-container {
     display: grid;
     position: absolute;
-    align-content: end;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
     grid-gap: 50px;
-    top: 60%;
-    left: 40%;
   }
     
   
@@ -51,7 +51,7 @@ body {
     font-family: 'Press Start 2P', cursive;
   }
 
-  .box:hover{
+  .box:hover { 
     background-color: #00D300;
       color: aliceblue;
   }
