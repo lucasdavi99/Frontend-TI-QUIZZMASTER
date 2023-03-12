@@ -1,0 +1,13 @@
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  canvas {
+    background: black;
+    display: block;
+    position: absolute;
+    z-index: -1;
+  }
