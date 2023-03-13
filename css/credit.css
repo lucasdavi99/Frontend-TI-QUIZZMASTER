@@ -1,0 +1,49 @@
+body {
+  background-color: #000000;
+  overflow: hidden;
+ }
+ .wrapper {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 600px;
+  margin-left: -300px;
+  font-family: Abadi MT Condensed;
+  text-align: center;
+  color: #fff;
+  animation: 80s credits linear infinite;
+  animation-delay: 1s;
+ }
+ .video_title {
+  margin-bottom: 50px;
+  font-size: 80px;
+  text-shadow: 2px 2px #878787;
+  letter-spacing: 0px;
+  
+  text-decoration: none;
+ }
+ .job_title {
+  margin-bottom: 5px;
+  font-size: 30px;
+  text-shadow: 2px 2px #878787;
+ }
+ .person_name {
+  margin-bottom: 50px;
+  font-size: 50px;
+  font-variant:small-caps;
+  text-shadow: 2px 2px #878787;
+ }
+ @keyframes credits {
+  0% {
+  top: 100%;
+  }
+  100% {
+  top: -500%;
+  }
+ }
+
+ #back-home{
+  display: none;
+  text-decoration: none;
+  color: white;
+ }
