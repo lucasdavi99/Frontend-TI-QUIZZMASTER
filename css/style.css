@@ -4,13 +4,14 @@
   }
   
   #titulo{
+    position: absolute;
     font-family: 'Rubik Glitch';
+    width: 50rem;
+    text-align: center;
     font-style: normal;
     font-weight: 400;
     font-size: 96px;
-    line-height: 114px;
-    text-align: center;
-    padding-bottom: 600px;
+    top: 1%;
     color: #00D300;
     }
 
