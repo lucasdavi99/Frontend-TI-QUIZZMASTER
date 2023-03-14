@@ -42,3 +42,9 @@
    transform: scale(1.20);
    background-color: #00D300;
  }
+
+ #login{
+  top: 10%;
+  left: 5%; 
+  position: fixed;
+ }

@@ -50,9 +50,8 @@ body {
   background-color: black;
   border: #00D300 2px solid;
   font-family: 'Press Start 2P', cursive;
-  transition: transform 0.5s ease-in-out;
 }
-
+  
 .box:hover {
   color: aliceblue;
   transform: scale(1.20);
