@@ -1,52 +1,44 @@
  body {
-    margin: 0;
-    padding: 0;
-  }
-  
-  #titulo{
-    position: absolute;
-    font-family: 'Rubik Glitch';
-    width: 50rem;
-    text-align: center;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 96px;
-    top: 1%;
-    color: #00D300;
-    }
+   margin: 0;
+   padding: 0;
+ }
 
-    .botao{
-      display: flex;
-      position: absolute;
-      flex-direction: column;
-      top: 50%;
-      left: 41%;
-    }
-      
-    
-    .btn{
-      margin: 30px;
-      text-decoration: none;
-      text-align: center;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 20px;
-      color: #00D300;
-      background-color: black;
-      border: #00D300 5px solid;
-      padding: 16px 64px;
-    }
+ #titulo {
+   top: 1%;
+   width: 50rem;
+   font-size: 96px;
+   font-weight: 400;
+   color: #00D300;
+   position: absolute;
+   text-align: center;
+   font-style: normal;
+   font-family: 'Rubik Glitch';
+ }
 
-    .btn:hover{
-      background-color: #00D300;
-      color: aliceblue;
-    }
-      
+ .botao {
+   top: 50%;
+   left: 41%;
+   display: flex;
+   position: absolute;
+   flex-direction: column;
+ }
 
-      
-        
-        
 
-      
-    
-  
-  
+ .btn {
+   margin: 30px;
+   font-size: 20px;
+   color: #00D300;
+   text-align: center;
+   padding: 16px 64px;
+   text-decoration: none;
+   background-color: black;
+   border: #00D300 5px solid;
+   font-family: 'Press Start 2P', cursive;
+   transition: transform 0.5s ease-in-out;
+ }
+
+ .btn:hover {
+   color: aliceblue;
+   transform: scale(1.20);
+   background-color: #00D300;
+ }
