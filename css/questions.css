@@ -3,32 +3,40 @@ body {
   padding: 0;
 }
 
+@media screen and (max-width:449px){
+
 .container-terminal {
   display: flex;
+
 }
 
 .terminal {
-  top: 30%;
-  left: 50%;
-  width: 115vh;
-  height: 50vh;
-  color: #00D300;
-  user-select: none;
-  position: absolute;
-  background-color: black;
-  border: #00D300 5px solid;
-  transform: translate(-50%, -50%);
+  max-width: 600px;
+    left: 50%;
+    top: 11%;
+    width: 80%;
+    height: 30%;
+    color: #00D300;
+    user-select: none;
+    position: absolute;
+    background-color: black;
+    border: #00D300 5px solid;
+    padding-top: 15px;
+    transform: translateX(-50%)
+
+  
 }
 
 
 
 .pergunta {
-  font-size: 30px;
-  color: #00D300;
-  text-align: center;
-  padding-top: 150px;
-  font-family: 'Press Start 2P', cursive;
+  margin: 65px;
+    text-align: center;
+    font-size: 90%;
+    color: #00D300;
+    font-family: 'Press Start 2P', cursive;
 }
+
 
 .grid-container {
   top: 70%;
@@ -50,11 +58,165 @@ body {
   background-color: black;
   border: #00D300 2px solid;
   font-family: 'Press Start 2P', cursive;
-  transition: transform 0.5s ease-in-out;
 }
-
+  
 .box:hover {
   color: aliceblue;
   transform: scale(1.20);
   background-color: #00D300;
+}
+
+}
+
+@media screen and (min-width: 450px) {
+  .terminal {
+    max-width: 600px;
+    left: 50%;
+    top: 11%;
+    width: 80%;
+    height: 30%;
+    color: #00D300;
+    user-select: none;
+    position: absolute;
+    background-color: black;
+    border: #00D300 5px solid;
+    padding-top: 15px;
+    transform: translateX(-50%);
+  }
+  
+  
+  
+  .pergunta {
+    margin: 80px;
+    text-align: center;
+    font-size: 130%;
+    color: #00D300;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .grid-container {
+    top: 70%;
+    left: 50%;
+    display: grid;
+    grid-gap: 50px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .box {
+    padding: 20px;
+    cursor: pointer;
+    color: #00D300;
+    user-select: none;
+    text-align: center;
+    background-color: black;
+    border: #00D300 2px solid;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .grid-container {
+    top: 70%;
+    left: 50%;
+    display: grid;
+    grid-gap: 50px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .box {
+    padding: 20px;
+    cursor: pointer;
+    color: #00D300;
+    user-select: none;
+    text-align: center;
+    background-color: black;
+    border: #00D300 2px solid;
+    font-family: 'Press Start 2P', cursive;
+  }
+    
+  .box:hover {
+    color: aliceblue;
+    transform: scale(1.20);
+    background-color: #00D300;
+  }
+}
+
+@media screen and (min-width: 1028) {
+  .terminal {
+    left: 50%;
+    top: 9%;
+    width: 80%;
+    height: 30%;
+    color: #00D300;
+    user-select: none;
+    position: absolute;
+    background-color: black;
+    border: #00D300 5px solid;
+    padding-top: 15px;
+    transform: translateX(-50%);
+  }
+  
+  
+  
+  .pergunta {
+    margin: 80px;
+    text-align: center;
+    font-size: 16px;
+    color: #00D300;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .grid-container {
+    top: 70%;
+    left: 50%;
+    display: grid;
+    grid-gap: 50px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .box {
+    padding: 20px;
+    cursor: pointer;
+    color: #00D300;
+    user-select: none;
+    text-align: center;
+    background-color: black;
+    border: #00D300 2px solid;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .grid-container {
+    top: 70%;
+    left: 50%;
+    display: grid;
+    grid-gap: 50px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .box {
+    padding: 20px;
+    cursor: pointer;
+    color: #00D300;
+    user-select: none;
+    text-align: center;
+    background-color: black;
+    border: #00D300 2px solid;
+    font-family: 'Press Start 2P', cursive;
+  }
+    
+  .box:hover {
+    color: aliceblue;
+    transform: scale(1.20);
+    background-color: #00D300;
+  }
 }

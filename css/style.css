@@ -9,7 +9,6 @@ body {
 
   #titulo {
 
-
     font-size: 40px;
     font-weight: 400;
     color: #00D300;
@@ -31,7 +30,6 @@ body {
   }
 
   .botao {
-
     display: flex;
     position: absolute;
     flex-direction: column;
@@ -62,7 +60,6 @@ body {
 
 @media screen and (min-width: 450px) {
   #titulo {
-
     font-size: 60px;
     font-weight: 400;
     color: #00D300;
@@ -78,7 +75,6 @@ body {
   }
 
   .botao {
-
     display: flex;
     position: absolute;
     flex-direction: column;
@@ -112,8 +108,8 @@ body {
   .botao {
     justify-content: center;
     display: flex;
-    top: 55%;
 
+    top: 55%;
 
   }
 }

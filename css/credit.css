@@ -1,35 +1,35 @@
 body {
-  background-color: #000000;
   overflow: hidden;
+  background-color: #000000;
  }
  .wrapper {
+   top: 100%;
+   left: 50%;
+   width: 600px;
+   color: #fff;
   position: absolute;
-  top: 100%;
-  left: 50%;
-  width: 600px;
-  margin-left: -300px;
-  font-family: Abadi MT Condensed;
   text-align: center;
-  color: #fff;
-  animation: 80s credits linear infinite;
+  margin-left: -300px;
   animation-delay: 1s;
+  font-family: Abadi MT Condensed;
+  animation: 80s credits linear infinite;
  }
  .video_title {
+   font-size: 80px;
   margin-bottom: 50px;
-  font-size: 80px;
-  text-shadow: 2px 2px #878787;
   letter-spacing: 0px;
-  
   text-decoration: none;
- }
+  text-shadow: 2px 2px #878787;
+}
+  
  .job_title {
+   font-size: 30px;
   margin-bottom: 5px;
-  font-size: 30px;
   text-shadow: 2px 2px #878787;
  }
  .person_name {
+   font-size: 50px;
   margin-bottom: 50px;
-  font-size: 50px;
   font-variant:small-caps;
   text-shadow: 2px 2px #878787;
  }
@@ -44,6 +44,6 @@ body {
 
  #back-home{
   display: none;
-  text-decoration: none;
   color: white;
+  text-decoration: none;
  }
