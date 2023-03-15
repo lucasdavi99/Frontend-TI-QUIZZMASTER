@@ -1,0 +1,43 @@
+body {
+    font-family: 'Press Start 2P', cursive;
+    padding: 0;
+    margin: 0;
+    user-select: none;
+  }
+
+  h1 {
+    top: 10%;
+    left: 30%;
+    position: absolute;
+    color: #00D300;
+    font-size: 36px;
+    letter-spacing: 4px;
+  }
+
+  table {
+    position: absolute;
+    top: 25%;
+    left: 32%;
+    border-collapse: collapse;
+  }
+
+  th {
+    font-size: 24px;
+    padding: 10px;
+    background-color: black;
+    color: #00D300;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    border: #00D300 2px solid;
+  }
+
+  td {
+    color: #00D300;
+    font-size: 18px;
+    padding: 10px;
+    border: 2px solid #00D300;
+  }
+
+  tr{
+    background-color: black;
+  }
