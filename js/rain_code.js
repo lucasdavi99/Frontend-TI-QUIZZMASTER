@@ -75,7 +75,7 @@ texty.set({
   speed: 120
 });
 texty.start();
-texty.reveal(50000);
+texty.reveal(2000);
 
 
 
