@@ -3,15 +3,22 @@ body {
   padding: 0;
 }
 
-@media screen and (max-width:449px){
+@media screen and (max-width:449px) {
 
-.container-terminal {
-  display: flex;
+  #back-home2 {
+    top: 1%;
+    left: 3%;
+    transform: scale(65%);
+    position: absolute;
+  }
+  
+  .container-terminal {
+    display: flex;
 
-}
+  }
 
-.terminal {
-  max-width: 600px;
+  .terminal {
+    max-width: 600px;
     left: 50%;
     top: 11%;
     width: 80%;
@@ -23,52 +30,56 @@ body {
     border: #00D300 5px solid;
     padding-top: 15px;
     transform: translateX(-50%)
-
-  
-}
+  }
 
 
 
-.pergunta {
-  margin: 65px;
+  .pergunta {
+    margin: 65px;
     text-align: center;
     font-size: 90%;
     color: #00D300;
     font-family: 'Press Start 2P', cursive;
-}
+  }
 
 
-.grid-container {
-  top: 70%;
-  left: 50%;
-  display: grid;
-  grid-gap: 50px;
-  position: absolute;
-  transform: translate(-50%, -50%);
-  grid-template-rows: repeat(2, 1fr);
-  grid-template-columns: repeat(2, 1fr);
-}
+  .grid-container {
+    top: 70%;
+    left: 50%;
+    display: grid;
+    grid-gap: 50px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-.box {
-  padding: 20px;
-  cursor: pointer;
-  color: #00D300;
-  user-select: none;
-  text-align: center;
-  background-color: black;
-  border: #00D300 2px solid;
-  font-family: 'Press Start 2P', cursive;
-}
-  
-.box:hover {
-  color: aliceblue;
-  transform: scale(1.20);
-  background-color: #00D300;
-}
+  .box {
+    padding: 20px;
+    cursor: pointer;
+    color: #00D300;
+    user-select: none;
+    text-align: center;
+    background-color: black;
+    border: #00D300 2px solid;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .box:hover {
+    color: aliceblue;
+    transform: scale(1.20);
+    background-color: #00D300;
+  }
 
 }
 
 @media screen and (min-width: 450px) {
+  #back-home2 {
+    position: absolute;
+    top: 5%;
+    left: 2%;
+  }
+  
   .terminal {
     max-width: 600px;
     left: 50%;
@@ -83,9 +94,7 @@ body {
     padding-top: 15px;
     transform: translateX(-50%);
   }
-  
-  
-  
+
   .pergunta {
     margin: 80px;
     text-align: center;
@@ -104,7 +113,7 @@ body {
     grid-template-rows: repeat(2, 1fr);
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .box {
     padding: 20px;
     cursor: pointer;
@@ -126,7 +135,7 @@ body {
     grid-template-rows: repeat(2, 1fr);
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .box {
     padding: 20px;
     cursor: pointer;
@@ -137,7 +146,7 @@ body {
     border: #00D300 2px solid;
     font-family: 'Press Start 2P', cursive;
   }
-    
+
   .box:hover {
     color: aliceblue;
     transform: scale(1.20);
@@ -146,6 +155,11 @@ body {
 }
 
 @media screen and (min-width: 1028) {
+  #back-home2 {
+    position: absolute;
+    top: 1%;
+  }
+
   .terminal {
     left: 50%;
     top: 9%;
@@ -159,9 +173,9 @@ body {
     padding-top: 15px;
     transform: translateX(-50%);
   }
-  
-  
-  
+
+
+
   .pergunta {
     margin: 80px;
     text-align: center;
@@ -180,7 +194,7 @@ body {
     grid-template-rows: repeat(2, 1fr);
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .box {
     padding: 20px;
     cursor: pointer;
@@ -202,7 +216,7 @@ body {
     grid-template-rows: repeat(2, 1fr);
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .box {
     padding: 20px;
     cursor: pointer;
@@ -213,7 +227,7 @@ body {
     border: #00D300 2px solid;
     font-family: 'Press Start 2P', cursive;
   }
-    
+
   .box:hover {
     color: aliceblue;
     transform: scale(1.20);

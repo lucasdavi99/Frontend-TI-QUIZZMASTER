@@ -1,40 +1,42 @@
 body {
-    font-family: 'Press Start 2P', cursive;
-    padding: 0;
-    margin: 0;
-    user-select: none;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  font-family: 'Press Start 2P', cursive;
   }
 
   h1 {
     top: 10%;
     left: 30%;
-    position: absolute;
-    color: #00D300;
     font-size: 36px;
+    color: #00D300;
+    position: absolute;
     letter-spacing: 4px;
   }
 
   table {
-    position: absolute;
     top: 25%;
-    left: 32%;
+    left: 2%;
+    width: 190vh;
+    text-align: center;
+    position: absolute;
     border-collapse: collapse;
   }
 
   th {
-    font-size: 24px;
     padding: 10px;
-    background-color: black;
+    font-size: 24px;
     color: #00D300;
-    text-transform: uppercase;
     letter-spacing: 4px;
+    background-color: black;
+    text-transform: uppercase;
     border: #00D300 2px solid;
   }
 
   td {
-    color: #00D300;
-    font-size: 18px;
     padding: 10px;
+    font-size: 18px;
+    color: #00D300;
     border: 2px solid #00D300;
   }
 

@@ -39,10 +39,11 @@ canvas {
     width: 400px;
     height: 500px;
     opacity: 8;
-    box-shadow: 0 0 50px #0ef;
+    box-shadow: 0 0 50px #00D300;
     border-radius: 20px;
     padding: 40px;
     overflow: hidden;
+    backdrop-filter: blur(10px);
 }
 
 .wrapper:hover {
@@ -128,15 +129,15 @@ h2 {
 }
 
 .remember label input {
-    accent-color: #0ef;
+    accent-color: #00D300;
 }
 
 button {
     position: relative;
     width: 100%;
     height: 40px;
-    background: #0ef;
-    box-shadow: 0 0 10px #0ef;
+    background: #00D300;
+    box-shadow: 0 0 10px #00D300;
     font-size: 16px;
     color: #000;
     font-weight: 500;
@@ -157,7 +158,7 @@ button {
 }
 
 .signUp-link p a {
-    color: #0ef;
+    color: #00D300;
     text-decoration: none;
     font-weight: 500;
 }
