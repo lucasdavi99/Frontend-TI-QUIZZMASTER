@@ -1,0 +1,24 @@
+[  {    "pergunta": "Qual é a linguagem de programação mais popular?",    "respostas": [      "Java",      "Python",      "JavaScript",      "C#"    ],
+    "resposta_correta": 2
+  },
+  {
+    "pergunta": "Qual é o comando usado para imprimir uma mensagem no console do navegador em JavaScript?",
+    "respostas": [
+      "alert()",
+      "console.log()",
+      "document.write()",
+      "prompt()"
+    ],
+    "resposta_correta": 1
+  },
+  {
+    "pergunta": "O que é CSS?",
+    "respostas": [
+      "Uma linguagem de programação",
+      "Um protocolo de rede",
+      "Um formato de arquivo",
+      "Uma linguagem de estilo"
+    ],
+    "resposta_correta": 3
+  }
+]
