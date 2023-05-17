@@ -8,6 +8,6 @@
   canvas {
     background: black;
     display: block;
-    position: absolute;
+    position: fixed;
     z-index: -1;
   }

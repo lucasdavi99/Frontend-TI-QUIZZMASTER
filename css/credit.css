@@ -1,49 +1,74 @@
 body {
   overflow: hidden;
   background-color: #000000;
- }
- .wrapper {
-   top: 100%;
-   left: 50%;
-   width: 600px;
-   color: #fff;
+}
+.wrapper {
+  top: 100%;
+  left: 50%;
+  width: 600px;
+  color: #fff;
   position: absolute;
   text-align: center;
   margin-left: -300px;
   animation-delay: 1s;
   font-family: Abadi MT Condensed;
   animation: 80s credits linear infinite;
- }
- .video_title {
-   font-size: 80px;
+}
+.video_title {
+  font-size: 80px;
   margin-bottom: 50px;
   letter-spacing: 0px;
   text-decoration: none;
   text-shadow: 2px 2px #878787;
 }
-  
- .job_title {
-   font-size: 30px;
+
+.job_title {
+  font-size: 30px;
   margin-bottom: 5px;
   text-shadow: 2px 2px #878787;
- }
- .person_name {
-   font-size: 50px;
+}
+.person_name {
+  font-size: 50px;
   margin-bottom: 50px;
-  font-variant:small-caps;
+  font-variant: small-caps;
   text-shadow: 2px 2px #878787;
- }
- @keyframes credits {
+}
+@keyframes credits {
   0% {
-  top: 100%;
+    top: 100%;
   }
   100% {
-  top: -500%;
+    top: -500%;
   }
- }
+}
 
- #back-home{
+#back-home {
   display: none;
   color: white;
+  position: fixed;
   text-decoration: none;
- }
+}
+
+/*          Responsive            */
+
+@media (max-width: 600px) {
+  body {
+    overflow: hidden;
+    background-color: #000000;
+  }
+  
+  .wrapper {
+    width: 100%;
+    left: 0;
+    margin-left: 0;
+    padding: 0 20px; /* Ajuste o valor conforme necessário */
+  }
+
+  .video_title{
+    font-size: 50px;
+  }
+
+  #back-home{
+    right: 70%;
+  }
+}
