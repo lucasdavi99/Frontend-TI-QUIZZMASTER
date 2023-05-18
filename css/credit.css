@@ -59,9 +59,10 @@ body {
   
   .wrapper {
     width: 100%;
-    left: 0;
-    margin-left: 0;
-    padding: 0 20px; /* Ajuste o valor conforme necessário */
+    left: 77%;
+    position: fixed;
+    
+    
   }
 
   .video_title{
@@ -69,6 +70,6 @@ body {
   }
 
   #back-home{
-    right: 70%;
+    right: 78%;
   }
 }
