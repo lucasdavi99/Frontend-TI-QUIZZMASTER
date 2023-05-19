@@ -17,7 +17,7 @@
       "Um tipo de loop que é usado para iterar sobre um conjunto de valores",
       "Uma forma de representar informações de forma organizada e acessível em um programa"
     ],
-    "resposta_correta": "ma estrutura de dados que armazena um conjunto de valores do mesmo tipo"
+    "resposta_correta": "Uma estrutura de dados que armazena um conjunto de valores do mesmo tipo"
   },
   {
     "pergunta": "O que é uma recursão em programação?",
@@ -97,7 +97,7 @@
       "Uma tag que é fechada automaticamente pelo navegador",
       "Uma tag que é usada para criar um espaço em branco em uma página web"
     ],
-    "resposta_correta": "ma tag que não tem conteúdo entre suas aberturas e fechamentos"
+    "resposta_correta": "Uma tag que não tem conteúdo entre suas aberturas e fechamentos"
   },
   {
     "pergunta": "Qual é a diferença entre 'display: none;' e 'visibility: hidden;' em CSS?",
