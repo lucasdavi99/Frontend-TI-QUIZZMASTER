@@ -41,18 +41,19 @@ fetch('js/arquivo.json')
       } else {
         console.log('Resposta incorreta! Você errou!');
         console.log('Você não é inteligente!');
-        alert('Sua pontuação foi ' + pontuacao);
+        showModal('Sua pontuação foi ' + pontuacao);
     
         // Redireciona o usuário para a página index.html após ele errar uma resposta
         window.location.href = "index.html";
         return;
       }
     
+      
       if (currentQuestionIndex < totalQuestions) {
         showQuestion(currentQuestionIndex);
       } else {
         console.log('Fim do questionário. Parabéns!');
-        alert('Sua pontuação foi ' + pontuacao);
+        showModal('Sua pontuação foi ' + pontuacao);
         // Ou exibir a mensagem de fim do questionário em um elemento HTML
       }
     }

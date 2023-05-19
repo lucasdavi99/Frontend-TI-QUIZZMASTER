@@ -248,5 +248,15 @@
       "Corre que é demonio"
     ],
     "resposta_correta": "Pressionar simultaneamente as teclas Ctrl + Alt + Del para abrir o Gerenciador de Tarefas e encerrar os processos em execução"
+  },
+  {
+    "pergunta": "Quando aparece a tela azul de erro do windows, qual é o problema?",
+    "respostas": [
+      "ERROR: 200",
+      "ERROR: 400",
+      "NullPointerException",
+      "Erro no kernel"
+    ],
+    "resposta_correta": "Erro no kernel"
   }
 ]
