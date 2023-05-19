@@ -51,7 +51,7 @@ body {
 
 /*          Responsive            */
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   body {
     overflow: hidden;
     background-color: #000000;
@@ -59,7 +59,7 @@ body {
   
   .wrapper {
     width: 100%;
-    left: 77%;
+    left: 73%;
     position: fixed;
     
     

@@ -9,7 +9,7 @@ body {
 
   #titulo {
 
-    font-size: 40px;
+    font-size: 52px;
     font-weight: 400;
     color: #00D300;
     display: flex;
@@ -126,7 +126,6 @@ body {
     text-align: center;
     font-style: normal;
     font-family: 'Rubik Glitch';
-    ;
     margin-bottom: 50%;
   }
 

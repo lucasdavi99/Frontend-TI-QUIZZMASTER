@@ -3,18 +3,16 @@ body {
   padding: 0;
 }
 
-@media screen and (max-width:449px) {
-
+@media screen and (max-width: 449px) {
   #back-home2 {
     top: 1%;
     left: 3%;
     transform: scale(65%);
     position: absolute;
   }
-  
+
   .container-terminal {
     display: flex;
-
   }
 
   .terminal {
@@ -23,31 +21,31 @@ body {
     top: 11%;
     width: 80%;
     height: 30%;
-    color: #00D300;
+    line-height: 2;
+    color: #00d300;
+    padding-top: 15px;
     user-select: none;
     position: absolute;
     background-color: black;
-    border: #00D300 5px solid;
-    padding-top: 15px;
-    transform: translateX(-50%)
+    border: #00d300 5px solid;
+    transform: translateX(-50%);
   }
-
-
 
   .pergunta {
     margin: 65px;
     text-align: center;
     font-size: 90%;
-    color: #00D300;
-    font-family: 'Press Start 2P', cursive;
+    color: #00d300;
+    line-height: 1.5;
+    font-family: "Press Start 2P", cursive;
   }
-
 
   .grid-container {
     top: 70%;
     left: 50%;
     display: grid;
     grid-gap: 50px;
+    line-height: 1.5;
     position: absolute;
     transform: translate(-50%, -50%);
     grid-template-rows: repeat(2, 1fr);
@@ -57,20 +55,21 @@ body {
   .box {
     padding: 20px;
     cursor: pointer;
-    color: #00D300;
+    color: #00d300;
     user-select: none;
     text-align: center;
+    justify-content: center;
     background-color: black;
-    border: #00D300 2px solid;
-    font-family: 'Press Start 2P', cursive;
+    border: #00d300 2px solid;
+    font-family: "Press Start 2P", cursive;
+    transition: transform 0.5s ease-in-out;
   }
 
   .box:hover {
     color: aliceblue;
-    transform: scale(1.20);
-    background-color: #00D300;
+    transform: scale(1.2);
+    background-color: #00d300;
   }
-
 }
 
 @media screen and (min-width: 450px) {
@@ -79,28 +78,34 @@ body {
     top: 5%;
     left: 2%;
   }
-  
+
+  .container-terminal {
+    display: flex;
+  }
+
   .terminal {
     max-width: 600px;
     left: 50%;
     top: 11%;
     width: 80%;
     height: 30%;
-    color: #00D300;
+    line-height: 2;
+    color: #00d300;
+    padding-top: 15px;
     user-select: none;
+    align-items: center;
     position: absolute;
     background-color: black;
-    border: #00D300 5px solid;
-    padding-top: 15px;
+    border: #00d300 5px solid;
     transform: translateX(-50%);
   }
 
   .pergunta {
     margin: 80px;
-    text-align: center;
     font-size: 130%;
-    color: #00D300;
-    font-family: 'Press Start 2P', cursive;
+    color: #00d300;
+    text-align: center;
+    font-family: "Press Start 2P", cursive;
   }
 
   .grid-container {
@@ -108,6 +113,7 @@ body {
     left: 50%;
     display: grid;
     grid-gap: 50px;
+    line-height: 1.5;
     position: absolute;
     transform: translate(-50%, -50%);
     grid-template-rows: repeat(2, 1fr);
@@ -117,40 +123,19 @@ body {
   .box {
     padding: 20px;
     cursor: pointer;
-    color: #00D300;
+    font-weight: 600;
+    color: #00d300;
     user-select: none;
     text-align: center;
     background-color: black;
-    border: #00D300 2px solid;
-    font-family: 'Press Start 2P', cursive;
-  }
-
-  .grid-container {
-    top: 70%;
-    left: 50%;
-    display: grid;
-    grid-gap: 50px;
-    position: absolute;
-    transform: translate(-50%, -50%);
-    grid-template-rows: repeat(2, 1fr);
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .box {
-    padding: 20px;
-    cursor: pointer;
-    color: #00D300;
-    user-select: none;
-    text-align: center;
-    background-color: black;
-    border: #00D300 2px solid;
-    font-family: 'Press Start 2P', cursive;
+    border: #00d300 2px solid;
+    font-family: "Press Start 2P", cursive;
   }
 
   .box:hover {
     color: aliceblue;
-    transform: scale(1.20);
-    background-color: #00D300;
+    transform: scale(1.2);
+    background-color: #00d300;
   }
 }
 
@@ -165,23 +150,46 @@ body {
     top: 9%;
     width: 80%;
     height: 30%;
-    color: #00D300;
+    line-height: 2;
+    color: #00d300;
     user-select: none;
     position: absolute;
     background-color: black;
-    border: #00D300 5px solid;
+    border: #00d300 5px solid;
     padding-top: 15px;
     transform: translateX(-50%);
   }
-
-
 
   .pergunta {
     margin: 80px;
     text-align: center;
     font-size: 16px;
-    color: #00D300;
-    font-family: 'Press Start 2P', cursive;
+    color: #00d300;
+    font-family: "Press Start 2P", cursive;
+    line-height: 1.5;
+  }
+
+  .grid-container {
+    top: 70%;
+    left: 50%;
+    display: grid;
+    grid-gap: 50px;
+    line-height: 1.5;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .box {
+    padding: 20px;
+    cursor: pointer;
+    color: #00d300;
+    user-select: none;
+    text-align: center;
+    background-color: black;
+    border: #00d300 2px solid;
+    font-family: "Press Start 2P", cursive;
   }
 
   .grid-container {
@@ -198,39 +206,17 @@ body {
   .box {
     padding: 20px;
     cursor: pointer;
-    color: #00D300;
+    color: #00d300;
     user-select: none;
     text-align: center;
     background-color: black;
-    border: #00D300 2px solid;
-    font-family: 'Press Start 2P', cursive;
-  }
-
-  .grid-container {
-    top: 70%;
-    left: 50%;
-    display: grid;
-    grid-gap: 50px;
-    position: absolute;
-    transform: translate(-50%, -50%);
-    grid-template-rows: repeat(2, 1fr);
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .box {
-    padding: 20px;
-    cursor: pointer;
-    color: #00D300;
-    user-select: none;
-    text-align: center;
-    background-color: black;
-    border: #00D300 2px solid;
-    font-family: 'Press Start 2P', cursive;
+    border: #00d300 2px solid;
+    font-family: "Press Start 2P", cursive;
   }
 
   .box:hover {
     color: aliceblue;
-    transform: scale(1.20);
-    background-color: #00D300;
+    transform: scale(1.2);
+    background-color: #00d300;
   }
 }
