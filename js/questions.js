@@ -30,10 +30,10 @@ fetch('js/arquivo.json')
     function handleAnswerSelection(userAnswer) {
       const question = shuffledQuestions[currentQuestionIndex];
       const correctAnswer = question.resposta_correta;
-    
+
       console.log("user = " + userAnswer);
       console.log("resposta certa = " + correctAnswer);
-    
+
       if (userAnswer === correctAnswer) {
         console.log('Resposta correta! Você acertou!');
         currentQuestionIndex++;
@@ -41,23 +41,18 @@ fetch('js/arquivo.json')
       } else {
         console.log('Resposta incorreta! Você errou!');
         console.log('Você não é inteligente!');
-        showModal('Sua pontuação foi ' + pontuacao);
-    
-        // Redireciona o usuário para a página index.html após ele errar uma resposta
-        window.location.href = "index.html";
-        return;
+        showModal('Sua pontuação foi ' + pontuacao + ' |||' +'  Resposta certa:' + correctAnswer);
+        currentQuestionIndex = 0; // Volta para a primeira questão se errar
       }
-    
-      
+
       if (currentQuestionIndex < totalQuestions) {
         showQuestion(currentQuestionIndex);
       } else {
         console.log('Fim do questionário. Parabéns!');
-        showModal('Sua pontuação foi ' + pontuacao);
+        showModal('Fim do questionário. Parabéns!' + '|||' + 'Sua pontuação foi ' + pontuacao);
         // Ou exibir a mensagem de fim do questionário em um elemento HTML
       }
     }
-    
 
     showQuestion(currentQuestionIndex);
 
