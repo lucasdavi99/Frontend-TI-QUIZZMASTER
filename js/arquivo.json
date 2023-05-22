@@ -102,12 +102,12 @@
   {
     "pergunta": "Qual é a diferença entre 'display: none;' e 'visibility: hidden;' em CSS?",
     "respostas": [
-      "'display: none;' esconde completamente o elemento da página, enquanto 'visibility: hidden;' apenas torna o elemento invisível, mas ainda ocupa espaço na página",
-      " display: none;   torna o elemento invisível, mas ainda ocupa espaço na página, enquanto   visibility: hidden;  esconde completamente o elemento da página",
+      "'display: none;' esconde o elemento, 'visibility: hidden;' torna invisível, mas ainda ocupa espaço.",
+      "'display: none;' ocupa espaço, tornando o elemento invisível, 'visibility: hidden;' esconde o elemento da página.",
       "Ambas as propriedades têm o mesmo efeito e podem ser usadas de forma intercambiável",
       "Nenhuma das alternativas"
     ],
-    "resposta_correta": "'display: none;' esconde completamente o elemento da página, enquanto 'visibility: hidden;' apenas torna o elemento invisível, mas ainda ocupa espaço na página"
+    "resposta_correta": "'display: none;' esconde o elemento, 'visibility: hidden;' torna invisível, mas ainda ocupa espaço."
   },
   {
     "pergunta": "O que é o modelo de caixa (box model) em CSS?",
@@ -120,7 +120,7 @@
     "resposta_correta": "Um modelo que define como as caixas que contêm o conteúdo são renderizadas em uma página web"
   },
   {
-    "pergunta": "Qual é a propriedade CSS usada para definir o espaçamento entre as bordas de um elemento e seu conteúdo?",
+    "pergunta": "Qual a propriedade CSS para espaçamento entre bordas e conteúdo?",
     "respostas": [
       "padding",
       "margin",
@@ -130,7 +130,7 @@
     "resposta_correta": "padding"
   },
   {
-    "pergunta": "Qual é a propriedade CSS usada para definir a posição de um elemento em relação à sua posição normal na página?",
+    "pergunta": "Qual a propriedade CSS para definir a posição ede um lemento na página?",
     "respostas": [
       "position",
       "top",
@@ -142,12 +142,12 @@
   {
     "pergunta": "Qual é a diferença entre 'inline' e 'block' em CSS?",
     "respostas": [
-      "Elementos com 'inline' são exibidos um após o outro em uma única linha, enquanto elementos com 'block' são exibidos em uma linha separada",
-      "Elementos com 'inline' são exibidos em uma linha separada, enquanto elementos com 'block' são exibidos um após o outro em uma única linha",
+      "'inline' é exibido um após o outro em uma única linha,'block' e exibido em uma linha separada",
+      "'inline' são exibidos em uma linha separada, 'block' são exibidos um após o outro em uma única linha",
       "'inline' e 'block' referem-se apenas à posição de um elemento na página e não afetam sua exibição",
       "Nenhuma das alternativas"
     ],
-    "resposta_correta": "Elementos com 'inline' são exibidos um após o outro em uma única linha, enquanto elementos com 'block' são exibidos em uma linha separada"
+    "resposta_correta": "'inline' é exibido um após o outro em uma única linha,'block' e exibido em uma linha separada"
   },
   {
     "pergunta": "Qual é a diferença entre let, const e var em JavaScript?",
@@ -230,7 +230,7 @@
     "resposta_correta": "Um serviço que permite acessar sites da internet por meio de nomes de domínio em vez de endereços IP"
   },
   {
-    "pergunta": "Qual é a linguagem de programação utilizada para desenvolver o kernel do sistema operacional Linux?",
+    "pergunta": "Qual linguagem é usada para desenvolver o kernel do Linux?",
     "respostas": [
       "C++",
       "Python",
@@ -240,7 +240,7 @@
     "resposta_correta": "C"
   },
   {
-    "pergunta": "Quais são as possíveis medidas a serem tomadas caso um computador trave?",
+    "pergunta": "O que fazer quando um PC travar?",
     "respostas": [
       "Pressionar simultaneamente as teclas Ctrl + Alt + Del para abrir o Gerenciador de Tarefas e encerrar os processos em execução",
       "Pressionar o botão de reset para reiniciar o computador",
