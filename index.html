@@ -1,46 +1,49 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/code_rain.css" />
+    <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik+Glitch&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <title>T.I QUIZZMASTER</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/code_rain.css">
-  <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik+Glitch&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <title>T.I QUIZZMASTER</title>
-</head>
+  <body>
+    <!------Rain Code-------->
+    <div class="container">
+      <h1 id="titulo">T.I QUIZZMASTER</h1>
+      <canvas id="canvas"></canvas>
+    </div>
 
-<body>
-  <!------Rain Code-------->
-  <div class="container">
-    <h1 id="titulo">T.I QUIZZMASTER</h1>
-    <canvas id="canvas"></canvas>
-  </div>
+    <!----Os botões---->
+    <div class="botao">
+      <a class="btn" href="questions.html">Começar</a>
+      <a class="btn" href="rank.html">Ranking</a>
+      <a class="btn" href="credit.html">Créditos</a>
+    </div>
 
-  <!----Os botões---->
-  <div class="botao">
-    <a class="btn" href="questions.html">Começar</a>
-    <a class="btn" href="rank.html">Ranking</a>
-    <a class="btn" href="credit.html">Créditos</a>
-  </div>
+    <!--Botão de login-->
+    <a href="login.html" id="login">
+      <img src="img/login-image.png" alt="login" />
+    </a>
 
-  <!--Botão de login-->
-  <a href="login.html" id="login">
-    <img src="img/login-image.png" alt="login">
-  </a>
+    <!--Musica-->
 
-  <!--Musica-->
+    <audio autoplay loop>
+      <source src="audio/Spektrem_Shine.mp3" />
+    </audio>
 
-<audio autoplay loop>
-  <source src="audio/Spektrem_Shine.mp3">
-</audio>
-
-  <script src="js/rain_code.js"></script>
-
-</body>
-
+    <script src="js/rain_code.js"></script>
+  </body>
 </html>

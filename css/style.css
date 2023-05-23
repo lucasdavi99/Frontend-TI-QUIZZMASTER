@@ -1,11 +1,11 @@
-body {
+* {
   margin: 0;
   padding: 0;
 }
 
 @media screen and (max-width: 449px) {
   #titulo {
-    font-size: 52px;
+    font-size: 49px;
     font-weight: 400;
     color: #00d300;
     display: flex;
@@ -55,7 +55,8 @@ body {
 
 @media screen and (min-width: 450px) {
   #titulo {
-    font-size: 60px;
+    font-size: 90px;
+    user-select: none;
     font-weight: 400;
     color: #00d300;
     display: flex;

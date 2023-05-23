@@ -41,7 +41,7 @@ fetch('js/arquivo.json')
       } else {
         console.log('Resposta incorreta! Você errou!');
         console.log('Você não é inteligente!');
-        showModal('Sua pontuação foi ' + pontuacao + ' |||' +'  Resposta certa:' + correctAnswer);
+        showModal('Sua pontuação foi ' + pontuacao); //+ ' |||' +'  Resposta certa:' + correctAnswer);
         currentQuestionIndex = 0; // Volta para a primeira questão se errar
       }
 
