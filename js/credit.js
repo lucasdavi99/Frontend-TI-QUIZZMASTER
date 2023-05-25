@@ -9,7 +9,7 @@ document.getElementById('back-home').addEventListener('click', function() {
 
 
 /*Função para diminuir a musica gradualmente*/
-window.onload = function() {
+/*window.onload = function() {
   // obtendo o elemento de áudio
   var audio = document.querySelector('.credit-music');
 
@@ -30,4 +30,4 @@ window.onload = function() {
           }
       }, fadeTime * 100); // dividindo o tempo total de fade pelo volume (de 1 a 0, logo 10 partes)
   }, 1000);
-};
+};*/
