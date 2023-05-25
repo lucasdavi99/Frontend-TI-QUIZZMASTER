@@ -13,6 +13,12 @@ window.onclick = function(event) {
   }
 }
 
+window.addEventListener('pageshow', function(event) {
+  if (event.persisted) {
+    window.location.reload();
+  }
+});
+
 function showModal(text) {
   modalText.textContent = text;
   modal.style.display = "block";

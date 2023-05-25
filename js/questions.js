@@ -33,7 +33,7 @@ fetch('js/arquivo.json')
 
       if (userAnswer === correctAnswer) {
         currentQuestionIndex++;
-        pontuacao++;
+        pontuacao+=100;
       } else {
         showModal('Sua pontuação foi ' + pontuacao); //+ ' |||' +'  Resposta certa:' + correctAnswer);
         currentQuestionIndex = 0; // Volta para a primeira questão se errar
