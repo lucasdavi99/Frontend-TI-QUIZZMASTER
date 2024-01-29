@@ -11,7 +11,7 @@ function shuffleArray(array) {
 }
 
 function loadQuestionsFromAPI() {
-    fetch('https://api-tiquizzmaster-production.up.railway.app/api/questions/api/questions')
+    fetch('https://api-tiquizzmaster-production.up.railway.app/api/questions')
         .then(response => response.json())
         .then(data => {
             shuffledQuestions = shuffleArray(data);
