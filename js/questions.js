@@ -11,7 +11,7 @@ function shuffleArray(array) {
 }
 
 function loadQuestionsFromAPI() {
-    fetch('3.235.154.188:8080/api/questions')
+    fetch('ec2-3-235-154-188.compute-1.amazonaws.com:8080/api/questions')
         .then(response => response.json())
         .then(data => {
             shuffledQuestions = shuffleArray(data);
