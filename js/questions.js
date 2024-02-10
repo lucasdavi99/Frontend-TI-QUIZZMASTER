@@ -11,7 +11,7 @@ function shuffleArray(array) {
 }
 
 function loadQuestionsFromAPI() {
-    fetch('https://api-tiquizzmaster-production.up.railway.app/api/questions')
+    fetch('http://localhost:8080/api/questions')
         .then(response => response.json())
         .then(data => {
             shuffledQuestions = shuffleArray(data);
@@ -36,21 +36,40 @@ function showQuestion(index) {
 
 function handleAnswerSelection(selectedIndex) {
     const question = shuffledQuestions[currentQuestionIndex];
-    const correctAnswerIndex = question.answers.findIndex(answer => answer.isCorrect);
+    const selectedAnswer = question.answers[selectedIndex];
 
-    if (selectedIndex === correctAnswerIndex) {
-        pontuacao += 100;
-        currentQuestionIndex++;
-    } else {
-        showModal('Sua pontuação foi ' + pontuacao);
-        currentQuestionIndex = 0;
-        pontuacao = 0;
-    }
-
-    showQuestion(currentQuestionIndex);
+    // Enviar a resposta selecionada para o servidor
+    fetch('http://localhost:8080/api/scores', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: JSON.stringify({
+            score: { points: pontuacao },
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Score saved:', data);
+            if (data.points !== undefined) {
+                pontuacao = data.points; // Atualizar a pontuação com o valor retornado do servidor
+            }
+            if (!selectedAnswer.isCorrect) {
+                showModal('Resposta errada. O questionário terminou. Sua pontuação final foi ' + pontuacao);
+                return;
+            }
+            currentQuestionIndex++;
+            if (currentQuestionIndex >= shuffledQuestions.length) {
+                showModal('Fim do questionário. Parabéns! Sua pontuação foi ' + pontuacao);
+                return;
+            }
+            showQuestion(currentQuestionIndex);
+        })
+        .catch(error => console.error('Error:', error));
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     loadQuestionsFromAPI();
 
     const answerElements = document.querySelectorAll('.box');
