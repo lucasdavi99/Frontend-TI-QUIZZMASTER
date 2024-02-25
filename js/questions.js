@@ -38,35 +38,70 @@ function handleAnswerSelection(selectedIndex) {
     const question = shuffledQuestions[currentQuestionIndex];
     const selectedAnswer = question.answers[selectedIndex];
 
-    // Enviar a resposta selecionada para o servidor
-    fetch('http://localhost:8080/api/scores', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-        },
-        body: JSON.stringify({
-            score: { points: pontuacao },
+    if (!selectedAnswer.isCorrect) {
+        const score = {
+            user: localStorage.getItem('user'),
+            points: pontuacao
+        };
+
+        fetch('http://localhost:8080/api/scores', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
         })
-    })
         .then(response => response.json())
         .then(data => {
-            console.log('Score saved:', data);
-            if (data.points !== undefined) {
-                pontuacao = data.points; // Atualizar a pontuação com o valor retornado do servidor
+            if (data.length > 0) {
+                // Update the score
+                fetch('http://localhost:8080/api/scores/' + data[0].id, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    body: JSON.stringify(score)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Score updated:', data);
+                    if (data.points !== undefined) {
+                        pontuacao = data.points; 
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                // Create a new score
+                fetch('http://localhost:8080/api/scores', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    body: JSON.stringify(score)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Score saved:', data);
+                    if (data.points !== undefined) {
+                        pontuacao = data.points; 
+                    }
+                })
+                .catch(error => console.error('Error:', error));
             }
-            if (!selectedAnswer.isCorrect) {
-                showModal('Resposta errada. O questionário terminou. Sua pontuação final foi ' + pontuacao);
-                return;
-            }
-            currentQuestionIndex++;
-            if (currentQuestionIndex >= shuffledQuestions.length) {
-                showModal('Fim do questionário. Parabéns! Sua pontuação foi ' + pontuacao);
-                return;
-            }
-            showQuestion(currentQuestionIndex);
+            showModal('Resposta errada. O questionário terminou. Sua pontuação final foi ' + pontuacao);
         })
         .catch(error => console.error('Error:', error));
+
+        return;
+    }
+
+    pontuacao += 10;
+    currentQuestionIndex++;
+    if (currentQuestionIndex < shuffledQuestions.length) {
+        showQuestion(currentQuestionIndex);
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
