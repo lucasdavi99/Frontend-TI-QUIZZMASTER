@@ -44,55 +44,50 @@ function handleAnswerSelection(selectedIndex) {
             points: pontuacao
         };
 
-        fetch('http://localhost:8080/api/scores', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.length > 0) {
-                // Update the score
-                fetch('http://localhost:8080/api/scores/' + data[0].id, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    },
-                    body: JSON.stringify(score)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Score updated:', data);
-                    if (data.points !== undefined) {
-                        pontuacao = data.points; 
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            } else {
-                // Create a new score
-                fetch('http://localhost:8080/api/scores', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    },
-                    body: JSON.stringify(score)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Score saved:', data);
-                    if (data.points !== undefined) {
-                        pontuacao = data.points; 
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            }
-            showModal('Resposta errada. O questionário terminou. Sua pontuação final foi ' + pontuacao);
-        })
-        .catch(error => console.error('Error:', error));
+        const scoreId = localStorage.getItem('scoreId');
+        
+        if (scoreId === null || scoreId === 'undefined') {
+            
+            fetch('http://localhost:8080/api/scores', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(score)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Score saved:', data);
+                if (data.points !== undefined) {
+                    pontuacao = data.points; 
+                }
+                showModal('Resposta errada. O questionário terminou. Sua pontuação final foi ' + pontuacao);
+                if (data.id !== undefined) {
+                    localStorage.setItem('scoreId', data.id);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        } else {
+            
+            fetch(`http://localhost:8080/api/scores/${scoreId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(score)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Score updated:', data);
+                if (data.points !== undefined) {
+                    pontuacao = data.points; 
+                }
+                showModal('Resposta errada. O questionário terminou. Sua pontuação final foi ' + pontuacao);
+            })
+            .catch(error => console.error('Error:', error));
+        }
 
         return;
     }
@@ -103,6 +98,7 @@ function handleAnswerSelection(selectedIndex) {
         showQuestion(currentQuestionIndex);
     }
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     loadQuestionsFromAPI();
