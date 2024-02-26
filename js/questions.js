@@ -106,9 +106,8 @@ function handleAnswerSelection(selectedIndex) {
 
     pontuacao += 10;
     currentQuestionIndex++;
-    if (currentQuestionIndex < shuffledQuestions.length) {
+    if (currentQuestionIndex >= shuffledQuestions.length) {
         showModal('Fim do questionário. Parabéns! Sua pontuação foi ' + pontuacao);
-        return;
     }
     showQuestion(currentQuestionIndex);
 }
