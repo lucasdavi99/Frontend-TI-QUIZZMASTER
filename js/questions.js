@@ -35,6 +35,11 @@ function showQuestion(index) {
 }
 
 function handleAnswerSelection(selectedIndex) {
+    if (currentQuestionIndex >= shuffledQuestions.length) {
+        console.log('No more questions.');
+        return;
+    }
+
     const question = shuffledQuestions[currentQuestionIndex];
     const selectedAnswer = question.answers[selectedIndex];
 
@@ -47,46 +52,9 @@ function handleAnswerSelection(selectedIndex) {
         const scoreId = localStorage.getItem('scoreId');
         
         if (scoreId === null || scoreId === 'undefined') {
-            
-            fetch('https://quizzmaster-a405941b4ff4.herokuapp.com/api/scores', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                body: JSON.stringify(score)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Score saved:', data);
-                if (data.points !== undefined) {
-                    pontuacao = data.points; 
-                }
-                showModal('Resposta errada. O questionário terminou. Sua pontuação final foi ' + pontuacao);
-                if (data.id !== undefined) {
-                    localStorage.setItem('scoreId', data.id);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+            saveScore(score);
         } else {
-            
-            fetch(`https://quizzmaster-a405941b4ff4.herokuapp.com/api/scores/${scoreId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                body: JSON.stringify(score)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Score updated:', data);
-                if (data.points !== undefined) {
-                    pontuacao = data.points; 
-                }
-                showModal('Resposta errada. O questionário terminou. Sua pontuação final foi ' + pontuacao);
-            })
-            .catch(error => console.error('Error:', error));
+            updateScore(score, scoreId);
         }
 
         return;
@@ -97,6 +65,49 @@ function handleAnswerSelection(selectedIndex) {
     if (currentQuestionIndex < shuffledQuestions.length) {
         showQuestion(currentQuestionIndex);
     }
+}
+
+function saveScore(score) {
+    fetch('https://quizzmaster-a405941b4ff4.herokuapp.com/api/scores', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: JSON.stringify(score)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Score saved:', data);
+        if (data.points !== undefined) {
+            pontuacao = data.points; 
+        }
+        showModal('Resposta errada. O questionário terminou. Sua pontuação final foi ' + pontuacao);
+        if (data.id !== undefined) {
+            localStorage.setItem('scoreId', data.id);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function updateScore(score, scoreId) {
+    fetch(`https://quizzmaster-a405941b4ff4.herokuapp.com/api/scores/${scoreId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: JSON.stringify(score)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Score updated:', data);
+        if (data.points !== undefined) {
+            pontuacao = data.points; 
+        }
+        showModal('Resposta errada. O questionário terminou. Sua pontuação final foi ' + pontuacao);
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 
