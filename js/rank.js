@@ -1,6 +1,6 @@
 // Função para carregar os dados do ranking
 function loadRankingData() {
-    fetch('http://localhost:8080/api/scores')
+    fetch('https://quizzmaster-a405941b4ff4.herokuapp.com/api/scores')
         .then(response => response.json())
         .then(data => {
             renderRankingTable(data);

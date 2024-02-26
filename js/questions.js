@@ -11,7 +11,7 @@ function shuffleArray(array) {
 }
 
 function loadQuestionsFromAPI() {
-    fetch('http://localhost:8080/api/questions')
+    fetch('https://quizzmaster-a405941b4ff4.herokuapp.com/api/questions')
         .then(response => response.json())
         .then(data => {
             shuffledQuestions = shuffleArray(data);
@@ -48,7 +48,7 @@ function handleAnswerSelection(selectedIndex) {
         
         if (scoreId === null || scoreId === 'undefined') {
             
-            fetch('http://localhost:8080/api/scores', {
+            fetch('https://quizzmaster-a405941b4ff4.herokuapp.com/api/scores', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ function handleAnswerSelection(selectedIndex) {
             .catch(error => console.error('Error:', error));
         } else {
             
-            fetch(`http://localhost:8080/api/scores/${scoreId}`, {
+            fetch(`https://quizzmaster-a405941b4ff4.herokuapp.com/api/scores/${scoreId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
