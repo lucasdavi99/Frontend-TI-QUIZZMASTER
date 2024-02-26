@@ -36,12 +36,21 @@ function showQuestion(index) {
 
 function handleAnswerSelection(selectedIndex) {
     if (currentQuestionIndex >= shuffledQuestions.length) {
-        console.log('No more questions.');
+        showModal('Fim do questionário. Parabéns! Sua pontuação foi ' + pontuacao);
         return;
     }
 
     const question = shuffledQuestions[currentQuestionIndex];
+    if (!question || !question.answers) {
+        console.error('Erro: Pergunta ou respostas não definidas.');
+        return;
+    }
+
     const selectedAnswer = question.answers[selectedIndex];
+    if (!selectedAnswer) {
+        console.error('Erro: Resposta selecionada não definida.');
+        return;
+    }
 
     if (!selectedAnswer.isCorrect) {
         const score = {
@@ -52,9 +61,44 @@ function handleAnswerSelection(selectedIndex) {
         const scoreId = localStorage.getItem('scoreId');
         
         if (scoreId === null || scoreId === 'undefined') {
-            saveScore(score);
+            fetch('https://quizzmaster-a405941b4ff4.herokuapp.com/api/scores', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(score)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Score saved:', data);
+                if (data.points !== undefined) {
+                    pontuacao = data.points; 
+                }
+                showModal('Resposta errada. O questionário terminou. Sua pontuação final foi ' + pontuacao);
+                if (data.id !== undefined) {
+                    localStorage.setItem('scoreId', data.id);
+                }
+            })
+            .catch(error => console.error('Error:', error));
         } else {
-            updateScore(score, scoreId);
+            fetch(`https://quizzmaster-a405941b4ff4.herokuapp.com/api/scores/${scoreId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(score)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Score updated:', data);
+                if (data.points !== undefined) {
+                    pontuacao = data.points; 
+                }
+                showModal('Resposta errada. O questionário terminou. Sua pontuação final foi ' + pontuacao);
+            })
+            .catch(error => console.error('Error:', error));
         }
 
         return;
@@ -63,53 +107,11 @@ function handleAnswerSelection(selectedIndex) {
     pontuacao += 10;
     currentQuestionIndex++;
     if (currentQuestionIndex < shuffledQuestions.length) {
-        showQuestion(currentQuestionIndex);
+        showModal('Fim do questionário. Parabéns! Sua pontuação foi ' + pontuacao);
+        return;
     }
+    showQuestion(currentQuestionIndex);
 }
-
-function saveScore(score) {
-    fetch('https://quizzmaster-a405941b4ff4.herokuapp.com/api/scores', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-        },
-        body: JSON.stringify(score)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Score saved:', data);
-        if (data.points !== undefined) {
-            pontuacao = data.points; 
-        }
-        showModal('Resposta errada. O questionário terminou. Sua pontuação final foi ' + pontuacao);
-        if (data.id !== undefined) {
-            localStorage.setItem('scoreId', data.id);
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-function updateScore(score, scoreId) {
-    fetch(`https://quizzmaster-a405941b4ff4.herokuapp.com/api/scores/${scoreId}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-        },
-        body: JSON.stringify(score)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Score updated:', data);
-        if (data.points !== undefined) {
-            pontuacao = data.points; 
-        }
-        showModal('Resposta errada. O questionário terminou. Sua pontuação final foi ' + pontuacao);
-    })
-    .catch(error => console.error('Error:', error));
-}
-
 
 document.addEventListener("DOMContentLoaded", function () {
     loadQuestionsFromAPI();
