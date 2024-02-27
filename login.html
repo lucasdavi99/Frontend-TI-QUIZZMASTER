@@ -23,29 +23,28 @@
             <form action="" id="loginForm">
                 <h2>Login</h2>
                 <div class="input-group">
-                    <input type="text" id="loginUsername" required>
+                    <input type="text" id="loginUsername" required autocomplete="username">
                     <label for="loginUsername">Username</label>
                 </div>
                 <div class="input-group">
-                    <input type="password" id="loginPassword" required>
-                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required autocomplete="current-password">
+                    <label for="loginPassword">Senha</label>
                 </div>
-                <div class="remember">
+                <!--<div class="remember">
                     <label><input type="checkbox"> Remember me</label>
-                </div>
+                </div>-->
                 <button type="submit">Login</button>
                 <div class="signUp-link">
-                    <p>Don't have an account? <a href="#" class="signUpBtn-link">Sign Up</a></p>
+                    <p>Não possui uma conta? <a href="#" class="signUpBtn-link">Inscreva-se</a></p>
                 </div>
             </form>
         </div>
-
-
+    
         <div class="form-wrapper sign-up">
             <form action="" id="registerForm">
-                <h2>Sign Up</h2>
+                <h2>Inscrição</h2>
                 <div class="input-group">
-                    <input type="text" id="registerUsername" required>
+                    <input type="text" id="registerUsername" required autocomplete="username">
                     <label for="registerUsername">Username</label>
                 </div>
                 <div class="input-group">
@@ -53,19 +52,19 @@
                     <label for="registerEmail">Email</label>
                 </div>
                 <div class="input-group">
-                    <input type="password" id="registerPassword" required>
-                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" required autocomplete="new-password">
+                    <label for="registerPassword">Senha</label>
                 </div>
                 <div class="remember">
                     <label><input type="checkbox"> I agree to the terms & conditions</label>
                 </div>
-                <button type="submit">Sign Up</button>
+                <button type="submit">Finalizar Cadastro</button>
                 <div class="signUp-link">
-                    <p>Already have an account? <a href="#" class="signInBtn-link">Sign In</a></p>
+                    <p>Já possui uma conta? <a href="#" class="signInBtn-link">Entrar</a></p>
                 </div>
             </form>
         </div>
-    </div>
+    </div>    
 
     <script src="js/login.js"></script>
     <script src="js/rain_code.js"></script>

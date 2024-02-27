@@ -35,7 +35,7 @@
 
     <!--Botão de login-->
     <a href="login.html" id="login">
-      <img src="img/login-image.png" alt="login" />
+      <img id="loginImage" src="img/login-image.png" alt="login" />
     </a>
 
     <!--Musica-->
@@ -46,5 +46,32 @@
 
     <script src="js/rain_code.js"></script>
     <script src="js/decoding_effect.js"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var isLoggedIn = localStorage.getItem('loggedIn');
+        var loginImage = document.getElementById('loginImage');
+        
+        if (isLoggedIn) {
+          loginImage.src = 'img/logout.png';
+        } else {
+          loginImage.src = 'img/login-image.png';
+        }
+        
+        loginImage.addEventListener('click', function() {
+          if (isLoggedIn) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('loggedIn');
+            event.preventDefault();
+            
+            loginImage.src = 'img/login-image.png';
+            
+            // Evita o redirecionamento para a página de login após o logout
+            // Você pode adicionar alguma mensagem ou efeito visual aqui se desejar
+          }
+        });
+      });
+    </script>
+    
   </body>
 </html>

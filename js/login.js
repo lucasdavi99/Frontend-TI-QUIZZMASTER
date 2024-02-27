@@ -1,7 +1,7 @@
 const signInBtnLink = document.querySelector('.signInBtn-link');
 const signUpBtnLink = document.querySelector('.signUpBtn-link');
 const wrapper = document.querySelector('.wrapper');
-const api = 'https://quizzmaster-a405941b4ff4.herokuapp.com';
+const api = 'http://localhost:8080';
 
 signUpBtnLink.addEventListener('click', () => {
     wrapper.classList.toggle('active');
@@ -36,6 +36,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     .then(data => {
 
         localStorage.setItem('token', data.token);
+        localStorage.setItem('loggedIn', true);
 
         window.location.href = '/index.html';
     })
@@ -65,10 +66,8 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     })
     .then(response => {
         if (response.ok) {
-            // Registro bem-sucedido, você pode redirecionar o usuário para a página de login
             window.location.href = '/login.html';
         } else {
-            // Algo deu errado, você pode mostrar uma mensagem de erro
             console.error('Registration failed');
         }
     })
