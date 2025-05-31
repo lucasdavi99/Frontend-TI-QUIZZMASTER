@@ -502,3 +502,176 @@ body {
 .high-contrast .terminal {
   border-width: 4px;
 }
+
+/* ==========================================================================
+   ADDITIONS TO QUESTIONS.CSS
+   Adicione estes estilos ao seu questions.css existente
+   ========================================================================== */
+
+/* Loading Overlay - garantir que funcione corretamente */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.loading-overlay.hidden {
+  display: none !important;
+}
+
+.loading-content {
+  text-align: center;
+  color: #00d300;
+  font-family: "Press Start 2P", cursive;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #003300;
+  border-top: 3px solid #00d300;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 2rem;
+  box-shadow: 0 0 20px #00d300;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-content p {
+  font-size: 0.8rem;
+  color: #00d300;
+  margin: 0;
+}
+
+/* Score Display - se não existir no seu CSS */
+.score-display {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.score-display p {
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #00d300;
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0, 211, 0, 0.3);
+  text-align: center;
+  color: #00d300;
+  font-family: "Press Start 2P", cursive;
+  font-size: 0.6rem;
+  margin: 0;
+}
+
+/* Progress Bar */
+.progress-container {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 600px;
+  z-index: 1000;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 211, 0, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #00d300;
+  box-shadow: 0 0 20px rgba(0, 211, 0, 0.3);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00d300, #00ff41);
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 10px #00d300;
+}
+
+.progress-text {
+  text-align: center;
+  margin-top: 0.5rem;
+  color: #00d300;
+  font-size: 0.7rem;
+  font-family: "Press Start 2P", cursive;
+}
+
+/* Melhorias nos botões de resposta */
+.box {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.box:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 211, 0, 0.5);
+}
+
+.box:active {
+  transform: scale(0.95);
+}
+
+/* Responsividade para elementos novos */
+@media screen and (max-width: 768px) {
+  .score-display {
+    top: 1rem;
+    right: 1rem;
+  }
+  
+  .score-display p {
+    font-size: 0.5rem;
+    padding: 0.6rem 1rem;
+  }
+  
+  .progress-container {
+    bottom: 1rem;
+    width: 95%;
+  }
+  
+  .progress-text {
+    font-size: 0.6rem;
+  }
+  
+  .loading-content p {
+    font-size: 0.6rem;
+  }
+}
+
+/* Estados de desabilitado para botões */
+.box[style*="pointer-events: none"] {
+  opacity: 0.6 !important;
+  cursor: not-allowed;
+}
+
+/* Animação de feedback para clique */
+.box.clicked {
+  animation: clickFeedback 0.3s ease;
+}
+
+@keyframes clickFeedback {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); background-color: rgba(0, 211, 0, 0.2); }
+  100% { transform: scale(1); }
+}
