@@ -1,41 +1,138 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/rank.css">
-    <link rel="stylesheet" href="css/code_rain.css">
     <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon">
-    <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/code_rain.css">
+    <link rel="stylesheet" href="css/rank.css">
+    
+    <!-- External Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <title>Rank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
+    
+    <title>T.I QUIZZMASTER - Ranking</title>
 </head>
 
 <body>
-    <!------Rain Code-------->
-    <div class="container">
-        <canvas id="canvas"></canvas>
+    <!-- Matrix Rain Background -->
+    <canvas id="canvas"></canvas>
+    
+    <!-- Back to Home Button -->
+    <div class="back-home-container">
+        <a href="index.html" id="back-home2" class="back-btn">
+            <img src="img/duas-setas-para-a-esquerda.png" alt="Voltar">
+            <span class="back-tooltip">Voltar ao Menu</span>
+        </a>
     </div>
-
-    <h1 id="rank-title">Ranking de Jogadores</h1>
-    <table id="table">
-        <thead>
-            <tr>
-                <th>Posição</th>
-                <th>Nome</th>
-                <th>Pontuação</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-
-    <a href="index.html" id="back-home2">
-        <img src="img/duas-setas-para-a-esquerda.png" alt="Voltar para a página principal">
-      </a>
+    
+    <!-- Main Content -->
+    <div class="ranking-container">
+        <!-- Page Title -->
+        <div class="title-section">
+            <h1 id="rank-title" class="ranking-title">RANKING DE JOGADORES</h1>
+            <div class="title-underline"></div>
+        </div>
+        
+        <!-- Statistics Cards -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number" id="total-players">0</div>
+                <div class="stat-label">Jogadores</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="total-games">0</div>
+                <div class="stat-label">Partidas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="highest-score">0</div>
+                <div class="stat-label">Recorde</div>
+            </div>
+        </div>
+        
+        <!-- User History Section -->
+        <div class="history-section" id="user-history" style="display: none;">
+            <h2 class="section-title">Seu Histórico</h2>
+            <div class="history-container" id="history-content">
+                <!-- Conteúdo será inserido via JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Ranking Table -->
+        <div class="table-container">
+            <h2 class="section-title">Top Jogadores</h2>
+            <div class="table-wrapper">
+                <table id="ranking-table" class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th class="rank-col">
+                                <div class="header-content">
+                                    <span class="header-icon">🏆</span>
+                                    <span>Posição</span>
+                                </div>
+                            </th>
+                            <th class="name-col">
+                                <div class="header-content">
+                                    <span class="header-icon">👤</span>
+                                    <span>Jogador</span>
+                                </div>
+                            </th>
+                            <th class="score-col">
+                                <div class="header-content">
+                                    <span class="header-icon">⚡</span>
+                                    <span>Pontuação</span>
+                                </div>
+                            </th>
+                            <th class="games-col">
+                                <div class="header-content">
+                                    <span class="header-icon">🎮</span>
+                                    <span>Partidas</span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranking-tbody">
+                        <!-- Dados serão inseridos via JavaScript -->
+                        <tr class="loading-row">
+                            <td colspan="4">
+                                <div class="loading-content">
+                                    <div class="loading-spinner"></div>
+                                    <span>Carregando dados...</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Empty State -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+            <div class="empty-icon">📊</div>
+            <h3>Nenhum dado encontrado</h3>
+            <p>Seja o primeiro a jogar e aparecer no ranking!</p>
+            <a href="questions.html" class="play-btn">Jogar Agora</a>
+        </div>
+        
+        <!-- Refresh Button -->
+        <div class="refresh-container">
+            <button id="refresh-btn" class="refresh-btn">
+                <span class="refresh-icon">🔄</span>
+                <span>Atualizar Dados</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- JavaScript Files -->
     <script src="js/rain_code.js"></script>
     <script src="js/rank.js"></script>
+    <script src="js/decoding_effect.js"></script>
 </body>
-
 </html>

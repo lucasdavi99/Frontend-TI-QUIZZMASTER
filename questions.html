@@ -2,53 +2,125 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon">
-    <link rel="stylesheet" href="css/code_rain.css">
-    <link rel="stylesheet" href="css/questions.css">
-    <link rel="stylesheet" href="css/modal.css">
-    <title>T.I QUIZZMASTER</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon">
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/code_rain.css">
+  <link rel="stylesheet" href="css/questions.css">
+  <link rel="stylesheet" href="css/modal.css">
+
+  <!-- External Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <title>T.I QUIZZMASTER - Quiz</title>
 </head>
 
-<!--Rain code-->
-<body> 
-  <div class="container">
-    <canvas id="canvas"></canvas>
+<body>
+  <!-- Matrix Rain Background -->
+  <canvas id="canvas"></canvas>
+
+  <!-- Back to Home Button -->
+  <div class="back-home-container">
+    <a href="index.html" id="back-home2" class="back-btn">
+      <img src="img/duas-setas-para-a-esquerda.png" alt="Voltar">
+      <span class="back-tooltip">Voltar ao Menu</span>
+    </a>
   </div>
-  
-  <div class="container-terminal">
-    <div class="terminal">
-      <h1 class="pergunta" id="Questao"></h1>
+
+  <!-- Score Display -->
+  <div class="score-display">
+    <div class="score-item">
+      <span class="score-label">Pontuação:</span>
+      <span id="current-score" class="score-value">0</span>
     </div>
-
-    <!-- Adicione depois do elemento terminal -->
-<div class="score-display">
-    <p>Pontuação: <span id="current-score">0</span></p>
-    <p>Pergunta <span id="current-question-number">1</span> de <span id="total-questions">10</span></p>
-</div>
-  </div>
-  
-  <div class="grid-container">
-    <div class="box"><p id="answer_a"></p></div>
-    <div class="box"><p id="answer_b"></p></div>
-    <div class="box"><p id="answer_c"></p></div>
-    <div class="box"><p id="answer_d"></p></div>
+    <div class="score-item">
+      <span class="score-label">Pergunta:</span>
+      <span class="score-value">
+        <span id="current-question-number">1</span> de <span id="total-questions">10</span>
+      </span>
+    </div>
   </div>
 
+  <!-- Question Terminal -->
+  <div class="terminal-container">
+    <div class="terminal">
+      <div class="terminal-header">
+        <div class="terminal-controls">
+          <span class="control close"></span>
+          <span class="control minimize"></span>
+          <span class="control maximize"></span>
+        </div>
+        <div class="terminal-title">T.I QUIZZMASTER - Terminal</div>
+      </div>
+      <div class="terminal-content">
+        <div class="command-line">
+          <span class="prompt">user@quizzmaster:~$</span>
+          <span class="command">cat question.txt</span>
+        </div>
+        <h1 class="pergunta" id="Questao">Carregando pergunta...</h1>
+      </div>
+    </div>
+  </div>
+
+  <!-- Answer Grid -->
+  <div class="answers-container">
+    <div class="answers-grid">
+      <div class="answer-box" data-option="A">
+        <div class="answer-label">A</div>
+        <p id="answer_a" class="answer-text">Carregando...</p>
+      </div>
+      <div class="answer-box" data-option="B">
+        <div class="answer-label">B</div>
+        <p id="answer_b" class="answer-text">Carregando...</p>
+      </div>
+      <div class="answer-box" data-option="C">
+        <div class="answer-label">C</div>
+        <p id="answer_c" class="answer-text">Carregando...</p>
+      </div>
+      <div class="answer-box" data-option="D">
+        <div class="answer-label">D</div>
+        <p id="answer_d" class="answer-text">Carregando...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="progress-text">
+      <span id="progress-percentage">0%</span>
+    </div>
+  </div>
+
+  <!-- Modal -->
   <div id="myModal" class="modal">
     <div class="modal-content">
-      <span class="close"></span>
-      <p id="modalText"></p>
+      <div class="modal-header">
+        <span class="close">&times;</span>
+        <h3>Quiz Master</h3>
+      </div>
+      <div class="modal-body">
+        <p id="modalText">Carregando...</p>
+      </div>
     </div>
   </div>
 
-  <a href="index.html" id="back-home2">
-    <img src="img/duas-setas-para-a-esquerda.png" alt="Voltar para a página principal">
-  </a>
-  
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <p>Carregando quiz...</p>
+    </div>
+  </div>
+
+  <!-- JavaScript Files -->
   <script src="js/rain_code.js"></script>
   <script src="js/questions.js"></script>
   <script src="js/modal.js"></script>

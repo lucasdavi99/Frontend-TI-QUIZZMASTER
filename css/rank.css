@@ -1,52 +1,618 @@
-body {
+/* ==========================================================================
+   RANKING PAGE STYLES - T.I QUIZZMASTER
+   ========================================================================== */
+
+:root {
+  --primary-green: #00ff41;
+  --secondary-green: #00d300;
+  --dark-green: #003300;
+  --neon-blue: #00ffff;
+  --background-black: #000000;
+  --text-white: #ffffff;
+  --glitch-red: #ff0040;
+  --gold: #ffd700;
+  --silver: #c0c0c0;
+  --bronze: #cd7f32;
+  --shadow-color: rgba(0, 255, 65, 0.3);
+}
+
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--background-black);
+  color: var(--text-white);
+  font-family: 'Press Start 2P', monospace;
+  overflow-x: hidden;
   user-select: none;
-  font-family: 'Press Start 2P', cursive;
-  }
+}
 
-  h1 {
-    top: 10%;
-    left: 30%;
-    font-size: 36px;
-    color: #00D300;
-    position: absolute;
-    letter-spacing: 4px;
-  }
+/* ==========================================================================
+   BACK BUTTON
+   ========================================================================== */
 
-  table {
-    top: 25%;
-    left: 10%;
-    width: 80%;
-    align-items: center;
-    text-align: center;
-    position: absolute;
-    border-collapse: collapse;
-  }
+.back-home-container {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  z-index: 1000;
+}
 
-  th {
-    padding: 10px;
-    font-size: 24px;
-    color: #00D300;
-    letter-spacing: 4px;
-    background-color: black;
-    text-transform: uppercase;
-    border: #00D300 2px solid;
-  }
+.back-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0.8rem;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--primary-green);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+}
 
-  td {
-    padding: 10px;
-    font-size: 18px;
-    color: #00D300;
-    border: 2px solid #00D300;
-  }
+.back-btn:hover {
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+  transform: translateX(-5px);
+}
 
-  tr{
-    background-color: black;
-  }
+.back-btn img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(92deg) brightness(101%) contrast(107%);
+  transition: filter 0.3s ease;
+}
 
-  #back-home2 {
-    position: absolute;
-    top: 5%;
-    left: 2%;
+.back-btn:hover img {
+  filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(180deg) brightness(101%) contrast(107%);
+}
+
+.back-tooltip {
+  position: absolute;
+  top: -3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--background-black);
+  color: var(--primary-green);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  border: 1px solid var(--primary-green);
+  white-space: nowrap;
+}
+
+.back-btn:hover .back-tooltip {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   MAIN CONTAINER
+   ========================================================================== */
+
+.ranking-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 2rem 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* ==========================================================================
+   TITLE SECTION
+   ========================================================================== */
+
+.title-section {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.ranking-title {
+  font-size: 2.5rem;
+  color: var(--primary-green);
+  letter-spacing: 0.2em;
+  text-shadow: 
+    0 0 10px var(--primary-green),
+    0 0 20px var(--primary-green),
+    0 0 40px var(--primary-green);
+  animation: titlePulse 3s ease-in-out infinite alternate;
+  margin-bottom: 1rem;
+}
+
+@keyframes titlePulse {
+  0% {
+    text-shadow: 
+      0 0 10px var(--primary-green),
+      0 0 20px var(--primary-green),
+      0 0 40px var(--primary-green);
   }
+  100% {
+    text-shadow: 
+      0 0 15px var(--primary-green),
+      0 0 30px var(--primary-green),
+      0 0 60px var(--primary-green);
+  }
+}
+
+.title-underline {
+  width: 200px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--primary-green), transparent);
+  margin: 0 auto;
+  animation: underlineGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes underlineGlow {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* ==========================================================================
+   STATISTICS CARDS
+   ========================================================================== */
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.stat-card {
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--primary-green);
+  border-radius: 12px;
+  padding: 2rem 1rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+  transition: all 0.7s ease;
+}
+
+.stat-card:hover::before {
+  left: 100%;
+}
+
+.stat-card:hover {
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+  transform: translateY(-5px);
+}
+
+.stat-number {
+  font-size: 2rem;
+  color: var(--neon-blue);
+  font-weight: bold;
+  text-shadow: 0 0 10px var(--neon-blue);
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.stat-label {
+  color: var(--primary-green);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  position: relative;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   SECTION TITLES
+   ========================================================================== */
+
+.section-title {
+  font-size: 1.5rem;
+  color: var(--secondary-green);
+  text-align: center;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 10px var(--secondary-green);
+  letter-spacing: 0.1em;
+}
+
+/* ==========================================================================
+   HISTORY SECTION
+   ========================================================================== */
+
+.history-section {
+  margin-bottom: 4rem;
+}
+
+.history-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.history-item {
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid var(--secondary-green);
+  border-radius: 8px;
+  padding: 1.5rem;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.history-item:hover {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+}
+
+.history-item p {
+  color: var(--primary-green);
+  font-size: 0.7rem;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+/* ==========================================================================
+   RANKING TABLE
+   ========================================================================== */
+
+.table-container {
+  margin-bottom: 4rem;
+}
+
+.table-wrapper {
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--primary-green);
+  border-radius: 12px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+}
+
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Press Start 2P', monospace;
+}
+
+.ranking-table thead {
+  background: linear-gradient(90deg, var(--dark-green), var(--secondary-green));
+}
+
+.ranking-table th {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  border-bottom: 2px solid var(--primary-green);
+  color: var(--background-black);
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.header-icon {
+  font-size: 1rem;
+}
+
+.ranking-table tbody tr {
+  background: rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid var(--dark-green);
+  transition: all 0.3s ease;
+}
+
+.ranking-table tbody tr:hover {
+  background: rgba(0, 255, 65, 0.1);
+  box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.2);
+}
+
+.ranking-table tbody tr:nth-child(1) {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), rgba(0, 0, 0, 0.6));
+}
+
+.ranking-table tbody tr:nth-child(2) {
+  background: linear-gradient(90deg, rgba(192, 192, 192, 0.1), rgba(0, 0, 0, 0.6));
+}
+
+.ranking-table tbody tr:nth-child(3) {
+  background: linear-gradient(90deg, rgba(205, 127, 50, 0.1), rgba(0, 0, 0, 0.6));
+}
+
+.ranking-table td {
+  padding: 1.2rem 1rem;
+  text-align: center;
+  color: var(--primary-green);
+  font-size: 0.8rem;
+  border-right: 1px solid var(--dark-green);
+}
+
+.ranking-table td:last-child {
+  border-right: none;
+}
+
+/* Rank styling */
+.ranking-table tbody tr:nth-child(1) td:first-child {
+  color: var(--gold);
+  font-weight: bold;
+  text-shadow: 0 0 10px var(--gold);
+}
+
+.ranking-table tbody tr:nth-child(2) td:first-child {
+  color: var(--silver);
+  font-weight: bold;
+  text-shadow: 0 0 10px var(--silver);
+}
+
+.ranking-table tbody tr:nth-child(3) td:first-child {
+  color: var(--bronze);
+  font-weight: bold;
+  text-shadow: 0 0 10px var(--bronze);
+}
+
+/* Loading row */
+.loading-row td {
+  padding: 3rem;
+}
+
+.loading-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--secondary-green);
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--dark-green);
+  border-top: 2px solid var(--primary-green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   EMPTY STATE
+   ========================================================================== */
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid var(--secondary-green);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+  opacity: 0.7;
+}
+
+.empty-state h3 {
+  color: var(--primary-green);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px var(--primary-green);
+}
+
+.empty-state p {
+  color: var(--secondary-green);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.play-btn {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: transparent;
+  border: 2px solid var(--primary-green);
+  color: var(--primary-green);
+  text-decoration: none;
+  border-radius: 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.play-btn:hover {
+  background: var(--primary-green);
+  color: var(--background-black);
+  box-shadow: 0 0 20px var(--primary-green);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   REFRESH BUTTON
+   ========================================================================== */
+
+.refresh-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 2rem;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--secondary-green);
+  color: var(--secondary-green);
+  border-radius: 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.refresh-btn:hover {
+  border-color: var(--neon-blue);
+  color: var(--neon-blue);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.refresh-btn:active {
+  transform: translateY(0);
+}
+
+.refresh-icon {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.refresh-btn:hover .refresh-icon {
+  transform: rotate(180deg);
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+
+/* Tablets */
+@media screen and (max-width: 768px) {
+  .ranking-container {
+    padding: 5rem 1rem 2rem;
+  }
+  
+  .ranking-title {
+    font-size: 1.8rem;
+  }
+  
+  .stats-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .stat-card {
+    padding: 1.5rem 1rem;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .ranking-table th,
+  .ranking-table td {
+    padding: 1rem 0.5rem;
+    font-size: 0.6rem;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .header-icon {
+    font-size: 0.8rem;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 480px) {
+  .ranking-title {
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+  }
+  
+  .section-title {
+    font-size: 1rem;
+  }
+  
+  .ranking-table th,
+  .ranking-table td {
+    padding: 0.8rem 0.3rem;
+    font-size: 0.5rem;
+  }
+  
+  .stat-number {
+    font-size: 1.2rem;
+  }
+  
+  .stat-label {
+    font-size: 0.6rem;
+  }
+  
+  .back-home-container {
+    top: 1rem;
+    left: 1rem;
+  }
+  
+  .empty-state {
+    padding: 2rem 1rem;
+  }
+  
+  .empty-state h3 {
+    font-size: 0.9rem;
+  }
+  
+  .empty-state p {
+    font-size: 0.6rem;
+  }
+  
+  .play-btn {
+    font-size: 0.6rem;
+    padding: 0.8rem 1.5rem;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & PERFORMANCE
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .ranking-title,
+  .title-underline,
+  .stat-card,
+  .loading-spinner,
+  .refresh-icon {
+    animation: none;
+  }
+  
+  .stat-card,
+  .ranking-table tbody tr,
+  .refresh-btn {
+    transition: none;
+  }
+}
+
+/* High contrast mode */
+.high-contrast .ranking-table {
+  border-width: 3px;
+}
+
+.high-contrast .stat-card {
+  border-width: 3px;
+}

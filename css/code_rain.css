@@ -97,7 +97,7 @@ body::after {
     transparent 100%
   );
   background-size: 100% 4px;
-  z-index: 5;
+  z-index: -3;
   pointer-events: none;
   animation: scanlines 0.1s linear infinite;
   opacity: 0.5;
