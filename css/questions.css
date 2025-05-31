@@ -675,3 +675,313 @@ body {
   50% { transform: scale(0.95); background-color: rgba(0, 211, 0, 0.2); }
   100% { transform: scale(1); }
 }
+
+/* ==========================================================================
+   FIXES PARA QUESTIONS.HTML - GARANTIR VISIBILIDADE
+   Adicione este CSS ao questions.css ou crie um arquivo separado
+   ========================================================================== */
+
+/* Força visibilidade dos elementos principais */
+.pergunta, #Questao {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: #00ff41 !important;
+  font-size: 1rem !important;
+  line-height: 1.8 !important;
+  text-align: center !important;
+  text-shadow: 0 0 10px #00ff41 !important;
+  margin: 1rem 0 !important;
+  padding: 1rem !important;
+  min-height: 60px !important;
+}
+
+/* Força visibilidade das respostas */
+#answer_a, #answer_b, #answer_c, #answer_d {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: #00ff41 !important;
+  font-size: 0.8rem !important;
+  line-height: 1.6 !important;
+  text-align: center !important;
+  margin: 0 !important;
+  padding: 0.5rem !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Força visibilidade dos boxes de resposta */
+.box, .answer-box {
+  display: flex !important;
+  flex-direction: column !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background: #000000 !important;
+  border: 2px solid #00ff41 !important;
+  border-radius: 8px !important;
+  padding: 1.5rem !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  min-height: 120px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 0.5rem !important;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.2) !important;
+  position: relative !important;
+  z-index: 100 !important;
+}
+
+/* Grid para as respostas - fallback se não existir */
+.grid-container, .answers-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 2rem !important;
+  max-width: 900px !important;
+  width: 100% !important;
+  margin: 2rem auto !important;
+  padding: 2rem !important;
+  position: relative !important;
+  z-index: 100 !important;
+  visibility: visible !important;
+}
+
+/* Container do terminal */
+.container-terminal, .terminal-container {
+  display: flex !important;
+  justify-content: center !important;
+  margin: 2rem auto !important;
+  padding: 0 2rem !important;
+  z-index: 100 !important;
+  position: relative !important;
+  visibility: visible !important;
+}
+
+.terminal {
+  width: 100% !important;
+  max-width: 900px !important;
+  background: #000000 !important;
+  border: 3px solid #00ff41 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.4) !important;
+  overflow: visible !important;
+  position: relative !important;
+  z-index: 100 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Garantir que o canvas não interfira */
+#canvas {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: -10 !important;
+  pointer-events: none !important;
+}
+
+/* Container principal */
+.container {
+  position: relative !important;
+  z-index: 10 !important;
+  min-height: 100vh !important;
+  padding: 2rem !important;
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* Score display */
+.score-display {
+  position: fixed !important;
+  top: 2rem !important;
+  right: 2rem !important;
+  z-index: 1000 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+  visibility: visible !important;
+}
+
+.score-item {
+  background: rgba(0, 0, 0, 0.8) !important;
+  border: 2px solid #00ff41 !important;
+  border-radius: 8px !important;
+  padding: 0.8rem 1.2rem !important;
+  backdrop-filter: blur(10px) !important;
+  text-align: center !important;
+  visibility: visible !important;
+}
+
+.score-label, .score-value {
+  display: block !important;
+  color: #00ff41 !important;
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 0.6rem !important;
+  visibility: visible !important;
+}
+
+/* Progress bar */
+.progress-container {
+  position: fixed !important;
+  bottom: 2rem !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 90% !important;
+  max-width: 600px !important;
+  z-index: 1000 !important;
+  visibility: visible !important;
+}
+
+.progress-bar {
+  width: 100% !important;
+  height: 8px !important;
+  background: rgba(0, 255, 65, 0.2) !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+  border: 1px solid #00ff41 !important;
+  visibility: visible !important;
+}
+
+.progress-fill {
+  height: 100% !important;
+  background: linear-gradient(90deg, #00d300, #00ff41) !important;
+  border-radius: 4px !important;
+  width: 0% !important;
+  transition: width 0.5s ease !important;
+  visibility: visible !important;
+}
+
+.progress-text {
+  text-align: center !important;
+  margin-top: 0.5rem !important;
+  color: #00ff41 !important;
+  font-size: 0.7rem !important;
+  font-family: "Press Start 2P", monospace !important;
+  visibility: visible !important;
+}
+
+/* Loading overlay */
+.loading-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.9) !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.loading-overlay.hidden {
+  display: none !important;
+}
+
+/* Hover effects */
+.box:hover, .answer-box:hover {
+  border-color: #00ffff !important;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.4) !important;
+  transform: translateY(-5px) scale(1.02) !important;
+}
+
+/* Click feedback */
+.box.clicked, .answer-box.clicked {
+  background-color: rgba(0, 255, 65, 0.2) !important;
+  transform: scale(0.95) !important;
+}
+
+/* Responsividade móvel */
+@media screen and (max-width: 768px) {
+  .grid-container, .answers-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+    padding: 1rem !important;
+  }
+  
+  .box, .answer-box {
+    min-height: 100px !important;
+    padding: 1.2rem !important;
+  }
+  
+  #answer_a, #answer_b, #answer_c, #answer_d {
+    font-size: 0.7rem !important;
+  }
+  
+  .pergunta, #Questao {
+    font-size: 0.8rem !important;
+  }
+  
+  .score-display {
+    position: static !important;
+    margin: 1rem !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+  }
+}
+
+/* Debug - remove após testar */
+.debug-border * {
+  border: 1px solid red !important;
+  background: rgba(255, 0, 0, 0.1) !important;
+}
+
+/* Garantir que nada seja cortado */
+body {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+/* Back button */
+.back-home-container {
+  position: fixed !important;
+  top: 2rem !important;
+  left: 2rem !important;
+  z-index: 1000 !important;
+  visibility: visible !important;
+}
+
+.back-btn {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.8rem !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  border: 2px solid #00ff41 !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(10px) !important;
+  visibility: visible !important;
+}
+
+/* Força exibição de todos os elementos de texto */
+p, h1, h2, h3, span, div {
+  font-family: "Press Start 2P", monospace !important;
+  line-height: 1.6 !important;
+  word-wrap: break-word !important;
+}
+
+/* Reset de possíveis conflitos */
+* {
+  box-sizing: border-box !important;
+}
+
+/* Container responsivo geral */
+@media screen and (max-width: 480px) {
+  .container-terminal, .terminal-container {
+    margin: 1rem auto !important;
+    padding: 0 1rem !important;
+  }
+  
+  .terminal {
+    max-width: 100% !important;
+  }
+  
+  .back-home-container {
+    top: 1rem !important;
+    left: 1rem !important;
+  }
+}

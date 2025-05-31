@@ -13,29 +13,74 @@
   <title>T.I QUIZZMASTER</title>
 </head>
 
-<!--Rain code-->
 <body> 
-  <div class="container">
-    <canvas id="canvas"></canvas>
-  </div>
+  <!-- Background Canvas for Matrix Rain -->
+  <canvas id="canvas"></canvas>
   
-  <div class="container-terminal">
-    <div class="terminal">
-      <h1 class="pergunta" id="Questao">Carregando pergunta...</h1>
-    </div>
+  <!-- Back Button -->
+  <div class="back-home-container">
+    <a href="index.html" class="back-btn">
+      <img src="img/duas-setas-para-a-esquerda.png" alt="Voltar">
+      <span class="back-tooltip">Voltar ao Menu</span>
+    </a>
+  </div>
 
-    <!-- Score Display -->
-    <div class="score-display">
-        <p>Pontuação: <span id="current-score">0</span></p>
-        <p>Pergunta <span id="current-question-number">1</span> de <span id="total-questions">10</span></p>
+  <!-- Score Display -->
+  <div class="score-display">
+    <div class="score-item">
+      <span class="score-label">PONTUAÇÃO</span>
+      <span class="score-value" id="current-score">0</span>
+    </div>
+    <div class="score-item">
+      <span class="score-label">PERGUNTA</span>
+      <span class="score-value">
+        <span id="current-question-number">1</span>/<span id="total-questions">10</span>
+      </span>
     </div>
   </div>
   
-  <div class="grid-container">
-    <div class="box"><p id="answer_a">Carregando...</p></div>
-    <div class="box"><p id="answer_b">Carregando...</p></div>
-    <div class="box"><p id="answer_c">Carregando...</p></div>
-    <div class="box"><p id="answer_d">Carregando...</p></div>
+  <!-- Terminal Container for Question -->
+  <div class="terminal-container">
+    <div class="terminal">
+      <div class="terminal-header">
+        <div class="terminal-controls">
+          <div class="control close"></div>
+          <div class="control minimize"></div>
+          <div class="control maximize"></div>
+        </div>
+        <div class="terminal-title">T.I QUIZZMASTER - SESSÃO ATIVA</div>
+        <div></div>
+      </div>
+      <div class="terminal-content">
+        <div class="command-line">
+          <span class="prompt">admin@quizzmaster:~$</span>
+          <span class="command">execute quiz_question.sh</span>
+        </div>
+        <h1 class="pergunta" id="Questao">Inicializando sistema de questões...</h1>
+      </div>
+    </div>
+  </div>
+
+  <!-- Answers Container -->
+  <div class="answers-container">
+    <div class="answers-grid">
+      <div class="answer-box box" data-answer-id="" data-answer-index="0">
+        <div class="answer-label">A)</div>
+        <div class="answer-text" id="answer_a">Carregando opção A...</div>
+      </div>
+      <div class="answer-box box" data-answer-id="" data-answer-index="1">
+        <div class="answer-label">B)</div>
+        <div class="answer-text" id="answer_b">Carregando opção B...</div>
+      </div>
+      <div class="answer-box box" data-answer-id="" data-answer-index="2">
+        <div class="answer-label">C)</div>
+        <div class="answer-text" id="answer_c">Carregando opção C...</div>
+      </div>
+      <div class="answer-box box" data-answer-id="" data-answer-index="3">
+        <div class="answer-label">D)</div>
+        <div class="answer-text" id="answer_d">Carregando opção D...</div>
+      </div>
+    </div>
   </div>
 
   <!-- Progress Bar -->
@@ -44,26 +89,23 @@
       <div class="progress-fill" id="progress-fill"></div>
     </div>
     <div class="progress-text">
-      <span id="progress-percentage">0%</span>
+      <span id="progress-percentage">0%</span> - Carregando Quiz...
     </div>
   </div>
 
+  <!-- Modal for Messages -->
   <div id="myModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <p id="modalText"></p>
+      <p id="modalText">Mensagem do sistema</p>
     </div>
   </div>
-
-  <a href="index.html" id="back-home2">
-    <img src="img/duas-setas-para-a-esquerda.png" alt="Voltar para a página principal">
-  </a>
 
   <!-- Loading Overlay -->
   <div id="loading-overlay" class="loading-overlay">
     <div class="loading-content">
       <div class="loading-spinner"></div>
-      <p>Carregando quiz...</p>
+      <p>Inicializando sistema de questões...</p>
     </div>
   </div>
   
