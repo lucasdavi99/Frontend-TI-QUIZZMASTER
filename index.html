@@ -5,73 +5,70 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon" />
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/reset.css" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/glitch-effects.css" />
     <link rel="stylesheet" href="css/code_rain.css" />
+    
+    <!-- External Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    
+    <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Rubik+Glitch&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-      rel="stylesheet"
-    />
+    
     <title>T.I QUIZZMASTER</title>
   </head>
 
   <body>
-    <!------Rain Code-------->
+    <!-- Matrix Rain Background -->
+    <canvas id="canvas"></canvas>
+    
+    <!-- Main Container -->
     <div class="container">
-      <h1 id="titulo">T.I QUIZZMASTER</h1>
-      <canvas id="canvas"></canvas>
+      <!-- Title with Glitch Effect -->
+      <div class="title-container">
+        <h1 id="titulo" class="glitch-title" data-text="T.I QUIZZMASTER">
+          <span class="glitch-layer">T.I QUIZZMASTER</span>
+        </h1>
+      </div>
+      
+      <!-- Navigation Buttons -->
+      <nav class="navigation">
+        <a class="btn btn-primary" href="questions.html">
+          <span class="btn-text">Começar</span>
+          <span class="btn-bg"></span>
+        </a>
+        <a class="btn btn-secondary" href="rank.html">
+          <span class="btn-text">Ranking</span>
+          <span class="btn-bg"></span>
+        </a>
+        <a class="btn btn-tertiary" href="credit.html">
+          <span class="btn-text">Créditos</span>
+          <span class="btn-bg"></span>
+        </a>
+      </nav>
     </div>
 
-    <!----Os botões---->
-    <div class="botao">
-      <a class="btn" href="questions.html">Começar</a>
-      <a class="btn" href="rank.html">Ranking</a>
-      <a class="btn" href="credit.html">Créditos</a>
+    <!-- Login/Logout Button -->
+    <div class="auth-container">
+      <a href="login.html" id="login" class="auth-btn">
+        <img id="loginImage" src="img/login-image.png" alt="login" />
+        <span class="auth-tooltip">Login</span>
+      </a>
     </div>
 
-    <!--Botão de login-->
-    <a href="login.html" id="login">
-      <img id="loginImage" src="img/login-image.png" alt="login" />
-    </a>
-
-    <!--Musica-->
-
-    <audio autoplay loop>
+    <!-- Audio -->
+    <audio id="backgroundAudio" autoplay loop>
       <source src="audio/Spektrem_Shine.mp3" />
     </audio>
 
+    <!-- JavaScript Files -->
     <script src="js/rain_code.js"></script>
-    <script src="js/decoding_effect.js"></script>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        var isLoggedIn = localStorage.getItem('loggedIn');
-        var loginImage = document.getElementById('loginImage');
-        
-        if (isLoggedIn) {
-          loginImage.src = 'img/logout.png';
-        } else {
-          loginImage.src = 'img/login-image.png';
-        }
-        
-        loginImage.addEventListener('click', function() {
-          if (isLoggedIn) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('loggedIn');
-            event.preventDefault();
-            
-            loginImage.src = 'img/login-image.png';
-            
-            // Evita o redirecionamento para a página de login após o logout
-            // Você pode adicionar alguma mensagem ou efeito visual aqui se desejar
-          }
-        });
-      });
-    </script>
-    
+    <script src="js/glitch-effects.js"></script>
+    <script src="js/auth-handler.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>
