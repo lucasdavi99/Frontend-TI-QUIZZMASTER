@@ -1,52 +1,52 @@
-// Função para carregar os dados do ranking
-function loadRankingData() {
-    fetch('https://quizzmaster-a405941b4ff4.herokuapp.com/api/scores')
-        .then(response => response.json())
-        .then(data => {
-            renderRankingTable(data);
-        })
-        .catch(error => console.error('Erro ao carregar os dados do ranking:', error));
-}
+const API_BASE_URL = 'http://localhost:8080';
 
-// Função para renderizar a tabela de ranking
-function renderRankingTable(scores) {
-    const tableBody = document.querySelector('#table tbody');
-
-    // Limpa o conteúdo atual da tabela
-    tableBody.innerHTML = '';
-
-    // Ordena os scores em ordem decrescente de pontos
-    scores.sort((a, b) => b.points - a.points);
-
-    // Itera sobre os top 10 scores para criar as linhas da tabela
-    for (let i = 0; i < Math.min(scores.length, 10); i++) {
-        const score = scores[i];
-        const position = i + 1;
-        const row = document.createElement('tr');
-
-        // Adiciona a classe de destaque para as primeiras posições
-        if (position <= 10) {
-            row.classList.add('highlighted-row');
+async function loadRankingData() {
+    try {
+        const token = localStorage.getItem('token');
+        
+        // Se tiver token, busca o histórico do usuário
+        if (token) {
+            const response = await fetch(`${API_BASE_URL}/api/quiz-session/history`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (response.ok) {
+                const history = await response.json();
+                renderUserHistory(history);
+            }
         }
-
-        // Verifica se score.user está definido antes de acessar a propriedade username
-        const username = score.user ? score.user.username : 'Usuário Não Definido';
-
-        row.innerHTML = `
-            <td>${position}º</td>
-            <td>${username}</td>
-            <td>${score.points}</td>
-        `;
-
-        tableBody.appendChild(row);
+        
+        // Buscar ranking global (você precisaria criar este endpoint)
+        // Por enquanto, você pode usar o endpoint de scores existente
+        const scoresResponse = await fetch(`${API_BASE_URL}/api/scores`);
+        if (scoresResponse.ok) {
+            const scores = await scoresResponse.json();
+            renderRankingTable(scores);
+        }
+        
+    } catch (error) {
+        console.error('Erro ao carregar ranking:', error);
     }
 }
 
-
-// Função para inicializar a página
-function initializePage() {
-    loadRankingData();
+function renderUserHistory(history) {
+    // Criar uma seção para mostrar o histórico pessoal do usuário
+    const historyContainer = document.getElementById('user-history');
+    if (!historyContainer) return;
+    
+    historyContainer.innerHTML = '<h2>Seu Histórico</h2>';
+    
+    history.forEach((session, index) => {
+        const sessionDiv = document.createElement('div');
+        sessionDiv.className = 'history-item';
+        sessionDiv.innerHTML = `
+            <p>Sessão ${index + 1}</p>
+            <p>Pontuação: ${session.finalScore}/${session.totalQuestions * 10}</p>
+            <p>Status: ${session.wasCompleted ? 'Completado' : 'Interrompido'}</p>
+            <p>Data: ${new Date(session.createdAt).toLocaleDateString('pt-BR')}</p>
+        `;
+        historyContainer.appendChild(sessionDiv);
+    });
 }
-
-// Chama a função de inicialização quando o DOM estiver pronto
-document.addEventListener('DOMContentLoaded', initializePage);

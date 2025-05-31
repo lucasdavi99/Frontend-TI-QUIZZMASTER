@@ -1,7 +1,7 @@
 const signInBtnLink = document.querySelector('.signInBtn-link');
 const signUpBtnLink = document.querySelector('.signUpBtn-link');
 const wrapper = document.querySelector('.wrapper');
-const api = 'https://quizzmaster-a405941b4ff4.herokuapp.com';
+const api = 'http://localhost:8080';
 
 signUpBtnLink.addEventListener('click', () => {
     wrapper.classList.toggle('active');
