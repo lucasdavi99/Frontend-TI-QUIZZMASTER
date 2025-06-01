@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/code_rain.css">
+    <link rel="stylesheet" href="css/rank.css">
+    <link rel="stylesheet" href="css/history.css">
+    
+    <!-- External Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
+    
+    <title>T.I QUIZZMASTER - Meu Histórico</title>
+</head>
+
+<body>
+    <!-- Matrix Rain Background -->
+    <canvas id="canvas"></canvas>
+    
+    <!-- Navigation Container -->
+    <div class="navigation-container">
+        <!-- Back to Ranking Button -->
+        <div class="back-home-container">
+            <a href="rank.html" id="back-ranking" class="back-btn">
+                <img src="img/duas-setas-para-a-esquerda.png" alt="Voltar">
+                <span class="back-tooltip">Voltar ao Ranking</span>
+            </a>
+        </div>
+        
+        <!-- Home Button -->
+        <div class="home-button-container">
+            <a href="index.html" id="home-btn" class="nav-btn">
+                <img src="img/home-icon.png" alt="Home" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(92deg) brightness(101%) contrast(107%);">
+                <span class="nav-tooltip">Menu Principal</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="history-container">
+        <!-- Page Title -->
+        <div class="title-section">
+            <h1 id="history-title" class="history-title">MEU HISTÓRICO DE PARTIDAS</h1>
+            <div class="title-underline"></div>
+            <p class="title-subtitle" id="user-welcome">Suas conquistas e estatísticas pessoais</p>
+        </div>
+        
+        <!-- User Stats Summary -->
+        <div class="user-stats-summary" id="user-stats-summary" style="display: none;">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="user-best-score">-</div>
+                    <div class="stat-label">Melhor Score</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="user-total-games">-</div>
+                    <div class="stat-label">Total de Jogos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="user-average-score">-</div>
+                    <div class="stat-label">Média</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="user-ranking-position">-</div>
+                    <div class="stat-label">Posição no Ranking</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="user-win-rate">-</div>
+                    <div class="stat-label">Taxa de Vitória</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="user-total-points">-</div>
+                    <div class="stat-label">Pontos Totais</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filter Controls -->
+        <div class="filter-section" id="filter-section" style="display: none;">
+            <h3 class="section-title">📊 Filtros e Ordenação</h3>
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="filter-status">Status:</label>
+                    <select id="filter-status" class="filter-select">
+                        <option value="all">Todas as Partidas</option>
+                        <option value="completed">Apenas Completadas</option>
+                        <option value="interrupted">Apenas Interrompidas</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sort-by">Ordenar por:</label>
+                    <select id="sort-by" class="filter-select">
+                        <option value="date-desc">Data (Mais Recente)</option>
+                        <option value="date-asc">Data (Mais Antiga)</option>
+                        <option value="score-desc">Pontuação (Maior)</option>
+                        <option value="score-asc">Pontuação (Menor)</option>
+                    </select>
+                </div>
+                <button id="apply-filters" class="filter-btn">Aplicar Filtros</button>
+                <button id="clear-filters" class="filter-btn secondary">Limpar</button>
+            </div>
+        </div>
+        
+        <!-- History Content -->
+        <div class="history-content">
+            <!-- Loading State -->
+            <div class="loading-state" id="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Carregando seu histórico...</p>
+            </div>
+            
+            <!-- History Grid -->
+            <div class="history-grid" id="history-grid" style="display: none;">
+                <!-- Partidas serão inseridas aqui via JavaScript -->
+            </div>
+            
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <div class="empty-icon">🎮</div>
+                <h3>Nenhuma partida encontrada</h3>
+                <p>Você ainda não jogou nenhuma partida. Que tal começar agora?</p>
+                <a href="questions.html" class="play-btn">Começar a Jogar</a>
+            </div>
+            
+            <!-- Error State -->
+            <div class="error-state" id="error-state" style="display: none;">
+                <div class="error-icon">⚠️</div>
+                <h3>Erro ao carregar histórico</h3>
+                <p id="error-message">Ocorreu um erro ao carregar seus dados.</p>
+                <button id="retry-btn" class="retry-btn">Tentar Novamente</button>
+            </div>
+            
+            <!-- Not Logged In State -->
+            <div class="not-logged-state" id="not-logged-state">
+                <div class="login-prompt">
+                    <div class="login-icon">🔐</div>
+                    <h3>Login Necessário</h3>
+                    <p>Você precisa estar logado para ver seu histórico de partidas.</p>
+                    <div class="login-actions">
+                        <a href="login.html" class="login-btn">Fazer Login</a>
+                        <a href="rank.html" class="secondary-btn">Ver Ranking Público</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="pagination" id="pagination" style="display: none;">
+            <button id="prev-page" class="page-btn" disabled>
+                <span>← Anterior</span>
+            </button>
+            <div class="page-info">
+                <span id="page-current">1</span>
+                <span>de</span>
+                <span id="page-total">1</span>
+            </div>
+            <button id="next-page" class="page-btn" disabled>
+                <span>Próxima →</span>
+            </button>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="quick-actions" id="quick-actions" style="display: none;">
+            <a href="questions.html" class="action-btn primary">
+                <span class="action-icon">🎮</span>
+                <span>Jogar Novamente</span>
+            </a>
+            <a href="rank.html" class="action-btn secondary">
+                <span class="action-icon">🏆</span>
+                <span>Ver Ranking</span>
+            </a>
+            <button id="export-data" class="action-btn tertiary">
+                <span class="action-icon">📊</span>
+                <span>Exportar Dados</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- JavaScript Files -->
+    <script src="js/rain_code.js"></script>
+    <script src="js/history.js"></script>
+    <script src="js/decoding_effect.js"></script>
+</body>
+</html>

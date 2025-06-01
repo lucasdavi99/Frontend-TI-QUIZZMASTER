@@ -589,6 +589,298 @@ body {
 }
 
 /* ==========================================================================
+   ESTILOS ADICIONAIS PARA RANKING DINÂMICO
+   ========================================================================== */
+
+/* Player Info Styling */
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.player-name {
+  font-weight: bold;
+  color: var(--primary-green);
+}
+
+.medal {
+  font-size: 1.2rem;
+  animation: medalGlow 2s ease-in-out infinite alternate;
+}
+
+.medal-1 { filter: hue-rotate(45deg); } /* Gold */
+.medal-2 { filter: hue-rotate(200deg); } /* Silver */
+.medal-3 { filter: hue-rotate(25deg); } /* Bronze */
+
+@keyframes medalGlow {
+  0% { transform: scale(1); text-shadow: 0 0 5px currentColor; }
+  100% { transform: scale(1.1); text-shadow: 0 0 15px currentColor; }
+}
+
+/* Score Info Styling */
+.score-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.best-score {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--neon-blue);
+  text-shadow: 0 0 10px var(--neon-blue);
+}
+
+.average-score {
+  font-size: 0.6rem;
+  color: var(--secondary-green);
+  opacity: 0.8;
+}
+
+/* Games Info Styling */
+.games-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.total-games {
+  font-size: 1rem;
+  color: var(--primary-green);
+}
+
+.total-points {
+  font-size: 0.6rem;
+  color: var(--secondary-green);
+  opacity: 0.8;
+}
+
+/* Position Styling */
+.position-1, .position-2, .position-3 {
+  font-weight: bold;
+  text-shadow: 0 0 10px currentColor;
+}
+
+.position-1 { color: var(--gold); }
+.position-2 { color: var(--silver); }
+.position-3 { color: var(--bronze); }
+.position-other { color: var(--primary-green); }
+
+/* Top Players Row Styling */
+.ranking-table tbody tr.top-1 {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.15), rgba(0, 0, 0, 0.6));
+  border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.ranking-table tbody tr.top-2 {
+  background: linear-gradient(90deg, rgba(192, 192, 192, 0.15), rgba(0, 0, 0, 0.6));
+  border: 2px solid rgba(192, 192, 192, 0.3);
+}
+
+.ranking-table tbody tr.top-3 {
+  background: linear-gradient(90deg, rgba(205, 127, 50, 0.15), rgba(0, 0, 0, 0.6));
+  border: 2px solid rgba(205, 127, 50, 0.3);
+}
+
+/* History Items Enhanced */
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--dark-green);
+}
+
+.session-number {
+  font-weight: bold;
+  color: var(--primary-green);
+  font-size: 0.8rem;
+}
+
+.session-status {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.session-status.completed {
+  background: var(--secondary-green);
+  color: var(--background-black);
+}
+
+.session-status.interrupted {
+  background: var(--glitch-red);
+  color: var(--text-white);
+}
+
+.history-details {
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+.history-details p {
+  margin: 0.3rem 0;
+  color: var(--secondary-green);
+}
+
+.history-details strong {
+  color: var(--primary-green);
+}
+
+/* Error and Loading States */
+.error-row {
+  background: rgba(255, 0, 64, 0.1);
+  border: 2px solid var(--glitch-red);
+}
+
+.error-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--glitch-red);
+  padding: 2rem;
+}
+
+.error-icon {
+  font-size: 2rem;
+}
+
+.error-message {
+  font-size: 0.8rem;
+}
+
+/* Enhanced Loading Spinner */
+.loading-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--dark-green);
+  border-top: 3px solid var(--primary-green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Number Animation */
+.stat-number {
+  transition: all 0.3s ease;
+}
+
+.stat-number.updating {
+  color: var(--neon-blue);
+  text-shadow: 0 0 15px var(--neon-blue);
+  transform: scale(1.1);
+}
+
+/* Enhanced Hover Effects */
+.ranking-table tbody tr:hover .player-name {
+  color: var(--neon-blue);
+  text-shadow: 0 0 10px var(--neon-blue);
+}
+
+.ranking-table tbody tr:hover .best-score {
+  transform: scale(1.05);
+  text-shadow: 0 0 15px var(--neon-blue);
+}
+
+/* Responsive Enhancements */
+@media screen and (max-width: 768px) {
+  .player-info {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  
+  .score-info, .games-info {
+    gap: 0.1rem;
+  }
+  
+  .best-score {
+    font-size: 0.9rem;
+  }
+  
+  .average-score, .total-points {
+    font-size: 0.5rem;
+  }
+  
+  .medal {
+    font-size: 1rem;
+  }
+  
+  .history-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .player-info {
+    text-align: center;
+  }
+  
+  .score-info, .games-info {
+    text-align: center;
+  }
+  
+  .average-score, .total-points {
+    display: none; /* Hide secondary info on very small screens */
+  }
+  
+  .medal {
+    font-size: 0.8rem;
+  }
+  
+  .history-details {
+    font-size: 0.6rem;
+  }
+}
+
+/* Accessibility Improvements */
+.ranking-table tbody tr:focus-within {
+  outline: 2px solid var(--primary-green);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .medal {
+    animation: none;
+  }
+  
+  .loading-spinner {
+    animation: none;
+    border: 3px solid var(--primary-green);
+    border-top: 3px solid var(--neon-blue);
+  }
+  
+  .stat-number {
+    transition: none;
+  }
+}
+
+/* High Contrast Mode */
+.high-contrast .player-name,
+.high-contrast .best-score,
+.high-contrast .total-games {
+  font-weight: 900;
+  text-shadow: none;
+}
+
+.high-contrast .medal {
+  filter: none;
+}
+
+.high-contrast .ranking-table tbody tr.top-1,
+.high-contrast .ranking-table tbody tr.top-2,
+.high-contrast .ranking-table tbody tr.top-3 {
+  border-width: 4px;
+}
+
+/* ==========================================================================
    ACCESSIBILITY & PERFORMANCE
    ========================================================================== */
 
@@ -615,4 +907,439 @@ body {
 
 .high-contrast .stat-card {
   border-width: 3px;
+}
+
+/* ==========================================================================
+   ATUALIZAÇÕES PARA RANK.CSS - NAVEGAÇÃO E MELHORIAS
+   ========================================================================== */
+
+/* ==========================================================================
+   NAVIGATION CONTAINER
+   ========================================================================== */
+
+.navigation-container {
+  position: fixed;
+  top: 2rem;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+}
+
+.history-button-container {
+  position: relative;
+}
+
+.nav-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0.8rem;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--secondary-green);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+}
+
+.nav-btn:hover {
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.nav-tooltip {
+  position: absolute;
+  top: -3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--background-black);
+  color: var(--primary-green);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  border: 1px solid var(--primary-green);
+  white-space: nowrap;
+}
+
+.nav-btn:hover .nav-tooltip {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   ENHANCED TITLE SECTION
+   ========================================================================== */
+
+.title-subtitle {
+  color: var(--secondary-green);
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 1rem;
+  opacity: 0.8;
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================================================
+   USER POSITION CARD
+   ========================================================================== */
+
+.user-stat-highlight {
+  border-color: var(--neon-blue) !important;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.4) !important;
+  animation: userCardPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes userCardPulse {
+  0% {
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 35px rgba(0, 255, 255, 0.6);
+  }
+}
+
+/* ==========================================================================
+   QUICK ACTIONS SECTION
+   ========================================================================== */
+
+.quick-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 2rem;
+  background: transparent;
+  border: 2px solid;
+  border-radius: 8px;
+  text-decoration: none;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.7rem;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  position: relative;
+  overflow: hidden;
+}
+
+.action-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: all 0.5s ease;
+}
+
+.action-btn:hover::before {
+  left: 100%;
+}
+
+.history-action {
+  border-color: var(--neon-blue);
+  color: var(--neon-blue);
+}
+
+.history-action:hover {
+  background: var(--neon-blue);
+  color: var(--background-black);
+  box-shadow: 0 0 20px var(--neon-blue);
+  transform: translateY(-2px);
+}
+
+.play-action {
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+}
+
+.play-action:hover {
+  background: var(--primary-green);
+  color: var(--background-black);
+  box-shadow: 0 0 20px var(--primary-green);
+  transform: translateY(-2px);
+}
+
+.action-icon {
+  font-size: 1rem;
+}
+
+/* ==========================================================================
+   TABLE HEADER IMPROVEMENTS
+   ========================================================================== */
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.table-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* ==========================================================================
+   ENHANCED RANKING ROWS
+   ========================================================================== */
+
+.position-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.position-number {
+  font-weight: bold;
+  text-shadow: 0 0 10px currentColor;
+}
+
+.current-user {
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.1), rgba(0, 0, 0, 0.6)) !important;
+  border: 2px solid var(--neon-blue) !important;
+  animation: currentUserGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes currentUserGlow {
+  0% {
+    box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.2);
+  }
+  100% {
+    box-shadow: inset 0 0 30px rgba(0, 255, 255, 0.4);
+  }
+}
+
+.current-user-badge {
+  background: var(--neon-blue);
+  color: var(--background-black);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-left: 0.5rem;
+  box-shadow: 0 0 10px var(--neon-blue);
+}
+
+/* ==========================================================================
+   INFO BANNER
+   ========================================================================== */
+
+.info-banner {
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.1), rgba(0, 0, 0, 0.8));
+  border: 2px solid var(--neon-blue);
+  border-radius: 8px;
+  padding: 1rem 2rem;
+  margin: 2rem 0;
+  backdrop-filter: blur(10px);
+  animation: bannerPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes bannerPulse {
+  0% {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+  }
+  100% {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 25px rgba(0, 255, 65, 0.4);
+  }
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.banner-icon {
+  font-size: 1.5rem;
+}
+
+.banner-text {
+  color: var(--text-white);
+  font-size: 0.8rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.banner-action {
+  padding: 0.8rem 1.5rem;
+  background: var(--neon-blue);
+  color: var(--background-black);
+  text-decoration: none;
+  border-radius: 4px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.6rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  border: 2px solid var(--neon-blue);
+}
+
+.banner-action:hover {
+  background: transparent;
+  color: var(--neon-blue);
+  box-shadow: 0 0 15px var(--neon-blue);
+}
+
+/* ==========================================================================
+   ERROR STATE IMPROVEMENTS
+   ========================================================================== */
+
+.retry-btn {
+  margin-top: 1rem;
+  padding: 0.8rem 1.5rem;
+  background: transparent;
+  border: 2px solid var(--primary-green);
+  color: var(--primary-green);
+  border-radius: 4px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.6rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.retry-btn:hover {
+  background: var(--primary-green);
+  color: var(--background-black);
+  box-shadow: 0 0 15px var(--primary-green);
+}
+
+/* ==========================================================================
+   FADE IN ANIMATION
+   ========================================================================== */
+
+.fade-in {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE UPDATES
+   ========================================================================== */
+
+@media screen and (max-width: 768px) {
+  .navigation-container {
+    padding: 0 1rem;
+  }
+  
+  .table-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .quick-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .action-btn {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+  
+  .banner-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .banner-text {
+    min-width: auto;
+  }
+  
+  .position-container {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .current-user-badge {
+    font-size: 0.4rem;
+    margin-left: 0.2rem;
+    margin-top: 0.2rem;
+  }
+  
+  .action-icon {
+    font-size: 0.8rem;
+  }
+  
+  .banner-icon {
+    font-size: 1.2rem;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY IMPROVEMENTS
+   ========================================================================== */
+
+.action-btn:focus,
+.nav-btn:focus,
+.banner-action:focus {
+  outline: 2px solid var(--primary-green);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .user-stat-highlight,
+  .current-user,
+  .info-banner,
+  .action-btn::before {
+    animation: none;
+  }
+  
+  .fade-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   HIGH CONTRAST MODE
+   ========================================================================== */
+
+.high-contrast .info-banner,
+.high-contrast .quick-actions .action-btn,
+.high-contrast .current-user {
+  border-width: 4px;
+}
+
+.high-contrast .current-user-badge {
+  border: 2px solid var(--background-black);
 }

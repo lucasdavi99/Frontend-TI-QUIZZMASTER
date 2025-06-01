@@ -25,12 +25,23 @@
     <!-- Matrix Rain Background -->
     <canvas id="canvas"></canvas>
     
-    <!-- Back to Home Button -->
-    <div class="back-home-container">
-        <a href="index.html" id="back-home2" class="back-btn">
-            <img src="img/duas-setas-para-a-esquerda.png" alt="Voltar">
-            <span class="back-tooltip">Voltar ao Menu</span>
-        </a>
+    <!-- Navigation Container -->
+    <div class="navigation-container">
+        <!-- Back to Home Button -->
+        <div class="back-home-container">
+            <a href="index.html" id="back-home2" class="back-btn">
+                <img src="img/duas-setas-para-a-esquerda.png" alt="Voltar">
+                <span class="back-tooltip">Voltar ao Menu</span>
+            </a>
+        </div>
+        
+        <!-- History Button -->
+        <div class="history-button-container">
+            <a href="history.html" id="history-btn" class="nav-btn">
+                <img src="img/history-icon.png" alt="Histórico" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(92deg) brightness(101%) contrast(107%);">
+                <span class="nav-tooltip">Meu Histórico</span>
+            </a>
+        </div>
     </div>
     
     <!-- Main Content -->
@@ -39,6 +50,7 @@
         <div class="title-section">
             <h1 id="rank-title" class="ranking-title">RANKING DE JOGADORES</h1>
             <div class="title-underline"></div>
+            <p class="title-subtitle">Os melhores jogadores da plataforma</p>
         </div>
         
         <!-- Statistics Cards -->
@@ -55,19 +67,36 @@
                 <div class="stat-number" id="highest-score">0</div>
                 <div class="stat-label">Recorde</div>
             </div>
+            <div class="stat-card" id="user-position-card" style="display: none;">
+                <div class="stat-number" id="user-position">-</div>
+                <div class="stat-label">Sua Posição</div>
+            </div>
         </div>
         
-        <!-- User History Section -->
-        <div class="history-section" id="user-history" style="display: none;">
-            <h2 class="section-title">Seu Histórico</h2>
-            <div class="history-container" id="history-content">
-                <!-- Conteúdo será inserido via JavaScript -->
-            </div>
+        <!-- Quick Actions -->
+        <div class="quick-actions" id="user-actions" style="display: none;">
+            <a href="history.html" class="action-btn history-action">
+                <span class="action-icon">📜</span>
+                <span class="action-text">Ver Meu Histórico</span>
+            </a>
+            <a href="questions.html" class="action-btn play-action">
+                <span class="action-icon">🎮</span>
+                <span class="action-text">Jogar Novamente</span>
+            </a>
         </div>
         
         <!-- Ranking Table -->
         <div class="table-container">
-            <h2 class="section-title">Top Jogadores</h2>
+            <div class="table-header">
+                <h2 class="section-title">🏆 Top Jogadores</h2>
+                <div class="table-controls">
+                    <button id="refresh-btn" class="refresh-btn">
+                        <span class="refresh-icon">🔄</span>
+                        <span>Atualizar</span>
+                    </button>
+                </div>
+            </div>
+            
             <div class="table-wrapper">
                 <table id="ranking-table" class="ranking-table">
                     <thead>
@@ -104,7 +133,7 @@
                             <td colspan="4">
                                 <div class="loading-content">
                                     <div class="loading-spinner"></div>
-                                    <span>Carregando dados...</span>
+                                    <span>Carregando ranking...</span>
                                 </div>
                             </td>
                         </tr>
@@ -115,18 +144,19 @@
         
         <!-- Empty State -->
         <div class="empty-state" id="empty-state" style="display: none;">
-            <div class="empty-icon">📊</div>
-            <h3>Nenhum dado encontrado</h3>
+            <div class="empty-icon">🏆</div>
+            <h3>Nenhum jogador no ranking ainda</h3>
             <p>Seja o primeiro a jogar e aparecer no ranking!</p>
-            <a href="questions.html" class="play-btn">Jogar Agora</a>
+            <a href="questions.html" class="play-btn">Começar a Jogar</a>
         </div>
         
-        <!-- Refresh Button -->
-        <div class="refresh-container">
-            <button id="refresh-btn" class="refresh-btn">
-                <span class="refresh-icon">🔄</span>
-                <span>Atualizar Dados</span>
-            </button>
+        <!-- User Not Logged Warning -->
+        <div class="info-banner" id="login-banner" style="display: none;">
+            <div class="banner-content">
+                <span class="banner-icon">ℹ️</span>
+                <span class="banner-text">Faça login para ver sua posição no ranking e acessar seu histórico</span>
+                <a href="login.html" class="banner-action">Fazer Login</a>
+            </div>
         </div>
     </div>
     

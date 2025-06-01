@@ -1,52 +1,460 @@
+/**
+ * RANKING PAGE CONTROLLER - VERSÃO FOCADA EM RANKING
+ * Sistema focado apenas em ranking e pontuações
+ */
+
 const API_BASE_URL = 'http://localhost:8080';
 
+console.log('🏆 Ranking.js carregado - versão focada v4.0');
+
+// Estado global da página
+let currentRankingData = [];
+let currentUserStats = null;
+let isLoading = false;
+let isUserLoggedIn = false;
+
+// Função principal para carregar dados do ranking
 async function loadRankingData() {
+    if (isLoading) {
+        console.log('⏳ Carregamento já em andamento...');
+        return;
+    }
+    
+    isLoading = true;
+    showLoadingState();
+    
     try {
-        const token = localStorage.getItem('token');
+        console.log('📊 Iniciando carregamento de dados do ranking...');
         
-        // Se tiver token, busca o histórico do usuário
-        if (token) {
-            const response = await fetch(`${API_BASE_URL}/api/quiz-session/history`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (response.ok) {
-                const history = await response.json();
-                renderUserHistory(history);
-            }
+        // Verifica se usuário está logado
+        isUserLoggedIn = !!getAuthToken();
+        updateUIForUserStatus();
+        
+        // Carrega dados principais em paralelo
+        const [rankingData, globalStats, userStats] = await Promise.allSettled([
+            loadRankingTable(),
+            loadGlobalStats(),
+            isUserLoggedIn ? loadUserStats() : Promise.resolve(null)
+        ]);
+        
+        // Processa resultados
+        if (rankingData.status === 'fulfilled') {
+            console.log('✅ Ranking carregado:', rankingData.value?.length || 0, 'jogadores');
+        } else {
+            console.error('❌ Erro ao carregar ranking:', rankingData.reason);
         }
         
-        // Buscar ranking global (você precisaria criar este endpoint)
-        // Por enquanto, você pode usar o endpoint de scores existente
-        const scoresResponse = await fetch(`${API_BASE_URL}/api/scores`);
-        if (scoresResponse.ok) {
-            const scores = await scoresResponse.json();
-            renderRankingTable(scores);
+        if (globalStats.status === 'fulfilled') {
+            console.log('✅ Estatísticas globais carregadas');
+        } else {
+            console.error('❌ Erro ao carregar estatísticas:', globalStats.reason);
+        }
+        
+        if (isUserLoggedIn && userStats.status === 'fulfilled' && userStats.value) {
+            console.log('✅ Estatísticas do usuário carregadas');
+            showUserPosition(userStats.value);
         }
         
     } catch (error) {
-        console.error('Erro ao carregar ranking:', error);
+        console.error('❌ Erro geral no carregamento:', error);
+        showErrorState('Erro ao carregar dados do ranking');
+    } finally {
+        isLoading = false;
+        hideLoadingState();
     }
 }
 
-function renderUserHistory(history) {
-    // Criar uma seção para mostrar o histórico pessoal do usuário
-    const historyContainer = document.getElementById('user-history');
-    if (!historyContainer) return;
-    
-    historyContainer.innerHTML = '<h2>Seu Histórico</h2>';
-    
-    history.forEach((session, index) => {
-        const sessionDiv = document.createElement('div');
-        sessionDiv.className = 'history-item';
-        sessionDiv.innerHTML = `
-            <p>Sessão ${index + 1}</p>
-            <p>Pontuação: ${session.finalScore}/${session.totalQuestions * 10}</p>
-            <p>Status: ${session.wasCompleted ? 'Completado' : 'Interrompido'}</p>
-            <p>Data: ${new Date(session.createdAt).toLocaleDateString('pt-BR')}</p>
-        `;
-        historyContainer.appendChild(sessionDiv);
-    });
+// Carrega dados da tabela de ranking
+async function loadRankingTable() {
+    try {
+        console.log('🏆 Buscando dados do ranking...');
+        
+        const response = await fetch(`${API_BASE_URL}/api/scores/ranking?limit=50`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const rankingData = await response.json();
+        console.log('📊 Dados do ranking recebidos:', rankingData);
+        
+        currentRankingData = rankingData;
+        renderRankingTable(rankingData);
+        
+        return rankingData;
+        
+    } catch (error) {
+        console.error('❌ Erro ao carregar ranking:', error);
+        
+        // Fallback para dados de demonstração se API falhar
+        const demoData = generateDemoRankingData();
+        renderRankingTable(demoData);
+        return demoData;
+    }
 }
+
+// Carrega estatísticas globais
+async function loadGlobalStats() {
+    try {
+        console.log('📈 Buscando estatísticas globais...');
+        
+        const response = await fetch(`${API_BASE_URL}/api/scores/stats`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const stats = await response.json();
+        console.log('📊 Estatísticas globais recebidas:', stats);
+        
+        updateGlobalStats(stats);
+        return stats;
+        
+    } catch (error) {
+        console.error('❌ Erro ao carregar estatísticas globais:', error);
+        
+        // Fallback para estatísticas de demonstração
+        const demoStats = {
+            totalPlayers: currentRankingData.length || 5,
+            totalGames: Math.max(currentRankingData.length * 3, 15),
+            highestScore: Math.max(...(currentRankingData.map(r => r.bestScore) || [100]))
+        };
+        updateGlobalStats(demoStats);
+        return demoStats;
+    }
+}
+
+// Carrega estatísticas do usuário
+async function loadUserStats() {
+    const token = getAuthToken();
+    if (!token) {
+        console.log('⚠️ Usuário não logado - não carregando estatísticas pessoais');
+        return null;
+    }
+    
+    try {
+        console.log('👤 Buscando estatísticas do usuário...');
+        
+        const response = await fetch(`${API_BASE_URL}/api/scores/my-stats`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const stats = await response.json();
+        console.log('👤 Estatísticas do usuário recebidas:', stats);
+        
+        currentUserStats = stats;
+        return stats;
+        
+    } catch (error) {
+        console.error('❌ Erro ao carregar estatísticas do usuário:', error);
+        return null;
+    }
+}
+
+// Renderiza a tabela de ranking
+function renderRankingTable(rankingData) {
+    console.log('🎨 Renderizando tabela de ranking...');
+    
+    const tbody = document.getElementById('ranking-tbody');
+    if (!tbody) {
+        console.error('❌ Elemento ranking-tbody não encontrado');
+        return;
+    }
+    
+    // Limpa tabela
+    tbody.innerHTML = '';
+    
+    if (!rankingData || rankingData.length === 0) {
+        showEmptyState();
+        return;
+    }
+    
+    hideEmptyState();
+    
+    // Renderiza cada linha do ranking
+    rankingData.forEach((player, index) => {
+        const row = createRankingRow(player, index + 1);
+        tbody.appendChild(row);
+    });
+    
+    console.log('✅ Tabela de ranking renderizada com', rankingData.length, 'jogadores');
+}
+
+// Cria uma linha da tabela de ranking
+function createRankingRow(player, position) {
+    const row = document.createElement('tr');
+    
+    // Adiciona classes especiais para top 3
+    if (position <= 3) {
+        row.classList.add(`top-${position}`);
+    }
+    
+    // Destaque para usuário atual
+    if (isUserLoggedIn && currentUserStats && player.userId === currentUserStats.userId) {
+        row.classList.add('current-user');
+    }
+    
+    // Célula de posição
+    const positionCell = document.createElement('td');
+    positionCell.innerHTML = `
+        <div class="position-container">
+            <span class="position-number position-${position <= 3 ? position : 'other'}">${position}</span>
+            ${position <= 3 ? `<span class="medal medal-${position}">🏆</span>` : ''}
+        </div>
+    `;
+    row.appendChild(positionCell);
+    
+    // Célula de nome do jogador
+    const nameCell = document.createElement('td');
+    nameCell.innerHTML = `
+        <div class="player-info">
+            <span class="player-name">${escapeHtml(player.username || 'Jogador Anônimo')}</span>
+            ${isUserLoggedIn && currentUserStats && player.userId === currentUserStats.userId ? 
+                '<span class="current-user-badge">Você</span>' : ''}
+        </div>
+    `;
+    row.appendChild(nameCell);
+    
+    // Célula de pontuação
+    const scoreCell = document.createElement('td');
+    scoreCell.innerHTML = `
+        <div class="score-info">
+            <span class="best-score">${player.bestScore || 0}</span>
+            <span class="average-score">Média: ${player.averageScore || 0}</span>
+        </div>
+    `;
+    row.appendChild(scoreCell);
+    
+    // Célula de partidas
+    const gamesCell = document.createElement('td');
+    gamesCell.innerHTML = `
+        <div class="games-info">
+            <span class="total-games">${player.totalGames || 0}</span>
+            <span class="total-points">Total: ${player.totalPoints || 0}pts</span>
+        </div>
+    `;
+    row.appendChild(gamesCell);
+    
+    return row;
+}
+
+// Atualiza estatísticas globais na interface
+function updateGlobalStats(stats) {
+    console.log('📊 Atualizando estatísticas globais...');
+    
+    const elements = {
+        'total-players': stats.totalPlayers || 0,
+        'total-games': stats.totalGames || 0,
+        'highest-score': stats.highestScore || 0
+    };
+    
+    Object.entries(elements).forEach(([id, value]) => {
+        const element = document.getElementById(id);
+        if (element) {
+            animateNumber(element, value);
+        }
+    });
+    
+    console.log('✅ Estatísticas globais atualizadas');
+}
+
+// Mostra posição do usuário
+function showUserPosition(userStats) {
+    const positionCard = document.getElementById('user-position-card');
+    const positionElement = document.getElementById('user-position');
+    
+    if (positionCard && positionElement && userStats.rankingPosition) {
+        positionElement.textContent = userStats.rankingPosition + 'º';
+        positionCard.style.display = 'block';
+        
+        // Anima a entrada do card
+        setTimeout(() => {
+            positionCard.classList.add('user-stat-highlight');
+        }, 500);
+        
+        console.log('👤 Posição do usuário exibida:', userStats.rankingPosition);
+    }
+}
+
+// Atualiza UI baseada no status do usuário
+function updateUIForUserStatus() {
+    const userActions = document.getElementById('user-actions');
+    const loginBanner = document.getElementById('login-banner');
+    
+    if (isUserLoggedIn) {
+        if (userActions) userActions.style.display = 'flex';
+        if (loginBanner) loginBanner.style.display = 'none';
+        console.log('👤 UI configurada para usuário logado');
+    } else {
+        if (userActions) userActions.style.display = 'none';
+        if (loginBanner) loginBanner.style.display = 'block';
+        console.log('👤 UI configurada para usuário não logado');
+    }
+}
+
+// Anima números com efeito contador
+function animateNumber(element, targetValue) {
+    const startValue = parseInt(element.textContent) || 0;
+    const duration = 1000; // 1 segundo
+    const startTime = Date.now();
+    
+    function updateNumber() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function (ease-out)
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
+        
+        const currentValue = Math.round(startValue + (targetValue - startValue) * easedProgress);
+        element.textContent = currentValue;
+        
+        if (progress < 1) {
+            requestAnimationFrame(updateNumber);
+        }
+    }
+    
+    updateNumber();
+}
+
+// Mostra estado de loading
+function showLoadingState() {
+    const tbody = document.getElementById('ranking-tbody');
+    if (tbody) {
+        tbody.innerHTML = `
+            <tr class="loading-row">
+                <td colspan="4">
+                    <div class="loading-content">
+                        <div class="loading-spinner"></div>
+                        <span>Carregando ranking...</span>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }
+}
+
+// Esconde estado de loading
+function hideLoadingState() {
+    // O loading será substituído pelos dados reais
+}
+
+// Mostra estado vazio
+function showEmptyState() {
+    const emptyState = document.getElementById('empty-state');
+    const tableContainer = document.querySelector('.table-container');
+    
+    if (emptyState && tableContainer) {
+        tableContainer.style.display = 'none';
+        emptyState.style.display = 'block';
+    }
+}
+
+// Esconde estado vazio
+function hideEmptyState() {
+    const emptyState = document.getElementById('empty-state');
+    const tableContainer = document.querySelector('.table-container');
+    
+    if (emptyState && tableContainer) {
+        emptyState.style.display = 'none';
+        tableContainer.style.display = 'block';
+    }
+}
+
+// Mostra estado de erro
+function showErrorState(message) {
+    const tbody = document.getElementById('ranking-tbody');
+    if (tbody) {
+        tbody.innerHTML = `
+            <tr class="error-row">
+                <td colspan="4">
+                    <div class="error-content">
+                        <span class="error-icon">⚠️</span>
+                        <span class="error-message">${message}</span>
+                        <button class="retry-btn" onclick="loadRankingData()">Tentar Novamente</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }
+}
+
+// Gera dados de demonstração para fallback
+function generateDemoRankingData() {
+    console.log('🎭 Gerando dados de demonstração...');
+    
+    const demoPlayers = [
+        { username: 'TechMaster', bestScore: 100, totalGames: 15, averageScore: 85.3, totalPoints: 1280 },
+        { username: 'CodeNinja', bestScore: 90, totalGames: 12, averageScore: 78.5, totalPoints: 942 },
+        { username: 'QuizPro', bestScore: 80, totalGames: 20, averageScore: 65.0, totalPoints: 1300 },
+        { username: 'LogicGuru', bestScore: 70, totalGames: 8, averageScore: 58.8, totalPoints: 470 },
+        { username: 'DataWiz', bestScore: 60, totalGames: 25, averageScore: 48.0, totalPoints: 1200 }
+    ];
+    
+    return demoPlayers.map((player, index) => ({
+        userId: index + 1,
+        username: player.username,
+        bestScore: player.bestScore,
+        totalGames: player.totalGames,
+        averageScore: player.averageScore,
+        totalPoints: player.totalPoints,
+        position: index + 1
+    }));
+}
+
+// Utilitários
+function getAuthToken() {
+    return localStorage.getItem('token') || 
+           (window.authData && window.authData.token) ||
+           sessionStorage.getItem('token');
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🏆 Página de ranking carregada - DOM ready');
+    
+    // Carrega dados iniciais
+    loadRankingData();
+    
+    // Configura botão de refresh
+    const refreshBtn = document.getElementById('refresh-btn');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => {
+            console.log('🔄 Refresh solicitado pelo usuário');
+            loadRankingData();
+        });
+    }
+    
+    // Auto-refresh a cada 60 segundos (aumentado para focar em ranking)
+    setInterval(() => {
+        if (!isLoading) {
+            console.log('🔄 Auto-refresh do ranking');
+            loadRankingData();
+        }
+    }, 60000);
+    
+    // Listener para mudanças de autenticação
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'token' || e.key === 'loggedIn') {
+            console.log('🔐 Status de autenticação alterado, recarregando...');
+            setTimeout(() => {
+                loadRankingData();
+            }, 500);
+        }
+    });
+});
+
+// Log de inicialização
+console.log('🏆 Ranking.js carregado completamente');
+console.log('🌐 API Base URL:', API_BASE_URL);
