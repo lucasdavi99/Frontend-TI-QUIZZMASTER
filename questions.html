@@ -26,7 +26,7 @@
   </div>
 
   <!-- Score Display -->
-  <div class="score-display">
+  <div class="score-display" id="score-display" style="display: none;">
     <div class="score-item">
       <span class="score-label">PONTUAÇÃO</span>
       <span class="score-value" id="current-score">0</span>
@@ -40,7 +40,7 @@
   </div>
   
   <!-- Terminal Container for Question -->
-  <div class="terminal-container">
+  <div class="terminal-container" id="terminal-container" style="display: none;">
     <div class="terminal">
       <div class="terminal-header">
         <div class="terminal-controls">
@@ -62,7 +62,7 @@
   </div>
 
   <!-- Answers Container -->
-  <div class="answers-container">
+  <div class="answers-container" id="answers-container" style="display: none;">
     <div class="answers-grid">
       <div class="answer-box box" data-answer-id="" data-answer-index="0">
         <div class="answer-label">A)</div>
@@ -84,7 +84,7 @@
   </div>
 
   <!-- Progress Bar -->
-  <div class="progress-container">
+  <div class="progress-container" id="progress-container" style="display: none;">
     <div class="progress-bar">
       <div class="progress-fill" id="progress-fill"></div>
     </div>
@@ -106,6 +106,52 @@
     <div class="loading-content">
       <div class="loading-spinner"></div>
       <p>Inicializando sistema de questões...</p>
+    </div>
+  </div>
+
+  <!-- Authentication Required Overlay -->
+  <div id="auth-required-overlay" class="auth-required-overlay" style="display: none;">
+    <div class="auth-required-content">
+      <div class="auth-icon">🔐</div>
+      <h2 class="auth-title">ACESSO RESTRITO</h2>
+      <div class="auth-message">
+        <p>Você precisa estar logado para acessar o quiz.</p>
+        <p>Faça login ou crie uma conta para começar a jogar!</p>
+      </div>
+      <div class="auth-actions">
+        <a href="login.html" class="auth-btn login-btn">
+          <span class="btn-icon">🔑</span>
+          <span>Fazer Login</span>
+        </a>
+        <a href="index.html" class="auth-btn back-btn">
+          <span class="btn-icon">🏠</span>
+          <span>Voltar ao Menu</span>
+        </a>
+      </div>
+      <div class="auth-timer">
+        <p>Redirecionando para login em <span id="countdown">5</span> segundos...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Overlay -->
+  <div id="error-overlay" class="error-overlay" style="display: none;">
+    <div class="error-content">
+      <div class="error-icon">⚠️</div>
+      <h2 class="error-title">ERRO NO SISTEMA</h2>
+      <div class="error-message" id="error-message">
+        <p>Ocorreu um erro inesperado.</p>
+      </div>
+      <div class="error-actions">
+        <button id="retry-btn" class="error-btn retry-btn">
+          <span class="btn-icon">🔄</span>
+          <span>Tentar Novamente</span>
+        </button>
+        <a href="index.html" class="error-btn back-btn">
+          <span class="btn-icon">🏠</span>
+          <span>Voltar ao Menu</span>
+        </a>
+      </div>
     </div>
   </div>
   

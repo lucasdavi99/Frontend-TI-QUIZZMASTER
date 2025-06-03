@@ -1,5 +1,5 @@
 /* ==========================================================================
-   QUESTIONS PAGE STYLES - T.I QUIZZMASTER
+   QUESTIONS PAGE STYLES - T.I QUIZZMASTER - VERSÃO MELHORADA
    ========================================================================== */
 
 :root {
@@ -404,6 +404,264 @@ body {
 }
 
 /* ==========================================================================
+   AUTHENTICATION REQUIRED OVERLAY
+   ========================================================================== */
+
+.auth-required-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(15px);
+  animation: fadeInSlide 0.5s ease-out;
+}
+
+@keyframes fadeInSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-required-content {
+  background: rgba(0, 0, 0, 0.9);
+  border: 3px solid var(--glitch-red);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 
+    0 0 40px rgba(255, 0, 64, 0.5),
+    inset 0 0 20px rgba(255, 0, 64, 0.1);
+  animation: authGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes authGlow {
+  0% {
+    box-shadow: 
+      0 0 40px rgba(255, 0, 64, 0.5),
+      inset 0 0 20px rgba(255, 0, 64, 0.1);
+  }
+  100% {
+    box-shadow: 
+      0 0 60px rgba(255, 0, 64, 0.7),
+      inset 0 0 30px rgba(255, 0, 64, 0.2);
+  }
+}
+
+.auth-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  color: var(--glitch-red);
+  text-shadow: 0 0 20px var(--glitch-red);
+  animation: iconPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.auth-title {
+  color: var(--glitch-red);
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 15px var(--glitch-red);
+  letter-spacing: 0.1em;
+}
+
+.auth-message {
+  color: var(--text-white);
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.auth-message p {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.auth-actions {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.auth-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 2rem;
+  border: 2px solid;
+  border-radius: 8px;
+  text-decoration: none;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.7rem;
+  transition: all 0.3s ease;
+  min-width: 180px;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: all 0.5s ease;
+}
+
+.auth-btn:hover::before {
+  left: 100%;
+}
+
+.login-btn {
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+  background: transparent;
+}
+
+.login-btn:hover {
+  background: var(--primary-green);
+  color: var(--background-black);
+  box-shadow: 0 0 25px var(--primary-green);
+  transform: translateY(-3px);
+}
+
+.auth-btn.back-btn {
+  border-color: var(--secondary-green);
+  color: var(--secondary-green);
+  background: transparent;
+}
+
+.auth-btn.back-btn:hover {
+  background: var(--secondary-green);
+  color: var(--background-black);
+  box-shadow: 0 0 25px var(--secondary-green);
+  transform: translateY(-3px);
+}
+
+.btn-icon {
+  font-size: 1rem;
+}
+
+.auth-timer {
+  color: var(--neon-blue);
+  font-size: 0.7rem;
+  opacity: 0.8;
+  animation: timerBlink 1s ease-in-out infinite;
+}
+
+@keyframes timerBlink {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+}
+
+/* ==========================================================================
+   ERROR OVERLAY
+   ========================================================================== */
+
+.error-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(15px);
+}
+
+.error-content {
+  background: rgba(0, 0, 0, 0.9);
+  border: 3px solid var(--glitch-red);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 
+    0 0 40px rgba(255, 0, 64, 0.5),
+    inset 0 0 20px rgba(255, 0, 64, 0.1);
+}
+
+.error-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  color: var(--glitch-red);
+  text-shadow: 0 0 20px var(--glitch-red);
+}
+
+.error-title {
+  color: var(--glitch-red);
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 15px var(--glitch-red);
+}
+
+.error-message {
+  color: var(--text-white);
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  font-size: 0.8rem;
+}
+
+.error-actions {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.error-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 2rem;
+  border: 2px solid;
+  border-radius: 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.7rem;
+  transition: all 0.3s ease;
+  min-width: 180px;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  background: transparent;
+}
+
+.retry-btn {
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+}
+
+.retry-btn:hover {
+  background: var(--primary-green);
+  color: var(--background-black);
+  box-shadow: 0 0 25px var(--primary-green);
+}
+
+/* ==========================================================================
    RESPONSIVE DESIGN
    ========================================================================== */
 
@@ -446,6 +704,34 @@ body {
     top: 1rem;
     left: 1rem;
   }
+  
+  .auth-required-content,
+  .error-content {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+  }
+  
+  .auth-title,
+  .error-title {
+    font-size: 1.2rem;
+  }
+  
+  .auth-actions,
+  .error-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .auth-btn,
+  .error-btn {
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .auth-icon,
+  .error-icon {
+    font-size: 3rem;
+  }
 }
 
 /* Small Mobile */
@@ -474,6 +760,17 @@ body {
   .score-value {
     font-size: 0.6rem;
   }
+  
+  .auth-message p,
+  .error-message {
+    font-size: 0.7rem;
+  }
+  
+  .auth-btn,
+  .error-btn {
+    font-size: 0.6rem;
+    padding: 0.8rem 1.5rem;
+  }
 }
 
 /* ==========================================================================
@@ -485,7 +782,9 @@ body {
   .pergunta,
   .answer-box,
   .progress-fill,
-  .loading-spinner {
+  .loading-spinner,
+  .auth-required-content,
+  .auth-icon {
     animation: none;
   }
   
@@ -503,170 +802,16 @@ body {
   border-width: 4px;
 }
 
+.high-contrast .auth-required-content,
+.high-contrast .error-content {
+  border-width: 4px;
+}
+
 /* ==========================================================================
-   ADDITIONS TO QUESTIONS.CSS
-   Adicione estes estilos ao seu questions.css existente
+   CLICK FEEDBACK
    ========================================================================== */
 
-/* Loading Overlay - garantir que funcione corretamente */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.9);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(10px);
-}
-
-.loading-overlay.hidden {
-  display: none !important;
-}
-
-.loading-content {
-  text-align: center;
-  color: #00d300;
-  font-family: "Press Start 2P", cursive;
-}
-
-.loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid #003300;
-  border-top: 3px solid #00d300;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 2rem;
-  box-shadow: 0 0 20px #00d300;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.loading-content p {
-  font-size: 0.8rem;
-  color: #00d300;
-  margin: 0;
-}
-
-/* Score Display - se não existir no seu CSS */
-.score-display {
-  position: fixed;
-  top: 2rem;
-  right: 2rem;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.score-display p {
-  background: rgba(0, 0, 0, 0.8);
-  border: 2px solid #00d300;
-  border-radius: 8px;
-  padding: 0.8rem 1.2rem;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 20px rgba(0, 211, 0, 0.3);
-  text-align: center;
-  color: #00d300;
-  font-family: "Press Start 2P", cursive;
-  font-size: 0.6rem;
-  margin: 0;
-}
-
-/* Progress Bar */
-.progress-container {
-  position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 600px;
-  z-index: 1000;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 8px;
-  background: rgba(0, 211, 0, 0.2);
-  border-radius: 4px;
-  overflow: hidden;
-  border: 1px solid #00d300;
-  box-shadow: 0 0 20px rgba(0, 211, 0, 0.3);
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #00d300, #00ff41);
-  border-radius: 4px;
-  width: 0%;
-  transition: width 0.5s ease;
-  box-shadow: 0 0 10px #00d300;
-}
-
-.progress-text {
-  text-align: center;
-  margin-top: 0.5rem;
-  color: #00d300;
-  font-size: 0.7rem;
-  font-family: "Press Start 2P", cursive;
-}
-
-/* Melhorias nos botões de resposta */
-.box {
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.box:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(0, 211, 0, 0.5);
-}
-
-.box:active {
-  transform: scale(0.95);
-}
-
-/* Responsividade para elementos novos */
-@media screen and (max-width: 768px) {
-  .score-display {
-    top: 1rem;
-    right: 1rem;
-  }
-  
-  .score-display p {
-    font-size: 0.5rem;
-    padding: 0.6rem 1rem;
-  }
-  
-  .progress-container {
-    bottom: 1rem;
-    width: 95%;
-  }
-  
-  .progress-text {
-    font-size: 0.6rem;
-  }
-  
-  .loading-content p {
-    font-size: 0.6rem;
-  }
-}
-
-/* Estados de desabilitado para botões */
-.box[style*="pointer-events: none"] {
-  opacity: 0.6 !important;
-  cursor: not-allowed;
-}
-
-/* Animação de feedback para clique */
-.box.clicked {
+.answer-box.clicked {
   animation: clickFeedback 0.3s ease;
 }
 
@@ -676,312 +821,8 @@ body {
   100% { transform: scale(1); }
 }
 
-/* ==========================================================================
-   FIXES PARA QUESTIONS.HTML - GARANTIR VISIBILIDADE
-   Adicione este CSS ao questions.css ou crie um arquivo separado
-   ========================================================================== */
-
-/* Força visibilidade dos elementos principais */
-.pergunta, #Questao {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  color: #00ff41 !important;
-  font-size: 1rem !important;
-  line-height: 1.8 !important;
-  text-align: center !important;
-  text-shadow: 0 0 10px #00ff41 !important;
-  margin: 1rem 0 !important;
-  padding: 1rem !important;
-  min-height: 60px !important;
-}
-
-/* Força visibilidade das respostas */
-#answer_a, #answer_b, #answer_c, #answer_d {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  color: #00ff41 !important;
-  font-size: 0.8rem !important;
-  line-height: 1.6 !important;
-  text-align: center !important;
-  margin: 0 !important;
-  padding: 0.5rem !important;
-  word-wrap: break-word !important;
-  overflow-wrap: break-word !important;
-}
-
-/* Força visibilidade dos boxes de resposta */
-.box, .answer-box {
-  display: flex !important;
-  flex-direction: column !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  background: #000000 !important;
-  border: 2px solid #00ff41 !important;
-  border-radius: 8px !important;
-  padding: 1.5rem !important;
-  cursor: pointer !important;
-  transition: all 0.3s ease !important;
-  min-height: 120px !important;
-  justify-content: center !important;
-  align-items: center !important;
-  margin: 0.5rem !important;
-  box-shadow: 0 0 20px rgba(0, 255, 65, 0.2) !important;
-  position: relative !important;
-  z-index: 100 !important;
-}
-
-/* Grid para as respostas - fallback se não existir */
-.grid-container, .answers-grid {
-  display: grid !important;
-  grid-template-columns: repeat(2, 1fr) !important;
-  gap: 2rem !important;
-  max-width: 900px !important;
-  width: 100% !important;
-  margin: 2rem auto !important;
-  padding: 2rem !important;
-  position: relative !important;
-  z-index: 100 !important;
-  visibility: visible !important;
-}
-
-/* Container do terminal */
-.container-terminal, .terminal-container {
-  display: flex !important;
-  justify-content: center !important;
-  margin: 2rem auto !important;
-  padding: 0 2rem !important;
-  z-index: 100 !important;
-  position: relative !important;
-  visibility: visible !important;
-}
-
-.terminal {
-  width: 100% !important;
-  max-width: 900px !important;
-  background: #000000 !important;
-  border: 3px solid #00ff41 !important;
-  border-radius: 12px !important;
-  box-shadow: 0 0 30px rgba(0, 255, 65, 0.4) !important;
-  overflow: visible !important;
-  position: relative !important;
-  z-index: 100 !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-/* Garantir que o canvas não interfira */
-#canvas {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  z-index: -10 !important;
-  pointer-events: none !important;
-}
-
-/* Container principal */
-.container {
-  position: relative !important;
-  z-index: 10 !important;
-  min-height: 100vh !important;
-  padding: 2rem !important;
-  display: block !important;
-  visibility: visible !important;
-}
-
-/* Score display */
-.score-display {
-  position: fixed !important;
-  top: 2rem !important;
-  right: 2rem !important;
-  z-index: 1000 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 0.5rem !important;
-  visibility: visible !important;
-}
-
-.score-item {
-  background: rgba(0, 0, 0, 0.8) !important;
-  border: 2px solid #00ff41 !important;
-  border-radius: 8px !important;
-  padding: 0.8rem 1.2rem !important;
-  backdrop-filter: blur(10px) !important;
-  text-align: center !important;
-  visibility: visible !important;
-}
-
-.score-label, .score-value {
-  display: block !important;
-  color: #00ff41 !important;
-  font-family: "Press Start 2P", monospace !important;
-  font-size: 0.6rem !important;
-  visibility: visible !important;
-}
-
-/* Progress bar */
-.progress-container {
-  position: fixed !important;
-  bottom: 2rem !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  width: 90% !important;
-  max-width: 600px !important;
-  z-index: 1000 !important;
-  visibility: visible !important;
-}
-
-.progress-bar {
-  width: 100% !important;
-  height: 8px !important;
-  background: rgba(0, 255, 65, 0.2) !important;
-  border-radius: 4px !important;
-  overflow: hidden !important;
-  border: 1px solid #00ff41 !important;
-  visibility: visible !important;
-}
-
-.progress-fill {
-  height: 100% !important;
-  background: linear-gradient(90deg, #00d300, #00ff41) !important;
-  border-radius: 4px !important;
-  width: 0% !important;
-  transition: width 0.5s ease !important;
-  visibility: visible !important;
-}
-
-.progress-text {
-  text-align: center !important;
-  margin-top: 0.5rem !important;
-  color: #00ff41 !important;
-  font-size: 0.7rem !important;
-  font-family: "Press Start 2P", monospace !important;
-  visibility: visible !important;
-}
-
-/* Loading overlay */
-.loading-overlay {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  background: rgba(0, 0, 0, 0.9) !important;
-  z-index: 9999 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  backdrop-filter: blur(10px) !important;
-}
-
-.loading-overlay.hidden {
-  display: none !important;
-}
-
-/* Hover effects */
-.box:hover, .answer-box:hover {
-  border-color: #00ffff !important;
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.4) !important;
-  transform: translateY(-5px) scale(1.02) !important;
-}
-
-/* Click feedback */
-.box.clicked, .answer-box.clicked {
-  background-color: rgba(0, 255, 65, 0.2) !important;
-  transform: scale(0.95) !important;
-}
-
-/* Responsividade móvel */
-@media screen and (max-width: 768px) {
-  .grid-container, .answers-grid {
-    grid-template-columns: 1fr !important;
-    gap: 1.5rem !important;
-    padding: 1rem !important;
-  }
-  
-  .box, .answer-box {
-    min-height: 100px !important;
-    padding: 1.2rem !important;
-  }
-  
-  #answer_a, #answer_b, #answer_c, #answer_d {
-    font-size: 0.7rem !important;
-  }
-  
-  .pergunta, #Questao {
-    font-size: 0.8rem !important;
-  }
-  
-  .score-display {
-    position: static !important;
-    margin: 1rem !important;
-    flex-direction: row !important;
-    justify-content: space-between !important;
-  }
-}
-
-/* Debug - remove após testar */
-.debug-border * {
-  border: 1px solid red !important;
-  background: rgba(255, 0, 0, 0.1) !important;
-}
-
-/* Garantir que nada seja cortado */
-body {
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-}
-
-/* Back button */
-.back-home-container {
-  position: fixed !important;
-  top: 2rem !important;
-  left: 2rem !important;
-  z-index: 1000 !important;
-  visibility: visible !important;
-}
-
-.back-btn {
-  display: flex !important;
-  align-items: center !important;
-  padding: 0.8rem !important;
-  background: rgba(0, 0, 0, 0.8) !important;
-  border: 2px solid #00ff41 !important;
-  border-radius: 8px !important;
-  text-decoration: none !important;
-  transition: all 0.3s ease !important;
-  backdrop-filter: blur(10px) !important;
-  visibility: visible !important;
-}
-
-/* Força exibição de todos os elementos de texto */
-p, h1, h2, h3, span, div {
-  font-family: "Press Start 2P", monospace !important;
-  line-height: 1.6 !important;
-  word-wrap: break-word !important;
-}
-
-/* Reset de possíveis conflitos */
-* {
-  box-sizing: border-box !important;
-}
-
-/* Container responsivo geral */
-@media screen and (max-width: 480px) {
-  .container-terminal, .terminal-container {
-    margin: 1rem auto !important;
-    padding: 0 1rem !important;
-  }
-  
-  .terminal {
-    max-width: 100% !important;
-  }
-  
-  .back-home-container {
-    top: 1rem !important;
-    left: 1rem !important;
-  }
+/* States for disabled buttons */
+.answer-box[style*="pointer-events: none"] {
+  opacity: 0.6 !important;
+  cursor: not-allowed;
 }

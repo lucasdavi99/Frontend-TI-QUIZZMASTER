@@ -1,39 +1,94 @@
 /**
- * QUESTIONS PAGE CONTROLLER - VERSÃO CORRIGIDA
- * Corrige problemas de visualização e funcionalidade
+ * QUESTIONS PAGE CONTROLLER - VERSÃO MELHORADA
+ * Sistema aprimorado com melhor tratamento de autenticação e estados
  */
 
 const API_BASE_URL = 'http://localhost:8080';
 let currentSessionId = null;
 let currentSessionState = null;
 let answerMapping = {};
+let countdownInterval = null;
+let redirectTimeout = null;
 
-console.log('📋 Questions.js carregado - versão corrigida v2.0');
+console.log('📋 Questions.js carregado - versão melhorada v3.0');
 
-// Função para verificar se o usuário está logado
-function checkAuth() {
-    // Tentar múltiplas formas de verificar autenticação
-    const token = localStorage.getItem('token') || 
-                  (window.authData && window.authData.token) ||
-                  sessionStorage.getItem('token');
+// Estados da aplicação
+const AppStates = {
+    INITIALIZING: 'initializing',
+    AUTH_REQUIRED: 'auth_required',
+    LOADING: 'loading',
+    PLAYING: 'playing',
+    ERROR: 'error'
+};
+
+let currentState = AppStates.INITIALIZING;
+
+// Função principal de inicialização
+function initializeApp() {
+    console.log('🚀 Inicializando aplicação...');
     
-    const isLoggedIn = localStorage.getItem('loggedIn') === 'true' || 
-                      (window.authData && window.authData.loggedIn) ||
-                      sessionStorage.getItem('loggedIn') === 'true';
+    // Limpar timeouts e intervals anteriores
+    clearTimers();
     
-    console.log('🔐 Verificando autenticação:', {
+    // Verificar autenticação imediatamente
+    if (!checkAuthentication()) {
+        setState(AppStates.AUTH_REQUIRED);
+        return;
+    }
+    
+    // Se autenticado, iniciar o quiz
+    setState(AppStates.LOADING);
+    startQuizSession();
+}
+
+// Gerenciamento de estados da aplicação
+function setState(state) {
+    console.log(`🔄 Mudando estado: ${currentState} → ${state}`);
+    currentState = state;
+    
+    // Esconder todos os overlays primeiro
+    hideAllOverlays();
+    hideGameElements();
+    
+    switch (state) {
+        case AppStates.INITIALIZING:
+            showLoadingOverlay('Inicializando sistema...');
+            break;
+            
+        case AppStates.AUTH_REQUIRED:
+            showAuthRequiredOverlay();
+            break;
+            
+        case AppStates.LOADING:
+            showLoadingOverlay('Carregando questões...');
+            break;
+            
+        case AppStates.PLAYING:
+            hideAllOverlays();
+            showGameElements();
+            break;
+            
+        case AppStates.ERROR:
+            // Error overlay será mostrado pela função que chama setState
+            break;
+    }
+}
+
+// Verificação de autenticação melhorada
+function checkAuthentication() {
+    console.log('🔐 Verificando autenticação...');
+    
+    const token = getAuthToken();
+    const isLoggedIn = getLoginStatus();
+    
+    console.log('🔐 Status de autenticação:', {
         hasToken: !!token,
         isLoggedIn: isLoggedIn,
-        tokenType: token ? 'found' : 'missing'
+        tokenLength: token ? token.length : 0
     });
     
     if (!token || !isLoggedIn) {
         console.warn('❌ Usuário não autenticado');
-        hideLoadingOverlay();
-        showModal('Você precisa fazer login para jogar!');
-        setTimeout(() => {
-            window.location.href = 'login.html';
-        }, 2000);
         return false;
     }
     
@@ -41,18 +96,184 @@ function checkAuth() {
     return true;
 }
 
-// Função para fazer requisições autenticadas (com fallback)
+// Função para obter token de autenticação
+function getAuthToken() {
+    return localStorage.getItem('token') || 
+           (window.authData && window.authData.token) ||
+           sessionStorage.getItem('token');
+}
+
+// Função para obter status de login
+function getLoginStatus() {
+    const localStorageStatus = localStorage.getItem('loggedIn') === 'true';
+    const windowDataStatus = window.authData && window.authData.loggedIn;
+    const sessionStorageStatus = sessionStorage.getItem('loggedIn') === 'true';
+    
+    return localStorageStatus || windowDataStatus || sessionStorageStatus;
+}
+
+// Mostrar overlay de autenticação requerida
+function showAuthRequiredOverlay() {
+    console.log('🔐 Mostrando overlay de autenticação requerida');
+    
+    const overlay = document.getElementById('auth-required-overlay');
+    if (overlay) {
+        overlay.style.display = 'flex';
+        startCountdown();
+    } else {
+        console.error('❌ Elemento auth-required-overlay não encontrado');
+        // Fallback para alert
+        alert('Você precisa fazer login para jogar!');
+        redirectToLogin();
+    }
+}
+
+// Mostrar overlay de erro
+function showErrorOverlay(message) {
+    console.log('❌ Mostrando overlay de erro:', message);
+    
+    const overlay = document.getElementById('error-overlay');
+    const messageElement = document.getElementById('error-message');
+    
+    if (overlay && messageElement) {
+        messageElement.innerHTML = `<p>${message}</p>`;
+        overlay.style.display = 'flex';
+        setState(AppStates.ERROR);
+    } else {
+        console.error('❌ Elementos de erro não encontrados');
+        alert(message);
+    }
+}
+
+// Controlar countdown de redirecionamento
+function startCountdown() {
+    let seconds = 5;
+    const countdownElement = document.getElementById('countdown');
+    
+    if (!countdownElement) {
+        console.warn('⚠️ Elemento countdown não encontrado');
+        setTimeout(redirectToLogin, 5000);
+        return;
+    }
+    
+    countdownElement.textContent = seconds;
+    
+    countdownInterval = setInterval(() => {
+        seconds--;
+        countdownElement.textContent = seconds;
+        
+        if (seconds <= 0) {
+            clearInterval(countdownInterval);
+            redirectToLogin();
+        }
+    }, 1000);
+}
+
+// Redirecionar para login
+function redirectToLogin() {
+    console.log('🔄 Redirecionando para login...');
+    clearTimers();
+    
+    // Adicionar efeito de transição
+    document.body.style.transition = 'opacity 0.5s ease';
+    document.body.style.opacity = '0';
+    
+    setTimeout(() => {
+        window.location.href = 'login.html';
+    }, 500);
+}
+
+// Limpar timers
+function clearTimers() {
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+    }
+    
+    if (redirectTimeout) {
+        clearTimeout(redirectTimeout);
+        redirectTimeout = null;
+    }
+}
+
+// Controlar overlays
+function showLoadingOverlay(message = 'Carregando...') {
+    const overlay = document.getElementById('loading-overlay');
+    const loadingText = overlay ? overlay.querySelector('p') : null;
+    
+    if (overlay) {
+        if (loadingText) {
+            loadingText.textContent = message;
+        }
+        overlay.classList.remove('hidden');
+        overlay.style.display = 'flex';
+    }
+}
+
+function hideLoadingOverlay() {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) {
+        overlay.classList.add('hidden');
+        overlay.style.display = 'none';
+    }
+}
+
+function hideAllOverlays() {
+    const overlays = [
+        'loading-overlay',
+        'auth-required-overlay', 
+        'error-overlay'
+    ];
+    
+    overlays.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.style.display = 'none';
+        }
+    });
+}
+
+// Controlar elementos do jogo
+function showGameElements() {
+    const elements = [
+        'score-display',
+        'terminal-container', 
+        'answers-container',
+        'progress-container'
+    ];
+    
+    elements.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.style.display = element.id === 'score-display' ? 'flex' : 'block';
+        }
+    });
+}
+
+function hideGameElements() {
+    const elements = [
+        'score-display',
+        'terminal-container',
+        'answers-container', 
+        'progress-container'
+    ];
+    
+    elements.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.style.display = 'none';
+        }
+    });
+}
+
+// Fazer requisição autenticada com melhor tratamento de erro
 async function authenticatedFetch(url, options = {}) {
-    const token = localStorage.getItem('token') || 
-                  (window.authData && window.authData.token) ||
-                  sessionStorage.getItem('token');
+    const token = getAuthToken();
     
     console.log('🌐 Fazendo requisição para:', url);
     
-    // Se não tiver token mas estiver em desenvolvimento, simular dados
-    if (!token && (url.includes('localhost') || url.includes('127.0.0.1'))) {
-        console.warn('⚠️ Modo simulação ativo - sem API');
-        return simulateAPIResponse(url, options);
+    if (!token) {
+        throw new Error('Token de autenticação não encontrado');
     }
     
     const defaultOptions = {
@@ -76,120 +297,57 @@ async function authenticatedFetch(url, options = {}) {
         console.log('📥 Status da resposta:', response.status);
         
         if (response.status === 403 || response.status === 401) {
-            console.error('❌ Erro de autenticação');
-            localStorage.removeItem('token');
-            localStorage.removeItem('loggedIn');
-            hideLoadingOverlay();
-            showModal('Sessão expirada. Faça login novamente.');
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 2000);
-            throw new Error('Unauthorized');
+            console.error('❌ Erro de autenticação - token inválido');
+            clearAuthData();
+            setState(AppStates.AUTH_REQUIRED);
+            throw new Error('Sessão expirada. Faça login novamente.');
         }
         
         if (!response.ok) {
             const errorText = await response.text();
             console.error('❌ Erro na resposta:', response.status, errorText);
-            throw new Error(`HTTP ${response.status}: ${errorText}`);
+            throw new Error(`Erro ${response.status}: ${errorText || 'Erro desconhecido'}`);
         }
         
         return response;
     } catch (error) {
         console.error('❌ Erro na requisição:', error);
+        
+        if (error.message.includes('Failed to fetch')) {
+            throw new Error('Erro de conexão. Verifique sua internet.');
+        }
+        
         throw error;
     }
 }
 
-// Função para simular resposta da API (desenvolvimento/demonstração)
-async function simulateAPIResponse(url, options) {
-    console.log('🎭 Simulando resposta da API para:', url);
-    
-    await new Promise(resolve => setTimeout(resolve, 500)); // Simular delay
-    
-    if (url.includes('/start')) {
-        const mockSession = {
-            sessionId: 'demo-session-' + Date.now(),
-            totalQuestions: 10,
-            currentQuestionIndex: 0,
-            score: 0,
-            currentQuestion: {
-                id: 1,
-                content: "Qual é a principal função de um sistema operacional?",
-                answers: [
-                    { id: 1, content: "Executar apenas jogos e entretenimento" },
-                    { id: 2, content: "Gerenciar recursos do computador e fornecer interface ao usuário" },
-                    { id: 3, content: "Conectar apenas à internet" },
-                    { id: 4, content: "Servir apenas como calculadora" }
-                ]
-            }
-        };
-        
-        return {
-            ok: true,
-            json: async () => mockSession
-        };
+// Limpar dados de autenticação
+function clearAuthData() {
+    try {
+        localStorage.removeItem('token');
+        localStorage.removeItem('loggedIn');
+        localStorage.removeItem('userData');
+    } catch (e) {
+        console.warn('⚠️ Erro ao limpar localStorage');
     }
     
-    if (url.includes('/answer')) {
-        const mockResponse = {
-            sessionId: currentSessionId,
-            totalQuestions: 10,
-            currentQuestionIndex: 1,
-            score: 10,
-            currentQuestion: {
-                id: 2,
-                content: "O que significa a sigla 'HTTP'?",
-                answers: [
-                    { id: 5, content: "Hyper Text Transfer Protocol" },
-                    { id: 6, content: "High Technology Transfer Protocol" },
-                    { id: 7, content: "Hyper Time Transfer Protocol" },
-                    { id: 8, content: "High Text Transfer Protocol" }
-                ]
-            }
-        };
-        
-        return {
-            ok: true,
-            json: async () => mockResponse
-        };
+    try {
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('loggedIn');
+    } catch (e) {
+        console.warn('⚠️ Erro ao limpar sessionStorage');
     }
     
-    throw new Error('Endpoint não simulado');
-}
-
-// Controlar a tela de loading
-function showLoadingOverlay() {
-    const overlay = document.getElementById('loading-overlay');
-    if (overlay) {
-        overlay.classList.remove('hidden');
-        overlay.style.display = 'flex';
-        console.log('👁️ Loading overlay mostrado');
+    if (window.authData) {
+        delete window.authData;
     }
 }
 
-function hideLoadingOverlay() {
-    const overlay = document.getElementById('loading-overlay');
-    if (overlay) {
-        overlay.classList.add('hidden');
-        overlay.style.display = 'none';
-        console.log('👁️ Loading overlay escondido');
-    }
-}
-
-// Iniciar nova sessão de quiz
+// Iniciar sessão de quiz
 async function startQuizSession() {
     console.log('🎮 Iniciando nova sessão de quiz...');
     
-    if (!checkAuth()) {
-        console.log('❌ Falha na autenticação');
-        return;
-    }
-    
-    showLoadingOverlay();
-    
     try {
-        console.log('📤 Enviando requisição para iniciar sessão...');
-        
         const response = await authenticatedFetch(`${API_BASE_URL}/api/quiz-session/start`, {
             method: 'POST',
             body: JSON.stringify({
@@ -206,15 +364,12 @@ async function startQuizSession() {
         // Exibir pergunta
         displayQuestion(sessionData);
         
-        // Esconder loading após exibir pergunta
-        setTimeout(() => {
-            hideLoadingOverlay();
-        }, 500);
+        // Mudar para estado de jogo
+        setState(AppStates.PLAYING);
         
     } catch (error) {
         console.error('❌ Erro ao iniciar quiz:', error);
-        hideLoadingOverlay();
-        showModal(`Erro ao iniciar o quiz: ${error.message}`);
+        showErrorOverlay(`Erro ao iniciar o quiz: ${error.message}`);
     }
 }
 
@@ -224,8 +379,7 @@ function displayQuestion(sessionState) {
     
     if (!sessionState || !sessionState.currentQuestion) {
         console.error('❌ Pergunta não encontrada no estado da sessão');
-        hideLoadingOverlay();
-        showModal('Erro ao carregar pergunta');
+        showErrorOverlay('Erro ao carregar pergunta');
         return;
     }
     
@@ -237,11 +391,6 @@ function displayQuestion(sessionState) {
     if (questionElement) {
         questionElement.textContent = question.content;
         console.log('✅ Pergunta atualizada na tela');
-        
-        // Forçar visibilidade
-        questionElement.style.display = 'block';
-        questionElement.style.visibility = 'visible';
-        questionElement.style.opacity = '1';
     } else {
         console.error('❌ Elemento #Questao não encontrado');
     }
@@ -256,9 +405,6 @@ function displayQuestion(sessionState) {
     const answerElements = ['answer_a', 'answer_b', 'answer_c', 'answer_d'];
     const boxElements = document.querySelectorAll('.box');
     
-    console.log('🔍 Elementos box encontrados:', boxElements.length);
-    console.log('🔍 Answer elements:', answerElements);
-    
     answers.forEach((answer, index) => {
         if (index < answerElements.length) {
             const textElement = document.getElementById(answerElements[index]);
@@ -266,25 +412,13 @@ function displayQuestion(sessionState) {
                 textElement.textContent = answer.content;
                 answerMapping[index] = answer.id;
                 
-                // Forçar visibilidade do texto
-                textElement.style.display = 'block';
-                textElement.style.visibility = 'visible';
-                textElement.style.opacity = '1';
-                
                 // Configurar o elemento box correspondente
                 if (boxElements[index]) {
                     boxElements[index].dataset.answerId = answer.id;
                     boxElements[index].dataset.answerIndex = index;
                     
-                    // Forçar visibilidade do box
-                    boxElements[index].style.display = 'flex';
-                    boxElements[index].style.visibility = 'visible';
-                    boxElements[index].style.opacity = '1';
-                    
                     console.log(`✅ Resposta ${index + 1} configurada: ${answer.content}`);
                 }
-            } else {
-                console.error(`❌ Elemento ${answerElements[index]} não encontrado`);
             }
         }
     });
@@ -295,13 +429,10 @@ function displayQuestion(sessionState) {
     updateScoreDisplay(sessionState);
     updateProgressDisplay(sessionState);
     
-    // Forçar reflow para garantir que tudo seja exibido
-    document.body.offsetHeight;
-    
     console.log('✅ Pergunta exibida com sucesso');
 }
 
-// Atualizar exibição da pontuação e progresso
+// Atualizar exibição da pontuação
 function updateScoreDisplay(sessionState) {
     const scoreElement = document.getElementById('current-score');
     if (scoreElement) {
@@ -322,12 +453,12 @@ function updateScoreDisplay(sessionState) {
 // Atualizar barra de progresso
 function updateProgressDisplay(sessionState) {
     const progressFill = document.getElementById('progress-fill');
-    const progressPercentage = document.getElementById('progress-percentage');
+    const progressText = document.querySelector('.progress-text');
     
-    if (progressFill && progressPercentage) {
+    if (progressFill && progressText) {
         const progress = ((sessionState.currentQuestionIndex + 1) / sessionState.totalQuestions) * 100;
         progressFill.style.width = `${progress}%`;
-        progressPercentage.textContent = `${Math.round(progress)}%`;
+        progressText.innerHTML = `${Math.round(progress)}% - Pergunta ${sessionState.currentQuestionIndex + 1} de ${sessionState.totalQuestions}`;
     }
 }
 
@@ -335,6 +466,7 @@ function updateProgressDisplay(sessionState) {
 async function submitAnswer(answerId) {
     if (!currentSessionId) {
         console.error('❌ Sessão inválida');
+        showErrorOverlay('Sessão inválida. Reinicie o quiz.');
         return;
     }
     
@@ -368,14 +500,14 @@ async function submitAnswer(answerId) {
         
     } catch (error) {
         console.error('❌ Erro ao enviar resposta:', error);
-        showModal(`Erro ao processar resposta: ${error.message}`);
+        showErrorOverlay(`Erro ao processar resposta: ${error.message}`);
     } finally {
         // Reabilitar botões
         enableAnswerButtons();
     }
 }
 
-// Desabilitar botões de resposta
+// Desabilitar/reabilitar botões de resposta
 function disableAnswerButtons() {
     const boxes = document.querySelectorAll('.box');
     boxes.forEach(box => {
@@ -384,7 +516,6 @@ function disableAnswerButtons() {
     });
 }
 
-// Reabilitar botões de resposta
 function enableAnswerButtons() {
     const boxes = document.querySelectorAll('.box');
     boxes.forEach(box => {
@@ -404,7 +535,12 @@ function handleQuizEnd(result) {
         message += ' - Parabéns por completar todas as perguntas!';
     }
     
-    showModal(message);
+    // Usar modal para mostrar resultado final
+    if (typeof showModal === 'function') {
+        showModal(message);
+    } else {
+        alert(message);
+    }
     
     // Resetar estado
     currentSessionId = null;
@@ -427,6 +563,11 @@ function handleAnswerClick(event) {
         return;
     }
     
+    if (currentState !== AppStates.PLAYING) {
+        console.warn('⚠️ Clique ignorado - jogo não está ativo');
+        return;
+    }
+    
     console.log('👆 Clique na resposta - ID:', answerId);
     
     // Feedback visual imediato
@@ -438,109 +579,75 @@ function handleAnswerClick(event) {
     submitAnswer(answerId);
 }
 
-// Função showModal melhorada
-function showModal(message) {
-    console.log('📢 Mostrando modal:', message);
-    
-    const modalText = document.getElementById('modalText');
-    const modal = document.getElementById('myModal');
-    
-    if (modalText && modal) {
-        modalText.textContent = message;
-        modal.style.display = 'block';
-    } else {
-        // Fallback para alert
-        alert(message);
-    }
-    
-    // Auto-hide loading se modal for mostrado
-    hideLoadingOverlay();
-}
-
-// Configurar elementos e verificar se estão visíveis
-function setupElements() {
-    console.log('🔧 Configurando elementos da página...');
-    
-    // Verificar se todos os elementos essenciais existem
-    const essentialElements = [
-        'Questao',
-        'answer_a', 'answer_b', 'answer_c', 'answer_d',
-        'current-score', 'current-question-number', 'total-questions',
-        'progress-fill', 'progress-percentage'
-    ];
-    
-    const missingElements = [];
-    essentialElements.forEach(id => {
-        const element = document.getElementById(id);
-        if (!element) {
-            missingElements.push(id);
-        } else {
-            // Forçar visibilidade de elementos importantes
-            if (id.startsWith('answer_') || id === 'Questao') {
-                element.style.display = 'block';
-                element.style.visibility = 'visible';
-                element.style.opacity = '1';
-            }
-        }
-    });
-    
-    if (missingElements.length > 0) {
-        console.warn('⚠️ Elementos não encontrados:', missingElements);
-    } else {
-        console.log('✅ Todos os elementos essenciais encontrados');
-    }
-    
-    // Verificar boxes
-    const boxes = document.querySelectorAll('.box');
-    console.log('📦 Boxes encontrados:', boxes.length);
-    
-    boxes.forEach((box, index) => {
-        box.style.display = 'flex';
-        box.style.visibility = 'visible';
-        box.style.opacity = '1';
-        console.log(`📦 Box ${index + 1} configurado`);
-    });
-}
-
 // Configurar event listeners
-document.addEventListener("DOMContentLoaded", function () {
-    console.log('🚀 Página de questões carregada - DOM ready');
+function setupEventListeners() {
+    console.log('🔧 Configurando event listeners...');
     
-    // Configurar elementos primeiro
-    setupElements();
-    
-    // Mostrar loading inicialmente
-    showLoadingOverlay();
-    
-    // Configurar cliques nas respostas
+    // Event listeners para respostas
     const answerElements = document.querySelectorAll('.box');
-    console.log('🔍 Configurando event listeners para', answerElements.length, 'elementos .box');
-    
     answerElements.forEach((element, index) => {
         element.addEventListener('click', handleAnswerClick);
         console.log(`✅ Event listener configurado para box ${index + 1}`);
     });
     
-    // Para modo de demonstração, simular login se necessário
-    if (!localStorage.getItem('token') && !window.authData) {
-        console.log('🎭 Modo demonstração ativo - simulando login');
-        localStorage.setItem('token', 'demo-token-' + Date.now());
-        localStorage.setItem('loggedIn', 'true');
+    // Event listener para botão de retry
+    const retryBtn = document.getElementById('retry-btn');
+    if (retryBtn) {
+        retryBtn.addEventListener('click', () => {
+            console.log('🔄 Tentando novamente...');
+            initializeApp();
+        });
     }
     
-    // Verificar autenticação e iniciar sessão
-    if (checkAuth()) {
-        console.log('✅ Usuário autenticado, iniciando sessão em 1 segundo...');
-        // Delay para permitir que a página carregue completamente
-        setTimeout(() => {
-            startQuizSession();
-        }, 1000);
-    } else {
-        console.log('❌ Usuário não autenticado');
-        hideLoadingOverlay();
-    }
+    // Event listeners para botões de autenticação
+    const authButtons = document.querySelectorAll('.auth-required-overlay .auth-btn');
+    authButtons.forEach(btn => {
+        if (btn.href && btn.href.includes('login.html')) {
+            btn.addEventListener('click', clearTimers);
+        }
+    });
+    
+    console.log('✅ Event listeners configurados');
+}
+
+// Inicialização quando DOM estiver pronto
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 === PÁGINA DE QUESTÕES CARREGADA ===');
+    console.log('🏠 DOM ready - iniciando configuração');
+    
+    // Configurar event listeners primeiro
+    setupEventListeners();
+    
+    // Inicializar aplicação após um breve delay para garantir que tudo esteja carregado
+    setTimeout(() => {
+        initializeApp();
+    }, 500);
+    
+    console.log('📋 === CONFIGURAÇÃO INICIAL COMPLETA ===');
 });
 
-// Debug: Log quando o script carrega
+// Limpar recursos quando a página for descarregada
+window.addEventListener('beforeunload', () => {
+    clearTimers();
+});
+
+// Log de inicialização
 console.log('📋 Questions.js carregado completamente');
 console.log('🌐 API Base URL:', API_BASE_URL);
+
+// Export para debugging (apenas no console)
+if (typeof window !== 'undefined') {
+    window.questionsDebug = {
+        getCurrentState: () => currentState,
+        forceState: (state) => setState(state),
+        simulateAuth: () => {
+            localStorage.setItem('token', 'debug-token');
+            localStorage.setItem('loggedIn', 'true');
+            initializeApp();
+        },
+        clearAuth: () => {
+            clearAuthData();
+            setState(AppStates.AUTH_REQUIRED);
+        }
+    };
+}
