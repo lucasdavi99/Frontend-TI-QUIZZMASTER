@@ -1,6 +1,6 @@
 /**
- * QUESTIONS PAGE CONTROLLER - VERSÃO MELHORADA
- * Sistema aprimorado com melhor tratamento de autenticação e estados
+ * QUESTIONS PAGE CONTROLLER - VERSÃO COM MODAL CORRIGIDO
+ * Sistema aprimorado com correção do z-index do modal
  */
 
 const API_BASE_URL = 'http://localhost:8080';
@@ -10,7 +10,7 @@ let answerMapping = {};
 let countdownInterval = null;
 let redirectTimeout = null;
 
-console.log('📋 Questions.js carregado - versão melhorada v3.0');
+console.log('📋 Questions.js carregado - versão com modal corrigido v4.0');
 
 // Estados da aplicação
 const AppStates = {
@@ -122,13 +122,17 @@ function showAuthRequiredOverlay() {
         startCountdown();
     } else {
         console.error('❌ Elemento auth-required-overlay não encontrado');
-        // Fallback para alert
-        alert('Você precisa fazer login para jogar!');
+        // 🔧 CORREÇÃO: Usa o modal melhorado em vez de alert
+        if (typeof showModal === 'function') {
+            showModal('Você precisa fazer login para jogar!', true, 3000);
+        } else {
+            alert('Você precisa fazer login para jogar!');
+        }
         redirectToLogin();
     }
 }
 
-// Mostrar overlay de erro
+// 🔧 CORREÇÃO: Função melhorada para mostrar overlay de erro
 function showErrorOverlay(message) {
     console.log('❌ Mostrando overlay de erro:', message);
     
@@ -141,7 +145,12 @@ function showErrorOverlay(message) {
         setState(AppStates.ERROR);
     } else {
         console.error('❌ Elementos de erro não encontrados');
-        alert(message);
+        // 🔧 CORREÇÃO: Usa o modal melhorado
+        if (typeof showErrorModal === 'function') {
+            showErrorModal(message);
+        } else {
+            alert(message);
+        }
     }
 }
 
@@ -194,6 +203,12 @@ function clearTimers() {
         clearTimeout(redirectTimeout);
         redirectTimeout = null;
     }
+    
+    // 🔧 ADICIONADO: Limpa timer do modal também
+    if (window.modalRedirectTimer) {
+        clearTimeout(window.modalRedirectTimer);
+        window.modalRedirectTimer = null;
+    }
 }
 
 // Controlar overlays
@@ -231,6 +246,11 @@ function hideAllOverlays() {
             element.style.display = 'none';
         }
     });
+    
+    // 🔧 ADICIONADO: Também esconde o modal se estiver aberto
+    if (typeof closeModal === 'function') {
+        closeModal();
+    }
 }
 
 // Controlar elementos do jogo
@@ -351,7 +371,7 @@ async function startQuizSession() {
         const response = await authenticatedFetch(`${API_BASE_URL}/api/quiz-session/start`, {
             method: 'POST',
             body: JSON.stringify({
-                numberOfQuestions: 10
+                numberOfQuestions: 1
             })
         });
         
@@ -524,22 +544,30 @@ function enableAnswerButtons() {
     });
 }
 
-// Lidar com o fim do quiz
+// 🔧 CORREÇÃO: Lidar com o fim do quiz usando o modal melhorado
 function handleQuizEnd(result) {
     console.log('🏁 Quiz finalizado:', result);
     
     let message = result.message || 'Quiz finalizado!';
-    message += ` Sua pontuação final foi: ${result.finalScore}`;
+    const score = result.finalScore || 0;
+    const wasCompleted = result.wasCompleted;
     
-    if (result.wasCompleted) {
-        message += ' - Parabéns por completar todas as perguntas!';
-    }
-    
-    // Usar modal para mostrar resultado final
-    if (typeof showModal === 'function') {
-        showModal(message);
+    // 🔧 CORREÇÃO: Usa o modal melhorado em vez do alert
+    if (typeof showGameEndModal === 'function') {
+        if (wasCompleted) {
+            showGameEndModal('🎉 Parabéns! Você completou todo o quiz!', score, true);
+        } else {
+            showGameEndModal('❌ Quiz finalizado por resposta incorreta.', score, false);
+        }
+    } else if (typeof showModal === 'function') {
+        const fullMessage = `${message} Sua pontuação final foi: ${score}`;
+        showModal(fullMessage, true, 5000);
     } else {
-        alert(message);
+        // Fallback para alert se nenhum modal estiver disponível
+        alert(`${message} Sua pontuação final foi: ${score}`);
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 2000);
     }
     
     // Resetar estado
@@ -547,10 +575,7 @@ function handleQuizEnd(result) {
     currentSessionState = null;
     answerMapping = {};
     
-    // Redirecionar após alguns segundos
-    setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 5000);
+    console.log('🏁 Estado do jogo resetado');
 }
 
 // Lidar com clique nas respostas
@@ -618,10 +643,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Configurar event listeners primeiro
     setupEventListeners();
     
-    // Inicializar aplicação após um breve delay para garantir que tudo esteja carregado
-    setTimeout(() => {
-        initializeApp();
-    }, 500);
+    // 🔧 ADICIONADO: Aguarda o modal.js carregar completamente
+    const waitForModal = () => {
+        if (typeof showModal === 'function') {
+            console.log('✅ Modal.js carregado, iniciando aplicação');
+            setTimeout(() => {
+                initializeApp();
+            }, 500);
+        } else {
+            console.log('⏳ Aguardando modal.js carregar...');
+            setTimeout(waitForModal, 100);
+        }
+    };
+    
+    waitForModal();
     
     console.log('📋 === CONFIGURAÇÃO INICIAL COMPLETA ===');
 });
@@ -648,6 +683,11 @@ if (typeof window !== 'undefined') {
         clearAuth: () => {
             clearAuthData();
             setState(AppStates.AUTH_REQUIRED);
+        },
+        testModal: () => {
+            if (typeof showGameEndModal === 'function') {
+                showGameEndModal('Teste do modal de fim de jogo', 85, true);
+            }
         }
     };
 }
