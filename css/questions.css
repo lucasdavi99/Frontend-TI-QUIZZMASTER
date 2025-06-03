@@ -1,5 +1,5 @@
 /* ==========================================================================
-   QUESTIONS PAGE STYLES - T.I QUIZZMASTER - VERSÃO MELHORADA
+   QUESTIONS PAGE STYLES - T.I QUIZZMASTER
    ========================================================================== */
 
 :root {
@@ -130,21 +130,25 @@ body {
 }
 
 /* ==========================================================================
-   TERMINAL
+   TERMINAL - CENTRALIZAÇÃO PERFEITA
    ========================================================================== */
 
 .terminal-container {
   position: relative;
   display: flex;
   justify-content: center;
-  margin-top: 8rem;
+  align-items: center;
+  margin: 8rem auto 0;
   padding: 0 2rem;
   z-index: 10;
+  width: 100%;
+  max-width: 1200px; /* Limite máximo para telas muito grandes */
 }
 
 .terminal {
   width: 100%;
   max-width: 900px;
+  margin: 0 auto; /* Centralização adicional */
   background: var(--background-black);
   border: 3px solid var(--primary-green);
   border-radius: 12px;
@@ -196,18 +200,25 @@ body {
   color: var(--background-black);
   font-size: 0.7rem;
   font-weight: bold;
+  text-align: center; /* Centraliza o título */
+  flex: 1; /* Ocupa espaço disponível para centralizar */
 }
 
 .terminal-content {
   padding: 2rem;
   min-height: 200px;
+  text-align: center; /* Centraliza todo o conteúdo */
 }
 
 .command-line {
   color: var(--terminal-green);
   font-size: 0.7rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   opacity: 0.8;
+  text-align: left; /* Manter alinhamento de terminal */
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .prompt {
@@ -221,11 +232,14 @@ body {
 
 .pergunta {
   color: var(--primary-green);
-  font-size: 1rem;
+  font-size: clamp(0.8rem, 2.5vw, 1.2rem); /* Responsivo */
   line-height: 1.8;
   text-align: center;
   text-shadow: 0 0 10px var(--primary-green);
   animation: questionPulse 2s ease-in-out infinite alternate;
+  margin: 0 auto;
+  max-width: 800px; /* Limite para leitura confortável */
+  padding: 0 1rem;
 }
 
 @keyframes questionPulse {
@@ -234,16 +248,19 @@ body {
 }
 
 /* ==========================================================================
-   ANSWERS GRID
+   ANSWERS GRID - CENTRALIZAÇÃO PERFEITA
    ========================================================================== */
 
 .answers-container {
   display: flex;
   justify-content: center;
-  margin: 3rem 0;
+  align-items: center;
+  margin: 3rem auto;
   padding: 0 2rem;
   z-index: 10;
   position: relative;
+  width: 100%;
+  max-width: 1200px; /* Limite máximo */
 }
 
 .answers-grid {
@@ -252,6 +269,8 @@ body {
   gap: 2rem;
   max-width: 900px;
   width: 100%;
+  margin: 0 auto; /* Centralização adicional */
+  justify-items: center; /* Centraliza os itens do grid */
 }
 
 .answer-box {
@@ -263,10 +282,15 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   min-height: 120px;
+  width: 100%; /* Garante largura total */
+  max-width: 400px; /* Limite máximo para não ficar muito largo */
   display: flex;
   flex-direction: column;
+  justify-content: center; /* Centraliza conteúdo verticalmente */
+  align-items: center; /* Centraliza conteúdo horizontalmente */
   box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
   overflow: hidden;
+  text-align: center;
 }
 
 .answer-box::before {
@@ -306,22 +330,27 @@ body {
   font-weight: bold;
   margin-bottom: 1rem;
   text-shadow: 0 0 10px var(--neon-blue);
+  text-align: center;
 }
 
 .answer-text {
   position: relative;
   z-index: 2;
   color: var(--primary-green);
-  font-size: 0.8rem;
+  font-size: clamp(0.6rem, 2vw, 0.8rem); /* Responsivo */
   line-height: 1.6;
   flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   text-align: center;
+  word-wrap: break-word;
+  hyphens: auto;
+  padding: 0 0.5rem;
 }
 
 /* ==========================================================================
-   PROGRESS BAR
+   PROGRESS BAR - CENTRALIZAÇÃO PERFEITA
    ========================================================================== */
 
 .progress-container {
@@ -357,7 +386,7 @@ body {
   text-align: center;
   margin-top: 0.5rem;
   color: var(--primary-green);
-  font-size: 0.7rem;
+  font-size: clamp(0.5rem, 1.5vw, 0.7rem);
 }
 
 /* ==========================================================================
@@ -441,6 +470,7 @@ body {
   text-align: center;
   max-width: 500px;
   width: 90%;
+  margin: 0 auto;
   box-shadow: 
     0 0 40px rgba(255, 0, 64, 0.5),
     inset 0 0 20px rgba(255, 0, 64, 0.1);
@@ -475,7 +505,7 @@ body {
 
 .auth-title {
   color: var(--glitch-red);
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 3vw, 1.5rem);
   margin-bottom: 2rem;
   text-shadow: 0 0 15px var(--glitch-red);
   letter-spacing: 0.1em;
@@ -489,7 +519,7 @@ body {
 
 .auth-message p {
   margin-bottom: 1rem;
-  font-size: 0.9rem;
+  font-size: clamp(0.7rem, 2vw, 0.9rem);
 }
 
 .auth-actions {
@@ -509,7 +539,7 @@ body {
   border-radius: 8px;
   text-decoration: none;
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.7rem;
+  font-size: clamp(0.5rem, 1.5vw, 0.7rem);
   transition: all 0.3s ease;
   min-width: 180px;
   justify-content: center;
@@ -564,7 +594,7 @@ body {
 
 .auth-timer {
   color: var(--neon-blue);
-  font-size: 0.7rem;
+  font-size: clamp(0.5rem, 1.5vw, 0.7rem);
   opacity: 0.8;
   animation: timerBlink 1s ease-in-out infinite;
 }
@@ -600,6 +630,7 @@ body {
   text-align: center;
   max-width: 500px;
   width: 90%;
+  margin: 0 auto;
   box-shadow: 
     0 0 40px rgba(255, 0, 64, 0.5),
     inset 0 0 20px rgba(255, 0, 64, 0.1);
@@ -614,7 +645,7 @@ body {
 
 .error-title {
   color: var(--glitch-red);
-  font-size: 1.3rem;
+  font-size: clamp(1rem, 3vw, 1.3rem);
   margin-bottom: 2rem;
   text-shadow: 0 0 15px var(--glitch-red);
 }
@@ -623,7 +654,7 @@ body {
   color: var(--text-white);
   margin-bottom: 2.5rem;
   line-height: 1.6;
-  font-size: 0.8rem;
+  font-size: clamp(0.6rem, 2vw, 0.8rem);
 }
 
 .error-actions {
@@ -641,7 +672,7 @@ body {
   border: 2px solid;
   border-radius: 8px;
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.7rem;
+  font-size: clamp(0.5rem, 1.5vw, 0.7rem);
   transition: all 0.3s ease;
   min-width: 180px;
   justify-content: center;
@@ -662,42 +693,43 @@ body {
 }
 
 /* ==========================================================================
-   RESPONSIVE DESIGN
+   RESPONSIVE DESIGN - MELHORADO
    ========================================================================== */
 
-/* Mobile Devices */
+/* Tablets */
 @media screen and (max-width: 768px) {
   .terminal-container {
     margin-top: 6rem;
+    padding: 0 1rem;
   }
   
   .terminal-content {
     padding: 1.5rem;
   }
   
-  .pergunta {
-    font-size: 0.8rem;
+  .answers-container {
+    margin: 2rem auto;
+    padding: 0 1rem;
   }
   
   .answers-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    max-width: 500px; /* Ajuste para mobile */
   }
   
   .answer-box {
     padding: 1.2rem;
     min-height: 100px;
-  }
-  
-  .answer-text {
-    font-size: 0.7rem;
+    max-width: none; /* Remove limitação em mobile */
   }
   
   .score-display {
     position: static;
     margin: 1rem;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 1rem;
   }
   
   .back-home-container {
@@ -711,11 +743,6 @@ body {
     margin: 1rem;
   }
   
-  .auth-title,
-  .error-title {
-    font-size: 1.2rem;
-  }
-  
   .auth-actions,
   .error-actions {
     flex-direction: column;
@@ -727,49 +754,68 @@ body {
     width: 100%;
     max-width: 280px;
   }
-  
-  .auth-icon,
-  .error-icon {
-    font-size: 3rem;
-  }
 }
 
 /* Small Mobile */
 @media screen and (max-width: 480px) {
-  .pergunta {
-    font-size: 0.6rem;
-    line-height: 1.6;
+  .terminal-container {
+    margin-top: 4rem;
+    padding: 0 0.5rem;
   }
   
-  .answer-text {
-    font-size: 0.6rem;
+  .terminal-content {
+    padding: 1rem;
   }
   
-  .answer-label {
-    font-size: 1rem;
+  .answers-container {
+    padding: 0 0.5rem;
+  }
+  
+  .answer-box {
+    padding: 1rem;
+    min-height: 80px;
   }
   
   .score-item {
     padding: 0.6rem;
   }
   
-  .score-label {
-    font-size: 0.5rem;
+  .back-home-container {
+    top: 0.5rem;
+    left: 0.5rem;
   }
   
-  .score-value {
-    font-size: 0.6rem;
-  }
-  
-  .auth-message p,
-  .error-message {
-    font-size: 0.7rem;
+  .auth-required-content,
+  .error-content {
+    padding: 1.5rem 1rem;
+    margin: 0.5rem;
   }
   
   .auth-btn,
   .error-btn {
-    font-size: 0.6rem;
     padding: 0.8rem 1.5rem;
+  }
+}
+
+/* Ultra-wide screens */
+@media screen and (min-width: 1400px) {
+  .terminal-container {
+    max-width: 1400px;
+  }
+  
+  .answers-container {
+    max-width: 1400px;
+  }
+  
+  .answers-grid {
+    max-width: 1000px;
+    gap: 3rem;
+  }
+  
+  .answer-box {
+    max-width: 450px;
+    padding: 2rem;
+    min-height: 150px;
   }
 }
 
@@ -808,7 +854,7 @@ body {
 }
 
 /* ==========================================================================
-   CLICK FEEDBACK
+   CLICK FEEDBACK - MELHORADO
    ========================================================================== */
 
 .answer-box.clicked {
@@ -816,13 +862,46 @@ body {
 }
 
 @keyframes clickFeedback {
-  0% { transform: scale(1); }
-  50% { transform: scale(0.95); background-color: rgba(0, 211, 0, 0.2); }
-  100% { transform: scale(1); }
+  0% { 
+    transform: scale(1); 
+  }
+  50% { 
+    transform: scale(0.95); 
+    background-color: rgba(0, 211, 0, 0.2);
+    box-shadow: 0 0 40px rgba(0, 255, 65, 0.6);
+  }
+  100% { 
+    transform: scale(1); 
+  }
 }
 
 /* States for disabled buttons */
 .answer-box[style*="pointer-events: none"] {
   opacity: 0.6 !important;
   cursor: not-allowed;
+}
+
+/* ==========================================================================
+   LAYOUT UTILITIES PARA GARANTIR CENTRALIZAÇÃO
+   ========================================================================== */
+
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.center-text {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Force centering for problematic elements */
+.terminal,
+.answers-grid,
+.progress-container {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }

@@ -39,51 +39,56 @@
     </div>
   </div>
   
-  <!-- Terminal Container for Question -->
-  <div class="terminal-container" id="terminal-container" style="display: none;">
-    <div class="terminal">
-      <div class="terminal-header">
-        <div class="terminal-controls">
-          <div class="control close"></div>
-          <div class="control minimize"></div>
-          <div class="control maximize"></div>
+  <!-- Main Game Content Container -->
+  <main class="game-content" style="width: 100%; max-width: 1200px; margin: 0 auto;">
+    
+    <!-- Terminal Container for Question -->
+    <div class="terminal-container" id="terminal-container" style="display: none;">
+      <div class="terminal">
+        <div class="terminal-header">
+          <div class="terminal-controls">
+            <div class="control close"></div>
+            <div class="control minimize"></div>
+            <div class="control maximize"></div>
+          </div>
+          <div class="terminal-title">T.I QUIZZMASTER - SESSÃO ATIVA</div>
+          <div></div> <!-- Spacer for flexbox centering -->
         </div>
-        <div class="terminal-title">T.I QUIZZMASTER - SESSÃO ATIVA</div>
-        <div></div>
-      </div>
-      <div class="terminal-content">
-        <div class="command-line">
-          <span class="prompt">admin@quizzmaster:~$</span>
-          <span class="command">execute quiz_question.sh</span>
+        <div class="terminal-content">
+          <div class="command-line">
+            <span class="prompt">admin@quizzmaster:~$</span>
+            <span class="command">execute quiz_question.sh</span>
+          </div>
+          <h1 class="pergunta" id="Questao">Inicializando sistema de questões...</h1>
         </div>
-        <h1 class="pergunta" id="Questao">Inicializando sistema de questões...</h1>
       </div>
     </div>
-  </div>
 
-  <!-- Answers Container -->
-  <div class="answers-container" id="answers-container" style="display: none;">
-    <div class="answers-grid">
-      <div class="answer-box box" data-answer-id="" data-answer-index="0">
-        <div class="answer-label">A)</div>
-        <div class="answer-text" id="answer_a">Carregando opção A...</div>
-      </div>
-      <div class="answer-box box" data-answer-id="" data-answer-index="1">
-        <div class="answer-label">B)</div>
-        <div class="answer-text" id="answer_b">Carregando opção B...</div>
-      </div>
-      <div class="answer-box box" data-answer-id="" data-answer-index="2">
-        <div class="answer-label">C)</div>
-        <div class="answer-text" id="answer_c">Carregando opção C...</div>
-      </div>
-      <div class="answer-box box" data-answer-id="" data-answer-index="3">
-        <div class="answer-label">D)</div>
-        <div class="answer-text" id="answer_d">Carregando opção D...</div>
+    <!-- Answers Container -->
+    <div class="answers-container" id="answers-container" style="display: none;">
+      <div class="answers-grid">
+        <div class="answer-box box" data-answer-id="" data-answer-index="0">
+          <div class="answer-label">A)</div>
+          <div class="answer-text" id="answer_a">Carregando opção A...</div>
+        </div>
+        <div class="answer-box box" data-answer-id="" data-answer-index="1">
+          <div class="answer-label">B)</div>
+          <div class="answer-text" id="answer_b">Carregando opção B...</div>
+        </div>
+        <div class="answer-box box" data-answer-id="" data-answer-index="2">
+          <div class="answer-label">C)</div>
+          <div class="answer-text" id="answer_c">Carregando opção C...</div>
+        </div>
+        <div class="answer-box box" data-answer-id="" data-answer-index="3">
+          <div class="answer-label">D)</div>
+          <div class="answer-text" id="answer_d">Carregando opção D...</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Progress Bar -->
+  </main>
+
+  <!-- Progress Bar - Fixed at Bottom -->
   <div class="progress-container" id="progress-container" style="display: none;">
     <div class="progress-bar">
       <div class="progress-fill" id="progress-fill"></div>
