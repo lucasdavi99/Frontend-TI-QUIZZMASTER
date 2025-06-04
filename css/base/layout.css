@@ -1,0 +1,681 @@
+/* ==========================================================================
+   LAYOUT SYSTEMS - T.I QUIZZMASTER
+   Sistemas de layout reutilizáveis e flexíveis
+   ========================================================================== */
+
+/* ==========================================================================
+   CONTAINER SYSTEM
+   ========================================================================== */
+
+/* Base container - responsive and centered */
+.layout-container {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+/* Container variants */
+.layout-container--sm { max-width: var(--container-sm); }
+.layout-container--md { max-width: var(--container-md); }
+.layout-container--lg { max-width: var(--container-lg); }
+.layout-container--xl { max-width: var(--container-xl); }
+.layout-container--2xl { max-width: var(--container-2xl); }
+.layout-container--full { max-width: none; }
+
+/* Fluid container without max-width */
+.layout-container--fluid {
+  max-width: none;
+  width: 100%;
+}
+
+/* Container with no padding */
+.layout-container--no-padding {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ==========================================================================
+   FLEXBOX LAYOUT SYSTEM
+   ========================================================================== */
+
+/* Basic flex container */
+.layout-flex {
+  display: flex;
+}
+
+/* Flex direction variants */
+.layout-flex--row { flex-direction: row; }
+.layout-flex--row-reverse { flex-direction: row-reverse; }
+.layout-flex--col { flex-direction: column; }
+.layout-flex--col-reverse { flex-direction: column-reverse; }
+
+/* Flex wrap variants */
+.layout-flex--wrap { flex-wrap: wrap; }
+.layout-flex--nowrap { flex-wrap: nowrap; }
+.layout-flex--wrap-reverse { flex-wrap: wrap-reverse; }
+
+/* Justify content variants */
+.layout-flex--justify-start { justify-content: flex-start; }
+.layout-flex--justify-end { justify-content: flex-end; }
+.layout-flex--justify-center { justify-content: center; }
+.layout-flex--justify-between { justify-content: space-between; }
+.layout-flex--justify-around { justify-content: space-around; }
+.layout-flex--justify-evenly { justify-content: space-evenly; }
+
+/* Align items variants */
+.layout-flex--items-start { align-items: flex-start; }
+.layout-flex--items-end { align-items: flex-end; }
+.layout-flex--items-center { align-items: center; }
+.layout-flex--items-baseline { align-items: baseline; }
+.layout-flex--items-stretch { align-items: stretch; }
+
+/* Align content variants */
+.layout-flex--content-start { align-content: flex-start; }
+.layout-flex--content-end { align-content: flex-end; }
+.layout-flex--content-center { align-content: center; }
+.layout-flex--content-between { align-content: space-between; }
+.layout-flex--content-around { align-content: space-around; }
+.layout-flex--content-evenly { align-content: space-evenly; }
+
+/* Gap variants */
+.layout-flex--gap-0 { gap: 0; }
+.layout-flex--gap-1 { gap: var(--space-1); }
+.layout-flex--gap-2 { gap: var(--space-2); }
+.layout-flex--gap-3 { gap: var(--space-3); }
+.layout-flex--gap-4 { gap: var(--space-4); }
+.layout-flex--gap-5 { gap: var(--space-5); }
+.layout-flex--gap-6 { gap: var(--space-6); }
+.layout-flex--gap-8 { gap: var(--space-8); }
+
+/* Flex item utilities */
+.layout-flex__item {
+  flex: 1 1 0%;
+}
+
+.layout-flex__item--auto { flex: 1 1 auto; }
+.layout-flex__item--initial { flex: 0 1 auto; }
+.layout-flex__item--none { flex: none; }
+
+.layout-flex__item--grow { flex-grow: 1; }
+.layout-flex__item--grow-0 { flex-grow: 0; }
+
+.layout-flex__item--shrink { flex-shrink: 1; }
+.layout-flex__item--shrink-0 { flex-shrink: 0; }
+
+/* Common flex patterns */
+.layout-flex--center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.layout-flex--between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.layout-flex--around {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.layout-flex--column-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ==========================================================================
+   GRID LAYOUT SYSTEM
+   ========================================================================== */
+
+/* Basic grid container */
+.layout-grid {
+  display: grid;
+}
+
+/* Grid template columns */
+.layout-grid--cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.layout-grid--cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.layout-grid--cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.layout-grid--cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.layout-grid--cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.layout-grid--cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.layout-grid--cols-8 { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+.layout-grid--cols-10 { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+.layout-grid--cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+/* Auto-fit and auto-fill grids */
+.layout-grid--auto-fit { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.layout-grid--auto-fill { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+
+/* Custom auto-fit sizes */
+.layout-grid--auto-fit-sm { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.layout-grid--auto-fit-md { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.layout-grid--auto-fit-lg { grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); }
+
+/* Grid template rows */
+.layout-grid--rows-1 { grid-template-rows: repeat(1, minmax(0, 1fr)); }
+.layout-grid--rows-2 { grid-template-rows: repeat(2, minmax(0, 1fr)); }
+.layout-grid--rows-3 { grid-template-rows: repeat(3, minmax(0, 1fr)); }
+.layout-grid--rows-4 { grid-template-rows: repeat(4, minmax(0, 1fr)); }
+.layout-grid--rows-5 { grid-template-rows: repeat(5, minmax(0, 1fr)); }
+.layout-grid--rows-6 { grid-template-rows: repeat(6, minmax(0, 1fr)); }
+
+/* Grid gap variants */
+.layout-grid--gap-0 { gap: 0; }
+.layout-grid--gap-1 { gap: var(--space-1); }
+.layout-grid--gap-2 { gap: var(--space-2); }
+.layout-grid--gap-3 { gap: var(--space-3); }
+.layout-grid--gap-4 { gap: var(--space-4); }
+.layout-grid--gap-5 { gap: var(--space-5); }
+.layout-grid--gap-6 { gap: var(--space-6); }
+.layout-grid--gap-8 { gap: var(--space-8); }
+
+/* Grid column gap */
+.layout-grid--gap-x-0 { column-gap: 0; }
+.layout-grid--gap-x-1 { column-gap: var(--space-1); }
+.layout-grid--gap-x-2 { column-gap: var(--space-2); }
+.layout-grid--gap-x-3 { column-gap: var(--space-3); }
+.layout-grid--gap-x-4 { column-gap: var(--space-4); }
+.layout-grid--gap-x-5 { column-gap: var(--space-5); }
+.layout-grid--gap-x-6 { column-gap: var(--space-6); }
+.layout-grid--gap-x-8 { column-gap: var(--space-8); }
+
+/* Grid row gap */
+.layout-grid--gap-y-0 { row-gap: 0; }
+.layout-grid--gap-y-1 { row-gap: var(--space-1); }
+.layout-grid--gap-y-2 { row-gap: var(--space-2); }
+.layout-grid--gap-y-3 { row-gap: var(--space-3); }
+.layout-grid--gap-y-4 { row-gap: var(--space-4); }
+.layout-grid--gap-y-5 { row-gap: var(--space-5); }
+.layout-grid--gap-y-6 { row-gap: var(--space-6); }
+.layout-grid--gap-y-8 { row-gap: var(--space-8); }
+
+/* Grid item utilities */
+.layout-grid__item--span-1 { grid-column: span 1 / span 1; }
+.layout-grid__item--span-2 { grid-column: span 2 / span 2; }
+.layout-grid__item--span-3 { grid-column: span 3 / span 3; }
+.layout-grid__item--span-4 { grid-column: span 4 / span 4; }
+.layout-grid__item--span-5 { grid-column: span 5 / span 5; }
+.layout-grid__item--span-6 { grid-column: span 6 / span 6; }
+.layout-grid__item--span-full { grid-column: 1 / -1; }
+
+/* Grid row span */
+.layout-grid__item--row-span-1 { grid-row: span 1 / span 1; }
+.layout-grid__item--row-span-2 { grid-row: span 2 / span 2; }
+.layout-grid__item--row-span-3 { grid-row: span 3 / span 3; }
+.layout-grid__item--row-span-4 { grid-row: span 4 / span 4; }
+.layout-grid__item--row-span-5 { grid-row: span 5 / span 5; }
+.layout-grid__item--row-span-6 { grid-row: span 6 / span 6; }
+.layout-grid__item--row-span-full { grid-row: 1 / -1; }
+
+/* ==========================================================================
+   STACK LAYOUT SYSTEM
+   ========================================================================== */
+
+/* Vertical stack with consistent spacing */
+.layout-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-stack > * + * {
+  margin-top: var(--space-4);
+}
+
+/* Stack variants with different spacing */
+.layout-stack--tight > * + * { margin-top: var(--space-1); }
+.layout-stack--snug > * + * { margin-top: var(--space-2); }
+.layout-stack--normal > * + * { margin-top: var(--space-4); }
+.layout-stack--relaxed > * + * { margin-top: var(--space-6); }
+.layout-stack--loose > * + * { margin-top: var(--space-8); }
+
+/* Horizontal stack (inline) */
+.layout-stack--horizontal {
+  flex-direction: row;
+  align-items: center;
+}
+
+.layout-stack--horizontal > * + * {
+  margin-top: 0;
+  margin-left: var(--space-4);
+}
+
+.layout-stack--horizontal.layout-stack--tight > * + * { margin-left: var(--space-1); }
+.layout-stack--horizontal.layout-stack--snug > * + * { margin-left: var(--space-2); }
+.layout-stack--horizontal.layout-stack--normal > * + * { margin-left: var(--space-4); }
+.layout-stack--horizontal.layout-stack--relaxed > * + * { margin-left: var(--space-6); }
+.layout-stack--horizontal.layout-stack--loose > * + * { margin-left: var(--space-8); }
+
+/* ==========================================================================
+   CLUSTER LAYOUT SYSTEM (for flexible grouped items)
+   ========================================================================== */
+
+.layout-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* Cluster alignment variants */
+.layout-cluster--center { justify-content: center; }
+.layout-cluster--end { justify-content: flex-end; }
+.layout-cluster--between { justify-content: space-between; }
+.layout-cluster--around { justify-content: space-around; }
+
+/* Cluster spacing variants */
+.layout-cluster--tight { gap: var(--space-1); }
+.layout-cluster--snug { gap: var(--space-2); }
+.layout-cluster--normal { gap: var(--space-3); }
+.layout-cluster--relaxed { gap: var(--space-4); }
+.layout-cluster--loose { gap: var(--space-6); }
+
+/* ==========================================================================
+   SIDEBAR LAYOUT SYSTEM
+   ========================================================================== */
+
+.layout-sidebar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.layout-sidebar__main {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-width: 50%;
+}
+
+.layout-sidebar__side {
+  flex-basis: 250px;
+  flex-grow: 1;
+}
+
+/* Sidebar variants */
+.layout-sidebar--left .layout-sidebar__side { order: -1; }
+.layout-sidebar--right .layout-sidebar__side { order: 1; }
+
+/* Sidebar widths */
+.layout-sidebar--narrow .layout-sidebar__side { flex-basis: 200px; }
+.layout-sidebar--wide .layout-sidebar__side { flex-basis: 300px; }
+
+/* ==========================================================================
+   COVER LAYOUT SYSTEM (for full-height sections)
+   ========================================================================== */
+
+.layout-cover {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: var(--space-4);
+}
+
+.layout-cover__header {
+  flex-shrink: 0;
+}
+
+.layout-cover__main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.layout-cover__footer {
+  flex-shrink: 0;
+}
+
+/* Cover variants */
+.layout-cover--centered .layout-cover__main {
+  align-items: center;
+  text-align: center;
+}
+
+.layout-cover--no-padding {
+  padding: 0;
+}
+
+/* ==========================================================================
+   SWITCHER LAYOUT SYSTEM (responsive horizontal/vertical)
+   ========================================================================== */
+
+.layout-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.layout-switcher > * {
+  flex-grow: 1;
+  flex-basis: calc((30rem - 100%) * 999);
+}
+
+/* Switcher variants */
+.layout-switcher--sm > * { flex-basis: calc((20rem - 100%) * 999); }
+.layout-switcher--lg > * { flex-basis: calc((40rem - 100%) * 999); }
+
+/* ==========================================================================
+   POSITIONING UTILITIES
+   ========================================================================== */
+
+/* Absolute positioning utilities */
+.layout-absolute {
+  position: absolute;
+}
+
+.layout-absolute--top-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.layout-absolute--top-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.layout-absolute--bottom-left {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.layout-absolute--bottom-right {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.layout-absolute--center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.layout-absolute--center-x {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.layout-absolute--center-y {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Fixed positioning utilities */
+.layout-fixed {
+  position: fixed;
+}
+
+.layout-fixed--top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.layout-fixed--bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.layout-fixed--left {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.layout-fixed--right {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.layout-fixed--center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Sticky positioning utilities */
+.layout-sticky {
+  position: sticky;
+  top: 0;
+}
+
+.layout-sticky--bottom {
+  position: sticky;
+  bottom: 0;
+}
+
+/* ==========================================================================
+   Z-INDEX MANAGEMENT
+   ========================================================================== */
+
+.layout-z--hide { z-index: var(--z-index-hide); }
+.layout-z--auto { z-index: var(--z-index-auto); }
+.layout-z--base { z-index: var(--z-index-base); }
+.layout-z--docked { z-index: var(--z-index-docked); }
+.layout-z--dropdown { z-index: var(--z-index-dropdown); }
+.layout-z--sticky { z-index: var(--z-index-sticky); }
+.layout-z--banner { z-index: var(--z-index-banner); }
+.layout-z--overlay { z-index: var(--z-index-overlay); }
+.layout-z--modal { z-index: var(--z-index-modal); }
+.layout-z--popover { z-index: var(--z-index-popover); }
+.layout-z--tooltip { z-index: var(--z-index-tooltip); }
+
+/* ==========================================================================
+   OVERFLOW MANAGEMENT
+   ========================================================================== */
+
+.layout-overflow--auto { overflow: auto; }
+.layout-overflow--hidden { overflow: hidden; }
+.layout-overflow--visible { overflow: visible; }
+.layout-overflow--scroll { overflow: scroll; }
+
+.layout-overflow-x--auto { overflow-x: auto; }
+.layout-overflow-x--hidden { overflow-x: hidden; }
+.layout-overflow-x--visible { overflow-x: visible; }
+.layout-overflow-x--scroll { overflow-x: scroll; }
+
+.layout-overflow-y--auto { overflow-y: auto; }
+.layout-overflow-y--hidden { overflow-y: hidden; }
+.layout-overflow-y--visible { overflow-y: visible; }
+.layout-overflow-y--scroll { overflow-y: scroll; }
+
+/* ==========================================================================
+   ASPECT RATIO UTILITIES
+   ========================================================================== */
+
+.layout-aspect {
+  position: relative;
+  overflow: hidden;
+}
+
+.layout-aspect::before {
+  content: '';
+  display: block;
+  width: 100%;
+}
+
+.layout-aspect__content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Common aspect ratios */
+.layout-aspect--square::before { padding-bottom: 100%; }
+.layout-aspect--video::before { padding-bottom: 56.25%; } /* 16:9 */
+.layout-aspect--photo::before { padding-bottom: 75%; } /* 4:3 */
+.layout-aspect--cinema::before { padding-bottom: 42.857%; } /* 21:9 */
+.layout-aspect--portrait::before { padding-bottom: 133.333%; } /* 3:4 */
+
+/* ==========================================================================
+   LAYOUT DEBUGGING
+   ========================================================================== */
+
+.layout-debug {
+  outline: 2px solid var(--color-accent-red);
+  outline-offset: -2px;
+}
+
+.layout-debug * {
+  outline: 1px solid var(--color-secondary);
+  outline-offset: -1px;
+}
+
+.layout-debug--grid {
+  background-image: 
+    linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+  background-size: var(--space-4) var(--space-4);
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT ADJUSTMENTS
+   ========================================================================== */
+
+/* Mobile adjustments */
+@media screen and (max-width: 480px) {
+  .layout-container {
+    padding-left: var(--space-3);
+    padding-right: var(--space-3);
+  }
+  
+  .layout-sidebar {
+    flex-direction: column;
+  }
+  
+  .layout-sidebar__main,
+  .layout-sidebar__side {
+    flex-basis: auto;
+    min-width: auto;
+  }
+  
+  .layout-switcher > * {
+    flex-basis: 100%;
+  }
+  
+  .layout-cluster {
+    justify-content: center;
+  }
+  
+  .layout-stack--horizontal {
+    flex-direction: column;
+  }
+  
+  .layout-stack--horizontal > * + * {
+    margin-left: 0;
+    margin-top: var(--space-3);
+  }
+}
+
+/* Tablet adjustments */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .layout-container {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+  
+  .layout-grid--auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+/* Desktop adjustments */
+@media screen and (min-width: 1024px) {
+  .layout-container {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+  
+  .layout-grid--auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+/* ==========================================================================
+   PRINT LAYOUT ADJUSTMENTS
+   ========================================================================== */
+
+@media print {
+  .layout-container {
+    max-width: none;
+    padding: 0;
+  }
+  
+  .layout-fixed,
+  .layout-sticky {
+    position: static;
+  }
+  
+  .layout-cover {
+    min-height: auto;
+  }
+  
+  .layout-grid,
+  .layout-flex {
+    display: block;
+  }
+  
+  .layout-grid > *,
+  .layout-flex > * {
+    margin-bottom: var(--space-4);
+    page-break-inside: avoid;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY IMPROVEMENTS
+   ========================================================================== */
+
+/* Ensure focus is visible in layout containers */
+.layout-flex:focus-within,
+.layout-grid:focus-within,
+.layout-stack:focus-within {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Reduce motion for layout animations */
+@media (prefers-reduced-motion: reduce) {
+  .layout-switcher,
+  .layout-cluster,
+  .layout-flex,
+  .layout-grid {
+    transition: none;
+  }
+}
+
+/* High contrast adjustments */
+@media (prefers-contrast: high) {
+  .layout-debug {
+    outline-width: 3px;
+  }
+  
+  .layout-debug * {
+    outline-width: 2px;
+  }
+}

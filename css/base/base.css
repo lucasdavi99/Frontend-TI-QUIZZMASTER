@@ -1,0 +1,706 @@
+/* ==========================================================================
+   BASE STYLES - T.I QUIZZMASTER
+   Configurações fundamentais e melhorias do sistema base
+   ========================================================================== */
+
+/* ==========================================================================
+   MODERN CSS RESET & NORMALIZATION
+   ========================================================================== */
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* Prevent font size inflation */
+html {
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+/* Remove list styles on ul, ol elements with a list role */
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  line-height: var(--line-height-normal);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  
+  /* Improve text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1;
+  
+  /* Prevent scroll issues */
+  overflow-x: hidden;
+  
+  /* Improve touch scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Set shorter line heights on headings and interactive elements */
+h1, h2, h3, h4, h5, h6,
+button, input, label {
+  line-height: var(--line-height-tight);
+}
+
+/* Balance text wrapping on headings */
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+a:not([class]):hover {
+  color: var(--color-secondary);
+}
+
+/* Make images easier to work with */
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Make sure textareas without a rows attribute are not tiny */
+textarea:not([rows]) {
+  min-height: 10em;
+}
+
+/* Anything that has been anchored to should have extra scroll margin */
+:target {
+  scroll-margin-block: 5ex;
+}
+
+/* ==========================================================================
+   ENHANCED FOCUS MANAGEMENT
+   ========================================================================== */
+
+/* Remove outline for mouse users, keep for keyboard users */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Custom focus styles for interactive elements */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-primary);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: 0 0 0 var(--focus-ring-offset) var(--bg-primary);
+}
+
+/* ==========================================================================
+   SCROLLBAR STYLING
+   ========================================================================== */
+
+/* Webkit-based browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-black);
+  border-radius: var(--border-radius-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-darker);
+  border-radius: var(--border-radius-base);
+  border: 1px solid var(--color-black);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-dark);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--color-primary);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--color-black);
+}
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary-darker) var(--color-black);
+}
+
+/* ==========================================================================
+   SELECTION STYLING
+   ========================================================================== */
+
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-black);
+  text-shadow: none;
+}
+
+::-moz-selection {
+  background-color: var(--color-primary);
+  color: var(--color-black);
+  text-shadow: none;
+}
+
+/* ==========================================================================
+   FORM ELEMENT IMPROVEMENTS
+   ========================================================================== */
+
+/* Remove default button styles */
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Improve button accessibility */
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Form control base styles */
+input,
+textarea,
+select {
+  background-color: transparent;
+  border: var(--border-width-2) solid var(--color-primary-darker);
+  border-radius: var(--border-radius-base);
+  padding: var(--input-padding);
+  color: var(--text-primary);
+  transition: var(--transition-colors);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* Checkbox and radio improvements */
+input[type="checkbox"],
+input[type="radio"] {
+  width: var(--space-4);
+  height: var(--space-4);
+  accent-color: var(--color-primary);
+}
+
+/* ==========================================================================
+   TABLE IMPROVEMENTS
+   ========================================================================== */
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--color-primary-darker);
+}
+
+th {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  background-color: rgba(0, 255, 65, 0.05);
+}
+
+/* ==========================================================================
+   TYPOGRAPHY ENHANCEMENTS
+   ========================================================================== */
+
+/* Improve readability */
+p {
+  max-width: 65ch;
+  text-wrap: pretty;
+}
+
+/* Code elements */
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+}
+
+code {
+  background-color: var(--color-primary-alpha);
+  color: var(--color-primary);
+  padding: 0.2em 0.4em;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.9em;
+}
+
+kbd {
+  background-color: var(--color-gray-800);
+  color: var(--color-white);
+  padding: 0.2em 0.4em;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--color-gray-600);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  font-size: 0.85em;
+}
+
+/* ==========================================================================
+   UTILITY BASE CLASSES
+   ========================================================================== */
+
+/* Screen reader only content */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: var(--space-6);
+  background: var(--color-primary);
+  color: var(--color-black);
+  padding: var(--space-2) var(--space-4);
+  text-decoration: none;
+  border-radius: var(--border-radius-base);
+  z-index: var(--z-index-skiplink);
+  font-weight: var(--font-weight-bold);
+}
+
+.skip-link:focus {
+  top: var(--space-6);
+}
+
+/* Container base class */
+.container {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+/* Responsive container variants */
+.container-sm { max-width: var(--container-sm); }
+.container-md { max-width: var(--container-md); }
+.container-lg { max-width: var(--container-lg); }
+.container-xl { max-width: var(--container-xl); }
+.container-2xl { max-width: var(--container-2xl); }
+
+/* Fluid container */
+.container-fluid {
+  width: 100%;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+/* ==========================================================================
+   ANIMATION BASE CLASSES
+   ========================================================================== */
+
+/* Reduced motion utility */
+.motion-safe {
+  animation-duration: var(--duration-base);
+  transition-duration: var(--duration-base);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  /* Disable problematic animations */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   LOADING AND STATE CLASSES
+   ========================================================================== */
+
+/* Loading state */
+.loading {
+  pointer-events: none;
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.loading * {
+  pointer-events: none;
+}
+
+/* Disabled state */
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Hidden state with transitions */
+.fade-out {
+  opacity: 0;
+  transition: var(--transition-opacity);
+}
+
+.fade-in {
+  opacity: 1;
+  transition: var(--transition-opacity);
+}
+
+/* Scale animations */
+.scale-up {
+  transform: scale(1.05);
+  transition: var(--transition-transform);
+}
+
+.scale-down {
+  transform: scale(0.95);
+  transition: var(--transition-transform);
+}
+
+/* ==========================================================================
+   CYBERPUNK THEME BASE EFFECTS
+   ========================================================================== */
+
+/* Base glow effect */
+.glow {
+  position: relative;
+}
+
+.glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  border-radius: inherit;
+  filter: blur(var(--space-1));
+  opacity: 0.5;
+  z-index: -1;
+}
+
+/* Scanline effect base */
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    transparent 0%,
+    rgba(0, 255, 65, 0.03) 50%,
+    transparent 100%
+  );
+  background-size: 100% 4px;
+  animation: scanline-move 0.1s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scanline-move {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 4px; }
+}
+
+/* Matrix rain background base */
+.matrix-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.matrix-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0, 255, 65, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.03) 0%, transparent 50%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   RESPONSIVE BASE ADJUSTMENTS
+   ========================================================================== */
+
+/* Mobile-first responsive adjustments */
+@media screen and (max-width: 480px) {
+  body {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
+  
+  .container,
+  .container-fluid {
+    padding-left: var(--space-3);
+    padding-right: var(--space-3);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    line-height: var(--line-height-snug);
+  }
+  
+  /* Adjust focus ring for touch devices */
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  a:focus-visible {
+    outline-width: 3px;
+    outline-offset: 3px;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .container {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .container {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+}
+
+/* ==========================================================================
+   HIGH CONTRAST MODE ADJUSTMENTS
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+  :focus-visible {
+    outline-width: 3px;
+    outline-color: currentColor;
+  }
+  
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  a:focus-visible {
+    outline-width: 3px;
+    outline-color: currentColor;
+  }
+  
+  /* Remove subtle effects that may reduce contrast */
+  .glow::before,
+  .scanlines::after {
+    display: none;
+  }
+  
+  input,
+  textarea,
+  select {
+    border-width: 2px;
+  }
+}
+
+/* ==========================================================================
+   DARK MODE ENHANCEMENTS
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  /* Enhanced for dark mode - our theme is already dark */
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+  }
+  
+  ::selection {
+    background-color: var(--color-secondary);
+  }
+}
+
+/* ==========================================================================
+   PRINT STYLES
+   ========================================================================== */
+
+@media print {
+  /* Reset colors for print */
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  /* Ensure good contrast */
+  a,
+  a:visited {
+    text-decoration: underline;
+    color: black !important;
+  }
+  
+  /* Show URLs after links */
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+  }
+  
+  /* Hide non-essential elements */
+  .no-print,
+  nav,
+  button {
+    display: none !important;
+  }
+  
+  /* Page breaks */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  
+  p, li {
+    page-break-inside: avoid;
+  }
+  
+  /* Adjust margins */
+  @page {
+    margin: 2cm;
+  }
+  
+  body {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+  
+  h1 { font-size: 24pt; }
+  h2 { font-size: 20pt; }
+  h3 { font-size: 16pt; }
+  h4 { font-size: 14pt; }
+  h5 { font-size: 12pt; }
+  h6 { font-size: 10pt; }
+}
+
+/* ==========================================================================
+   PERFORMANCE OPTIMIZATIONS
+   ========================================================================== */
+
+/* Enable hardware acceleration for animations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize repaints */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.will-change-scroll {
+  will-change: scroll-position;
+}
+
+/* Reset will-change after animations */
+.animation-done {
+  will-change: auto;
+}
+
+/* ==========================================================================
+   DEVELOPMENT HELPERS
+   ========================================================================== */
+
+/* Debug utility - shows element boundaries */
+.debug * {
+  outline: 1px solid red !important;
+}
+
+.debug *:hover {
+  outline: 2px solid blue !important;
+}
+
+/* Grid overlay for development */
+.debug-grid {
+  background-image: 
+    linear-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: var(--space-4) var(--space-4);
+}
