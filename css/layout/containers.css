@@ -1,0 +1,866 @@
+/* ==========================================================================
+   SPECIALIZED CONTAINERS - T.I QUIZZMASTER
+   Containers especializados para diferentes seções e layouts
+   ========================================================================== */
+
+/* ==========================================================================
+   PAGE CONTAINERS - Containers principais de página
+   ========================================================================== */
+
+.page-container {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  isolation: isolate;
+}
+
+.page-container--centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.page-container--quiz {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  position: relative;
+}
+
+.page-container--dashboard {
+  padding: var(--space-6) var(--space-4);
+  max-width: var(--container-2xl);
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   CONTENT CONTAINERS - Wrappers para conteúdo
+   ========================================================================== */
+
+.content-container {
+  position: relative;
+  z-index: var(--z-index-base);
+  width: 100%;
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4);
+}
+
+.content-container--narrow {
+  max-width: var(--container-md);
+}
+
+.content-container--wide {
+  max-width: var(--container-2xl);
+}
+
+.content-container--full {
+  max-width: none;
+  padding: var(--space-4);
+}
+
+.content-container--no-padding {
+  padding: 0;
+}
+
+.content-container--vertical-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - var(--space-12));
+}
+
+/* ==========================================================================
+   SECTION CONTAINERS - Seções de página
+   ========================================================================== */
+
+.section-container {
+  position: relative;
+  width: 100%;
+  padding: var(--space-8) 0;
+  isolation: isolate;
+}
+
+.section-container--hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(0, 255, 65, 0.05) 0%, transparent 70%),
+    var(--bg-primary);
+}
+
+.section-container--feature {
+  padding: var(--space-12) 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+.section-container--compact {
+  padding: var(--space-6) 0;
+}
+
+.section-container--spacious {
+  padding: var(--space-16) 0;
+}
+
+/* Section with background effects */
+.section-container--glow {
+  position: relative;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0, 255, 65, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.03) 0%, transparent 50%);
+}
+
+.section-container--glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.3;
+  pointer-events: none;
+  animation: gridPulse 4s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.3; }
+}
+
+/* ==========================================================================
+   TERMINAL CONTAINERS - Containers estilo terminal
+   ========================================================================== */
+
+.terminal-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--color-black);
+  border: 3px solid var(--color-primary);
+  border-radius: var(--border-radius-xl);
+  box-shadow: 
+    var(--shadow-neon-xl),
+    inset 0 0 20px rgba(0, 255, 65, 0.1);
+  overflow: hidden;
+  animation: terminalGlow 3s ease-in-out infinite alternate;
+  isolation: isolate;
+}
+
+@keyframes terminalGlow {
+  0% {
+    box-shadow: 
+      var(--shadow-neon-xl),
+      inset 0 0 20px rgba(0, 255, 65, 0.1);
+  }
+  100% {
+    box-shadow: 
+      0 0 40px rgba(0, 255, 65, 0.6),
+      inset 0 0 30px rgba(0, 255, 65, 0.2);
+  }
+}
+
+.terminal-header {
+  background: linear-gradient(90deg, var(--color-primary-darker), var(--color-primary-dark));
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--color-primary);
+  position: relative;
+  z-index: 2;
+}
+
+.terminal-controls {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.terminal-control {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--border-radius-full);
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-control--close { 
+  background: #ff5f57; 
+  box-shadow: 0 0 5px rgba(255, 95, 87, 0.5);
+}
+
+.terminal-control--minimize { 
+  background: #ffbd2e; 
+  box-shadow: 0 0 5px rgba(255, 189, 46, 0.5);
+}
+
+.terminal-control--maximize { 
+  background: #28ca42; 
+  box-shadow: 0 0 5px rgba(40, 202, 66, 0.5);
+}
+
+.terminal-title {
+  color: var(--color-black);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  flex: 1;
+  text-shadow: none;
+}
+
+.terminal-content {
+  padding: var(--space-6);
+  min-height: 200px;
+  background: var(--color-black);
+  position: relative;
+  z-index: 1;
+}
+
+.terminal-command-line {
+  color: var(--color-success);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-4);
+  opacity: 0.8;
+}
+
+.terminal-prompt {
+  color: var(--color-secondary);
+}
+
+.terminal-command {
+  color: var(--color-primary);
+  margin-left: var(--space-2);
+}
+
+/* ==========================================================================
+   SCORE CONTAINERS - Containers para pontuação
+   ========================================================================== */
+
+.score-container {
+  position: fixed;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: var(--z-index-sticky);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  isolation: isolate;
+}
+
+.score-item {
+  background: rgba(0, 0, 0, 0.8);
+  border: var(--border-width-2) solid var(--color-primary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-3) var(--space-4);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-neon-base);
+  text-align: center;
+  min-width: 120px;
+  transition: var(--transition-base);
+}
+
+.score-item:hover {
+  border-color: var(--color-secondary);
+  box-shadow: var(--shadow-cyber-lg);
+  transform: scale(1.05);
+}
+
+.score-label {
+  color: var(--color-secondary);
+  font-size: var(--font-size-xs);
+  display: block;
+  margin-bottom: var(--space-1);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-medium);
+}
+
+.score-value {
+  color: var(--color-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  text-shadow: var(--text-shadow-neon);
+  line-height: 1;
+}
+
+/* ==========================================================================
+   PROGRESS CONTAINERS - Containers para barras de progresso
+   ========================================================================== */
+
+.progress-container {
+  position: fixed;
+  bottom: var(--space-4);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 600px;
+  z-index: var(--z-index-sticky);
+  isolation: isolate;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 255, 65, 0.2);
+  border-radius: var(--border-radius-base);
+  overflow: hidden;
+  border: 1px solid var(--color-primary);
+  box-shadow: var(--shadow-neon-sm);
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary-dark), var(--color-primary));
+  border-radius: var(--border-radius-base);
+  width: 0%;
+  transition: width var(--duration-slow) var(--ease-out);
+  box-shadow: 0 0 10px var(--color-primary);
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: progressShine 2s ease-in-out infinite;
+}
+
+@keyframes progressShine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progress-text {
+  text-align: center;
+  margin-top: var(--space-2);
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  text-shadow: var(--text-shadow-neon);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ==========================================================================
+   NAVIGATION CONTAINERS - Containers de navegação
+   ========================================================================== */
+
+.navigation-container {
+  position: fixed;
+  top: var(--space-4);
+  left: 0;
+  right: 0;
+  z-index: var(--z-index-sticky);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--space-4);
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  pointer-events: none;
+  isolation: isolate;
+}
+
+.navigation-container > * {
+  pointer-events: auto;
+}
+
+.nav-left,
+.nav-right,
+.nav-center {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.nav-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ==========================================================================
+   OVERLAY CONTAINERS - Containers para overlays
+   ========================================================================== */
+
+.overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: var(--z-index-overlay);
+  background: var(--modal-backdrop);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  opacity: 0;
+  visibility: hidden;
+  transition: 
+    opacity var(--duration-base) var(--ease-out),
+    visibility var(--duration-base) var(--ease-out);
+  isolation: isolate;
+}
+
+.overlay-container.active,
+.overlay-container--active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.overlay-content {
+  position: relative;
+  max-width: 500px;
+  width: 100%;
+  max-height: calc(100vh - var(--space-8));
+  overflow-y: auto;
+  background: var(--color-black);
+  border: 3px solid var(--color-primary);
+  border-radius: var(--border-radius-xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-neon-xl);
+  text-align: center;
+  transform: scale(0.9) translateY(-20px);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.overlay-container.active .overlay-content,
+.overlay-container--active .overlay-content {
+  transform: scale(1) translateY(0);
+}
+
+/* ==========================================================================
+   FILTER CONTAINERS - Containers para filtros
+   ========================================================================== */
+
+.filter-container {
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid var(--color-primary-darker);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-5);
+  backdrop-filter: blur(5px);
+  margin: var(--space-6) 0;
+  isolation: isolate;
+}
+
+.filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-primary-darker);
+}
+
+.filter-title {
+  font-size: var(--fluid-text-lg);
+  color: var(--color-secondary);
+  text-shadow: var(--text-shadow-cyber);
+  margin: 0;
+}
+
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: end;
+  justify-content: center;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 140px;
+  flex: 1;
+  max-width: 200px;
+}
+
+/* ==========================================================================
+   LOADING CONTAINERS - Containers para estados de carregamento
+   ========================================================================== */
+
+.loading-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: var(--space-8);
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--color-primary-darker);
+  border-top: 3px solid var(--color-primary);
+  border-radius: var(--border-radius-full);
+  animation: spin 1s linear infinite;
+  margin: 0 auto var(--space-4);
+  box-shadow: var(--shadow-neon-base);
+}
+
+.loading-text {
+  color: var(--color-primary);
+  font-size: var(--fluid-text-lg);
+  text-shadow: var(--text-shadow-neon);
+  margin-bottom: var(--space-2);
+}
+
+.loading-subtext {
+  color: var(--color-secondary);
+  font-size: var(--font-size-sm);
+  opacity: 0.8;
+}
+
+/* Loading overlay variant */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: var(--z-index-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.loading-overlay.hidden {
+  display: none;
+}
+
+/* ==========================================================================
+   ERROR CONTAINERS - Containers para estados de erro
+   ========================================================================== */
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  padding: var(--space-8);
+  text-align: center;
+  background: rgba(255, 0, 64, 0.05);
+  border: 2px solid var(--color-accent-red);
+  border-radius: var(--border-radius-xl);
+  backdrop-filter: blur(10px);
+}
+
+.error-icon {
+  font-size: 4rem;
+  margin-bottom: var(--space-4);
+  color: var(--color-accent-red);
+  text-shadow: var(--shadow-error);
+  animation: errorPulse 2s ease-in-out infinite;
+}
+
+@keyframes errorPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.error-title {
+  color: var(--color-accent-red);
+  font-size: var(--fluid-text-2xl);
+  margin-bottom: var(--space-3);
+  text-shadow: var(--text-shadow-base);
+}
+
+.error-message {
+  color: var(--text-primary);
+  margin-bottom: var(--space-6);
+  line-height: var(--line-height-relaxed);
+  max-width: 500px;
+}
+
+.error-actions {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   EMPTY STATE CONTAINERS - Containers para estados vazios
+   ========================================================================== */
+
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: var(--space-8);
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--color-primary-darker);
+  border-radius: var(--border-radius-xl);
+  backdrop-filter: blur(5px);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: var(--space-4);
+  color: var(--color-secondary);
+  opacity: 0.7;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.empty-title {
+  color: var(--color-primary);
+  font-size: var(--fluid-text-xl);
+  margin-bottom: var(--space-3);
+  text-shadow: var(--text-shadow-neon);
+}
+
+.empty-message {
+  color: var(--color-secondary);
+  margin-bottom: var(--space-6);
+  line-height: var(--line-height-relaxed);
+  max-width: 400px;
+}
+
+.empty-actions {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+
+/* Mobile adjustments */
+@media screen and (max-width: 480px) {
+  .content-container {
+    padding: var(--space-4) var(--space-3);
+  }
+  
+  .section-container {
+    padding: var(--space-6) 0;
+  }
+  
+  .section-container--spacious {
+    padding: var(--space-8) 0;
+  }
+  
+  .terminal-container {
+    margin: 0 var(--space-3);
+    border-radius: var(--border-radius-lg);
+  }
+  
+  .terminal-content {
+    padding: var(--space-4);
+  }
+  
+  .score-container {
+    position: static;
+    flex-direction: row;
+    justify-content: center;
+    margin: var(--space-4) auto;
+    gap: var(--space-3);
+  }
+  
+  .score-item {
+    min-width: 80px;
+    padding: var(--space-2) var(--space-3);
+  }
+  
+  .navigation-container {
+    top: var(--space-2);
+    padding: 0 var(--space-3);
+  }
+  
+  .nav-left,
+  .nav-right {
+    gap: var(--space-2);
+  }
+  
+  .progress-container {
+    bottom: var(--space-2);
+    width: 95%;
+  }
+  
+  .filter-container {
+    padding: var(--space-4);
+    margin: var(--space-4) 0;
+  }
+  
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+  
+  .filter-group {
+    min-width: auto;
+    max-width: none;
+  }
+  
+  .overlay-content {
+    padding: var(--space-6);
+    margin: var(--space-3);
+  }
+  
+  .loading-container,
+  .error-container,
+  .empty-container {
+    padding: var(--space-6);
+    min-height: 250px;
+  }
+  
+  .error-icon,
+  .empty-icon {
+    font-size: 3rem;
+  }
+}
+
+/* Tablet adjustments */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .content-container {
+    padding: var(--space-5) var(--space-4);
+  }
+  
+  .score-container {
+    top: var(--space-3);
+    right: var(--space-3);
+  }
+  
+  .navigation-container {
+    padding: 0 var(--space-3);
+  }
+  
+  .progress-container {
+    bottom: var(--space-3);
+  }
+}
+
+/* Desktop enhancements */
+@media screen and (min-width: 1024px) {
+  .section-container--hero {
+    background-attachment: fixed;
+  }
+  
+  .score-item:hover {
+    transform: scale(1.1);
+  }
+  
+  .terminal-container:hover {
+    box-shadow: 
+      0 0 50px rgba(0, 255, 65, 0.8),
+      inset 0 0 30px rgba(0, 255, 65, 0.3);
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ========================================================================== */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .terminal-container,
+  .overlay-content,
+  .filter-container {
+    border-width: 4px;
+  }
+  
+  .score-item {
+    border-width: 3px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .terminal-container,
+  .score-item,
+  .overlay-content,
+  .loading-spinner,
+  .error-icon,
+  .empty-icon {
+    animation: none;
+    transition: none;
+  }
+  
+  .progress-fill::after {
+    animation: none;
+  }
+  
+  .section-container--glow::before {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   PRINT STYLES
+   ========================================================================== */
+
+@media print {
+  .score-container,
+  .navigation-container,
+  .progress-container,
+  .overlay-container,
+  .loading-overlay {
+    display: none !important;
+  }
+  
+  .page-container {
+    min-height: auto;
+    background: transparent;
+  }
+  
+  .content-container {
+    max-width: none;
+    padding: var(--space-4) 0;
+  }
+  
+  .section-container {
+    padding: var(--space-4) 0;
+    background: transparent;
+  }
+  
+  .terminal-container {
+    background: transparent;
+    border: 2px solid black;
+    box-shadow: none;
+  }
+  
+  .filter-container,
+  .error-container,
+  .empty-container {
+    background: transparent;
+    border: 1px solid black;
+    backdrop-filter: none;
+  }
+}

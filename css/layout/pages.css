@@ -1,0 +1,773 @@
+/* ==========================================================================
+   PAGE-SPECIFIC LAYOUTS - T.I QUIZZMASTER
+   Layouts específicos para cada página da aplicação
+   ========================================================================== */
+
+/* ==========================================================================
+   HOME PAGE LAYOUT - index.html
+   ========================================================================== */
+
+.home-layout {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-4);
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(0, 255, 65, 0.05) 0%, transparent 70%),
+    var(--bg-primary);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.home-layout::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(rgba(0, 255, 65, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+  pointer-events: none;
+  animation: gridMove 20s linear infinite;
+  z-index: -1;
+}
+
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(40px, 40px); }
+}
+
+.home-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  width: 100%;
+}
+
+.home-title {
+  font-size: var(--fluid-text-6xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-primary);
+  letter-spacing: var(--letter-spacing-wider);
+  text-shadow: var(--text-shadow-neon-lg);
+  margin-bottom: var(--space-8);
+  animation: titlePulse 3s ease-in-out infinite alternate;
+  text-transform: uppercase;
+}
+
+@keyframes titlePulse {
+  0% {
+    text-shadow: var(--text-shadow-neon-lg);
+    transform: scale(1);
+  }
+  100% {
+    text-shadow: 
+      0 0 20px var(--color-primary),
+      0 0 40px var(--color-primary),
+      0 0 80px var(--color-primary);
+    transform: scale(1.02);
+  }
+}
+
+.home-navigation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.home-auth {
+  position: fixed;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: var(--z-index-sticky);
+}
+
+/* ==========================================================================
+   QUESTIONS PAGE LAYOUT - questions.html
+   ========================================================================== */
+
+.questions-layout {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.questions-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-index-sticky);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4);
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 255, 65, 0.1);
+}
+
+.questions-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: calc(var(--space-16) + 60px) var(--space-4) calc(var(--space-8) + 80px);
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.questions-content {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.questions-terminal {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.questions-answers {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.questions-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-index-sticky);
+  padding: var(--space-4);
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(0, 255, 65, 0.1);
+}
+
+/* ==========================================================================
+   RANKING PAGE LAYOUT - rank.html
+   ========================================================================== */
+
+.ranking-layout {
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding-top: calc(var(--space-12) + 60px);
+  overflow-x: hidden;
+}
+
+.ranking-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-index-sticky);
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 255, 65, 0.1);
+  padding: var(--space-4);
+}
+
+.ranking-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: var(--container-xl);
+  margin: 0 auto;
+}
+
+.ranking-main {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4);
+}
+
+.ranking-title-section {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.ranking-title {
+  font-size: var(--fluid-text-5xl);
+  color: var(--color-primary);
+  text-shadow: var(--text-shadow-neon-lg);
+  margin-bottom: var(--space-4);
+  animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+  0% {
+    text-shadow: var(--text-shadow-neon-lg);
+  }
+  100% {
+    text-shadow: 
+      0 0 15px var(--color-primary),
+      0 0 30px var(--color-primary),
+      0 0 60px var(--color-primary);
+  }
+}
+
+.ranking-subtitle {
+  color: var(--color-secondary);
+  font-size: var(--fluid-text-base);
+  opacity: 0.9;
+}
+
+.ranking-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.ranking-content {
+  margin-bottom: var(--space-8);
+}
+
+.ranking-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   HISTORY PAGE LAYOUT - history.html
+   ========================================================================== */
+
+.history-layout {
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding-top: calc(var(--space-12) + 60px);
+  overflow-x: hidden;
+}
+
+.history-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-index-sticky);
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 255, 65, 0.1);
+  padding: var(--space-4);
+}
+
+.history-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: var(--container-xl);
+  margin: 0 auto;
+}
+
+.history-main {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4);
+}
+
+.history-title-section {
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+
+.history-title {
+  font-size: var(--fluid-text-4xl);
+  color: var(--color-primary);
+  text-shadow: var(--text-shadow-neon);
+  margin-bottom: var(--space-3);
+}
+
+.history-subtitle {
+  color: var(--color-secondary);
+  font-size: var(--fluid-text-base);
+  opacity: 0.9;
+}
+
+.history-summary {
+  margin-bottom: var(--space-6);
+}
+
+.history-filters {
+  margin-bottom: var(--space-6);
+}
+
+.history-content {
+  margin-bottom: var(--space-8);
+}
+
+.history-pagination {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-6);
+}
+
+.history-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   LOGIN PAGE LAYOUT - login.html
+   ========================================================================== */
+
+.login-layout {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  padding: var(--space-4);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.login-layout::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 30% 70%, rgba(0, 255, 65, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(0, 255, 255, 0.03) 0%, transparent 50%);
+  z-index: -1;
+}
+
+.login-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  background: rgba(0, 0, 0, 0.8);
+  border: var(--border-width-3) solid var(--color-primary);
+  border-radius: var(--border-radius-2xl);
+  padding: var(--space-8);
+  backdrop-filter: blur(15px);
+  box-shadow: 
+    var(--shadow-neon-xl),
+    inset 0 0 30px rgba(0, 255, 65, 0.1);
+  animation: loginGlow 3s ease-in-out infinite alternate;
+  overflow: hidden;
+}
+
+@keyframes loginGlow {
+  0% {
+    box-shadow: 
+      var(--shadow-neon-xl),
+      inset 0 0 30px rgba(0, 255, 65, 0.1);
+  }
+  100% {
+    box-shadow: 
+      0 0 50px rgba(0, 255, 65, 0.8),
+      inset 0 0 50px rgba(0, 255, 65, 0.2);
+  }
+}
+
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--color-primary), var(--color-secondary), var(--color-primary));
+  background-size: 400% 400%;
+  border-radius: var(--border-radius-2xl);
+  z-index: -1;
+  animation: loginBorder 4s ease-in-out infinite;
+}
+
+@keyframes loginBorder {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+
+.login-title {
+  font-size: var(--fluid-text-3xl);
+  color: var(--color-primary);
+  text-shadow: var(--text-shadow-neon);
+  margin-bottom: var(--space-2);
+}
+
+.login-subtitle {
+  color: var(--color-secondary);
+  font-size: var(--font-size-sm);
+  opacity: 0.8;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.login-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.login-toggle {
+  text-align: center;
+  margin-top: var(--space-4);
+  color: var(--color-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.login-toggle a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: var(--font-weight-bold);
+  transition: var(--transition-colors);
+}
+
+.login-toggle a:hover {
+  color: var(--color-secondary);
+  text-shadow: var(--text-shadow-cyber);
+}
+
+/* ==========================================================================
+   CREDITS PAGE LAYOUT - credit.html
+   ========================================================================== */
+
+.credits-layout {
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.credits-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  color: var(--text-primary);
+  z-index: 2;
+}
+
+.credits-content {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 100%;
+  transform: translateX(-50%);
+  animation: creditsScroll 80s linear infinite;
+  font-family: var(--font-primary);
+}
+
+@keyframes creditsScroll {
+  0% { top: 100%; }
+  100% { top: -500%; }
+}
+
+.credits-title {
+  font-size: var(--fluid-text-5xl);
+  color: var(--color-primary);
+  text-shadow: var(--text-shadow-neon-lg);
+  margin-bottom: var(--space-8);
+  letter-spacing: var(--letter-spacing-wider);
+}
+
+.credits-section {
+  margin-bottom: var(--space-8);
+}
+
+.credits-role {
+  font-size: var(--fluid-text-lg);
+  color: var(--color-secondary);
+  text-shadow: var(--text-shadow-cyber);
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.credits-name {
+  font-size: var(--fluid-text-xl);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-4);
+  text-shadow: var(--text-shadow-neon);
+  font-variant: small-caps;
+}
+
+.credits-skip {
+  position: fixed;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  z-index: var(--z-index-sticky);
+  display: none;
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+
+/* Mobile adjustments */
+@media screen and (max-width: 480px) {
+  .home-layout {
+    padding: var(--space-3);
+  }
+  
+  .home-title {
+    font-size: var(--fluid-text-4xl);
+    margin-bottom: var(--space-6);
+  }
+  
+  .home-navigation {
+    gap: var(--space-3);
+    max-width: 300px;
+  }
+  
+  .home-auth {
+    top: var(--space-3);
+    left: var(--space-3);
+  }
+  
+  .questions-header,
+  .ranking-header,
+  .history-header {
+    padding: var(--space-3);
+  }
+  
+  .questions-main {
+    padding: calc(var(--space-12) + 40px) var(--space-3) calc(var(--space-6) + 60px);
+  }
+  
+  .questions-content {
+    gap: var(--space-6);
+  }
+  
+  .ranking-layout,
+  .history-layout {
+    padding-top: calc(var(--space-10) + 40px);
+  }
+  
+  .ranking-main,
+  .history-main {
+    padding: var(--space-4) var(--space-3);
+  }
+  
+  .ranking-title {
+    font-size: var(--fluid-text-3xl);
+  }
+  
+  .ranking-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+  
+  .ranking-actions,
+  .history-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  
+  .login-container {
+    padding: var(--space-6);
+    margin: var(--space-3);
+  }
+  
+  .login-title {
+    font-size: var(--fluid-text-2xl);
+  }
+  
+  .credits-title {
+    font-size: var(--fluid-text-3xl);
+  }
+  
+  .credits-content {
+    animation-duration: 60s;
+  }
+}
+
+/* Tablet adjustments */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .home-title {
+    font-size: var(--fluid-text-5xl);
+  }
+  
+  .questions-main {
+    padding: calc(var(--space-14) + 50px) var(--space-4) calc(var(--space-8) + 70px);
+  }
+  
+  .ranking-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .login-container {
+    max-width: 450px;
+  }
+}
+
+/* Desktop enhancements */
+@media screen and (min-width: 1024px) {
+  .home-layout::before {
+    background-size: 60px 60px;
+  }
+  
+  @keyframes gridMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(60px, 60px); }
+  }
+  
+  .home-navigation {
+    flex-direction: row;
+    gap: var(--space-6);
+    max-width: 600px;
+  }
+  
+  .questions-main {
+    padding: calc(var(--space-16) + 60px) var(--space-6) calc(var(--space-8) + 80px);
+  }
+  
+  .ranking-stats {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+  }
+  
+  .login-container {
+    max-width: 500px;
+    padding: var(--space-10);
+  }
+}
+
+/* Ultra-wide adjustments */
+@media screen and (min-width: 1400px) {
+  .questions-content {
+    max-width: 1400px;
+  }
+  
+  .questions-terminal {
+    max-width: 1000px;
+  }
+  
+  .questions-answers {
+    max-width: 1000px;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & PERFORMANCE
+   ========================================================================== */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .login-container {
+    border-width: 4px;
+  }
+  
+  .home-layout::before,
+  .login-layout::before {
+    display: none;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .home-title,
+  .ranking-title,
+  .login-container,
+  .credits-content {
+    animation: none;
+  }
+  
+  .home-layout::before {
+    animation: none;
+  }
+  
+  .login-container::before {
+    animation: none;
+    background: var(--color-primary);
+  }
+  
+  .credits-content {
+    position: static;
+    transform: none;
+    animation: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .home-auth,
+  .questions-header,
+  .questions-footer,
+  .ranking-header,
+  .history-header,
+  .credits-skip {
+    display: none !important;
+  }
+  
+  .questions-layout,
+  .ranking-layout,
+  .history-layout {
+    padding-top: 0;
+  }
+  
+  .home-layout,
+  .login-layout {
+    background: transparent;
+    min-height: auto;
+  }
+  
+  .home-layout::before,
+  .login-layout::before {
+    display: none;
+  }
+  
+  .login-container {
+    background: transparent;
+    border: 2px solid black;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  
+  .credits-content {
+    position: static;
+    transform: none;
+    animation: none;
+  }
+}
