@@ -1,0 +1,413 @@
+/* ==========================================================================
+   COMPONENTS INDEX - T.I QUIZZMASTER
+   Ponto de entrada único para todos os componentes
+   ========================================================================== */
+
+/* ==========================================================================
+   ORDEM DE IMPORTAÇÃO DOS COMPONENTES
+   
+   Ordem organizada por dependência e especificidade:
+   1. Buttons - Componente mais básico, usado em outros
+   2. Forms - Elementos de formulário e inputs
+   3. Cards - Containers de conteúdo
+   4. Navigation - Navegação e tooltips
+   5. Modals - Overlays e popups (z-index mais alto)
+   
+   Esta ordem garante que não haja conflitos de especificidade
+   e que componentes que dependem de outros sejam carregados depois
+   ========================================================================== */
+
+/* 1. BUTTONS - Sistema de botões reutilizáveis */
+@import url('./buttons.css');
+
+/* 2. FORMS - Sistema de formulários e inputs */
+@import url('./forms.css');
+
+/* 3. CARDS - Sistema de cards e containers */
+@import url('./cards.css');
+
+/* 4. NAVIGATION - Sistema de navegação e tooltips */
+@import url('./navigation.css');
+
+/* 5. MODALS - Sistema de modais e overlays */
+@import url('./modals.css');
+
+/* ==========================================================================
+   CONFIGURAÇÕES GLOBAIS DOS COMPONENTES
+   Configurações que afetam todos os componentes
+   ========================================================================== */
+
+/* Garante que todos os componentes tenham box-sizing correto */
+.btn,
+.btn *,
+.card,
+.card *,
+.modal,
+.modal *,
+.nav-btn,
+.nav-btn *,
+.form-input,
+.form-group * {
+  box-sizing: border-box;
+}
+
+/* Melhora performance de componentes animados */
+.btn,
+.card,
+.modal__content,
+.nav-btn {
+  contain: layout style;
+}
+
+/* Componentes com animações complexas */
+.modal,
+.card--terminal,
+.loading-spinner {
+  contain: layout style paint;
+  will-change: transform, opacity;
+}
+
+/* Remove will-change após animações */
+.animation-complete {
+  will-change: auto;
+}
+
+/* ==========================================================================
+   COMPONENT COMBINATIONS - Interações entre componentes
+   ========================================================================== */
+
+/* Botões dentro de cards */
+.card .btn {
+  min-width: auto; /* Remove minimum width constraint in cards */
+}
+
+.card__actions .btn {
+  flex: 1; /* Make buttons equal width in card actions */
+}
+
+.card__actions .btn:not(:last-child) {
+  margin-right: var(--space-2);
+}
+
+/* Botões em modais */
+.modal__footer .btn {
+  min-width: 120px;
+}
+
+.modal__footer .btn--full {
+  min-width: auto;
+  flex: 1;
+}
+
+/* Cards em modais */
+.modal .card {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: var(--color-primary-darker);
+  box-shadow: none;
+  margin-bottom: var(--space-4);
+}
+
+.modal .card:last-child {
+  margin-bottom: 0;
+}
+
+/* Formulários em cards */
+.card .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.card .form-input,
+.card .form-select,
+.card .form-textarea {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Navegação em cards (para card headers) */
+.card__header .nav-btn {
+  background: transparent;
+  border: 1px solid var(--color-primary-darker);
+  padding: var(--space-1) var(--space-2);
+  min-width: auto;
+  min-height: auto;
+}
+
+/* Tooltips em cards */
+.card .nav-tooltip,
+.card .tooltip {
+  z-index: calc(var(--z-index-tooltip) + 1);
+}
+
+/* ==========================================================================
+   RESPONSIVE COMPONENT INTERACTIONS
+   ========================================================================== */
+
+/* Mobile: Stack card actions vertically */
+@media screen and (max-width: 480px) {
+  .card__actions {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  
+  .card__actions .btn {
+    width: 100%;
+    margin-right: 0;
+  }
+  
+  /* Modal adjustments */
+  .modal__footer {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  
+  .modal__footer .btn {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  /* Navigation in small cards */
+  .card--sm .nav-btn,
+  .card--xs .nav-btn {
+    padding: var(--space-1);
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* Tablet: Adjust spacing */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .card__actions .btn {
+    min-width: 100px;
+  }
+  
+  .modal__footer .btn {
+    min-width: 100px;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY COMPONENT INTERACTIONS
+   ========================================================================== */
+
+/* High contrast adjustments for components */
+@media (prefers-contrast: high) {
+  .card .btn {
+    border-width: 3px;
+  }
+  
+  .modal .card {
+    border-width: 3px;
+  }
+  
+  .card .form-input,
+  .card .form-select {
+    border-width: 3px;
+  }
+}
+
+/* Reduced motion for component interactions */
+@media (prefers-reduced-motion: reduce) {
+  .card:hover {
+    transform: none;
+  }
+  
+  .btn:hover {
+    transform: none;
+  }
+  
+  .nav-btn:hover {
+    transform: none;
+  }
+  
+  .modal__content {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* Focus management between components */
+.modal:not([aria-hidden="true"]) .btn:first-of-type,
+.modal:not([aria-hidden="true"]) .form-input:first-of-type {
+  /* Auto-focus first interactive element in modals */
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.card:focus-within {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* ==========================================================================
+   COMPONENT STATE COMBINATIONS
+   ========================================================================== */
+
+/* Loading states */
+.card--loading .btn,
+.modal--state-loading .btn {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.card--loading .form-input,
+.card--loading .form-select {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Disabled states */
+.card--disabled .btn,
+.card--disabled .form-input,
+.card--disabled .form-select {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Selected states */
+.card--selected .btn--primary {
+  background: var(--color-primary);
+  color: var(--color-black);
+}
+
+/* Error states */
+.card--error .form-input,
+.card--error .form-select {
+  border-color: var(--color-accent-red);
+}
+
+.modal--error .btn--primary {
+  border-color: var(--color-accent-red);
+  color: var(--color-accent-red);
+}
+
+/* ==========================================================================
+   ANIMATION COORDINATION
+   ========================================================================== */
+
+/* Stagger animations for multiple components */
+.card:nth-child(1) { animation-delay: 0ms; }
+.card:nth-child(2) { animation-delay: 100ms; }
+.card:nth-child(3) { animation-delay: 200ms; }
+.card:nth-child(4) { animation-delay: 300ms; }
+.card:nth-child(5) { animation-delay: 400ms; }
+
+/* Modal backdrop prevents component interactions */
+.modal.active ~ * .btn,
+.modal.active ~ * .form-input,
+.modal.active ~ * .nav-btn {
+  pointer-events: none;
+}
+
+/* Override for modal content */
+.modal.active .btn,
+.modal.active .form-input,
+.modal.active .nav-btn {
+  pointer-events: auto;
+}
+
+/* ==========================================================================
+   PRINT OPTIMIZATIONS FOR COMPONENTS
+   ========================================================================== */
+
+@media print {
+  /* Simplify components for print */
+  .btn {
+    background: transparent !important;
+    border: 1px solid black !important;
+    color: black !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+  
+  .card {
+    background: transparent !important;
+    border: 1px solid black !important;
+    box-shadow: none !important;
+    transform: none !important;
+    page-break-inside: avoid;
+  }
+  
+  .nav-btn,
+  .nav-tooltip,
+  .tooltip,
+  .modal {
+    display: none !important;
+  }
+  
+  .form-input,
+  .form-select {
+    background: transparent !important;
+    border: 1px solid black !important;
+    color: black !important;
+  }
+}
+
+/* ==========================================================================
+   DEVELOPMENT HELPERS
+   ========================================================================== */
+
+/* Debug mode for components */
+.debug-components .btn {
+  outline: 2px solid blue !important;
+}
+
+.debug-components .card {
+  outline: 2px solid green !important;
+}
+
+.debug-components .modal {
+  outline: 2px solid red !important;
+}
+
+.debug-components .form-input,
+.debug-components .form-select {
+  outline: 2px solid orange !important;
+}
+
+.debug-components .nav-btn {
+  outline: 2px solid purple !important;
+}
+
+/* Component performance monitoring */
+.monitor-performance .btn,
+.monitor-performance .card,
+.monitor-performance .modal {
+  /* Will show in DevTools Performance tab */
+  will-change: transform, opacity;
+}
+
+/* ==========================================================================
+   COMPONENT VERSIONING INFO
+   ========================================================================== */
+
+/*
+  T.I QUIZZMASTER - COMPONENTS SYSTEM
+  
+  Versão: 1.0.0
+  
+  Componentes incluídos:
+  - buttons.css (Sistema de botões)
+  - forms.css (Formulários e inputs)
+  - cards.css (Cards e containers)
+  - navigation.css (Navegação e tooltips)
+  - modals.css (Modais e overlays)
+  
+  Como usar:
+  @import url('./css/components/index.css');
+  
+  Ou incluir componentes individualmente:
+  @import url('./css/components/buttons.css');
+  
+  Características:
+  - Totalmente responsivo
+  - Acessibilidade integrada
+  - Estados interativos
+  - Temas consistentes
+  - Performance otimizada
+  - Print-ready
+  
+  Classes principais:
+  - .btn, .btn--primary, .btn--secondary
+  - .card, .card--primary, .card--stat
+  - .modal, .modal--success, .modal--error
+  - .nav-btn, .nav-tooltip
+  - .form-input, .form-group, .form-label
+*/
