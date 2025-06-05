@@ -1,0 +1,875 @@
+/* ==========================================================================
+   HOLOGRAM EFFECTS - T.I QUIZZMASTER
+   Efeitos holográficos e projeção digital
+   ========================================================================== */
+
+/* ==========================================================================
+   HOLOGRAM KEYFRAMES - Animações holográficas
+   ========================================================================== */
+
+@keyframes hologram-shimmer {
+  0%, 100% {
+    transform: translateX(0) skewX(0deg);
+    filter: hue-rotate(0deg) brightness(1);
+  }
+  25% {
+    transform: translateX(1px) skewX(0.5deg);
+    filter: hue-rotate(90deg) brightness(1.1);
+  }
+  50% {
+    transform: translateX(-1px) skewX(-0.5deg);
+    filter: hue-rotate(180deg) brightness(0.9);
+  }
+  75% {
+    transform: translateX(1px) skewX(0.3deg);
+    filter: hue-rotate(270deg) brightness(1.05);
+  }
+}
+
+@keyframes hologram-flicker {
+  0%, 96%, 100% {
+    opacity: 1;
+    filter: brightness(1) contrast(1);
+  }
+  97% {
+    opacity: 0.8;
+    filter: brightness(1.2) contrast(0.8);
+  }
+  98% {
+    opacity: 0.3;
+    filter: brightness(0.7) contrast(1.3);
+  }
+  99% {
+    opacity: 0.9;
+    filter: brightness(1.1) contrast(0.9);
+  }
+}
+
+@keyframes hologram-distortion {
+  0%, 100% {
+    transform: scale(1, 1) translateY(0);
+    filter: blur(0px);
+  }
+  10% {
+    transform: scale(1.02, 0.98) translateY(1px);
+    filter: blur(0.5px);
+  }
+  20% {
+    transform: scale(0.98, 1.02) translateY(-1px);
+    filter: blur(0px);
+  }
+  30% {
+    transform: scale(1.01, 0.99) translateY(0.5px);
+    filter: blur(0.3px);
+  }
+  40% {
+    transform: scale(0.99, 1.01) translateY(-0.5px);
+    filter: blur(0px);
+  }
+  50% {
+    transform: scale(1, 1) translateY(0);
+    filter: blur(0.2px);
+  }
+  60% {
+    transform: scale(1.01, 0.99) translateY(0.3px);
+    filter: blur(0px);
+  }
+  70% {
+    transform: scale(0.99, 1.01) translateY(-0.3px);
+    filter: blur(0.4px);
+  }
+  80% {
+    transform: scale(1.02, 0.98) translateY(0.8px);
+    filter: blur(0px);
+  }
+  90% {
+    transform: scale(0.98, 1.02) translateY(-0.8px);
+    filter: blur(0.2px);
+  }
+}
+
+@keyframes hologram-projection {
+  0% {
+    opacity: 0;
+    transform: scaleY(0) rotateX(90deg);
+    filter: blur(5px);
+  }
+  10% {
+    opacity: 0.3;
+    transform: scaleY(0.2) rotateX(70deg);
+    filter: blur(3px);
+  }
+  20% {
+    opacity: 0.6;
+    transform: scaleY(0.5) rotateX(45deg);
+    filter: blur(2px);
+  }
+  30% {
+    opacity: 0.8;
+    transform: scaleY(0.8) rotateX(20deg);
+    filter: blur(1px);
+  }
+  40% {
+    opacity: 0.9;
+    transform: scaleY(0.95) rotateX(5deg);
+    filter: blur(0.5px);
+  }
+  50%, 100% {
+    opacity: 1;
+    transform: scaleY(1) rotateX(0deg);
+    filter: blur(0px);
+  }
+}
+
+@keyframes hologram-interference {
+  0%, 70%, 100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  71% {
+    transform: translateX(2px);
+    opacity: 0.8;
+  }
+  72% {
+    transform: translateX(-1px);
+    opacity: 0.6;
+  }
+  73% {
+    transform: translateX(3px);
+    opacity: 0.9;
+  }
+  74% {
+    transform: translateX(-2px);
+    opacity: 0.7;
+  }
+  75% {
+    transform: translateX(1px);
+    opacity: 1;
+  }
+}
+
+@keyframes hologram-scan {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+@keyframes hologram-phase {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes hologram-chromatic {
+  0%, 100% {
+    text-shadow: 
+      -1px 0 var(--color-accent-red),
+      1px 0 var(--color-accent-blue);
+  }
+  25% {
+    text-shadow: 
+      0 -1px var(--color-accent-red),
+      0 1px var(--color-accent-blue);
+  }
+  50% {
+    text-shadow: 
+      1px 0 var(--color-accent-red),
+      -1px 0 var(--color-accent-blue);
+  }
+  75% {
+    text-shadow: 
+      0 1px var(--color-accent-red),
+      0 -1px var(--color-accent-blue);
+  }
+}
+
+@keyframes hologram-rgb-split {
+  0%, 100% {
+    transform: translateX(0);
+    filter: contrast(1);
+  }
+  16% {
+    transform: translateX(2px);
+    filter: contrast(1.1);
+  }
+  33% {
+    transform: translateX(-1px);
+    filter: contrast(0.9);
+  }
+  50% {
+    transform: translateX(1px);
+    filter: contrast(1.2);
+  }
+  66% {
+    transform: translateX(-2px);
+    filter: contrast(0.8);
+  }
+  83% {
+    transform: translateX(1px);
+    filter: contrast(1.1);
+  }
+}
+
+/* ==========================================================================
+   HOLOGRAM BASE EFFECTS
+   ========================================================================== */
+
+.hologram {
+  position: relative;
+  background: linear-gradient(
+    45deg,
+    rgba(0, 255, 255, 0.1) 0%,
+    rgba(0, 255, 65, 0.05) 25%,
+    rgba(0, 255, 255, 0.1) 50%,
+    rgba(0, 255, 65, 0.05) 75%,
+    rgba(0, 255, 255, 0.1) 100%
+  );
+  background-size: 400% 400%;
+  border: var(--border-width-1) solid rgba(0, 255, 255, 0.3);
+  backdrop-filter: blur(1px);
+  
+  animation: 
+    hologram-shimmer 3s ease-in-out infinite,
+    hologram-phase 8s ease-in-out infinite;
+  
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.3),
+    inset 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.hologram::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 255, 255, 0.03) 50%,
+      transparent 100%
+    );
+  background-size: 2px 100%;
+  animation: hologram-scan 2s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hologram::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 255, 65, 0.02) 50%,
+      transparent 100%
+    );
+  background-size: 100% 1px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   HOLOGRAM TEXT EFFECTS
+   ========================================================================== */
+
+.hologram-text {
+  color: var(--color-secondary);
+  text-shadow: 
+    0 0 5px var(--color-secondary),
+    0 0 10px var(--color-secondary);
+  animation: hologram-flicker 4s ease-in-out infinite;
+  position: relative;
+}
+
+.hologram-text-unstable {
+  color: var(--color-secondary);
+  animation: 
+    hologram-shimmer 2s ease-in-out infinite,
+    hologram-interference 5s ease-in-out infinite,
+    hologram-flicker 3s ease-in-out infinite;
+  position: relative;
+}
+
+.hologram-text-chromatic {
+  color: var(--color-secondary);
+  animation: 
+    hologram-chromatic 1.5s ease-in-out infinite,
+    hologram-flicker 4s ease-in-out infinite;
+  position: relative;
+}
+
+.hologram-text-projecting {
+  color: var(--color-secondary);
+  animation: hologram-projection 2s ease-out forwards;
+  transform-origin: bottom center;
+  perspective: 1000px;
+}
+
+/* ==========================================================================
+   HOLOGRAM CONTAINER EFFECTS
+   ========================================================================== */
+
+.hologram-container {
+  position: relative;
+  border: var(--border-width-2) solid rgba(0, 255, 255, 0.4);
+  border-radius: var(--border-radius-base);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
+  overflow: hidden;
+  
+  animation: hologram-distortion 6s ease-in-out infinite;
+  
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.2),
+    inset 0 0 30px rgba(0, 255, 255, 0.05);
+}
+
+.hologram-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(0, 255, 255, 0.1),
+    transparent,
+    rgba(0, 255, 65, 0.1),
+    transparent
+  );
+  animation: spin 10s linear infinite;
+  z-index: -1;
+}
+
+.hologram-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      45deg,
+      transparent 0%,
+      rgba(0, 255, 255, 0.02) 1px,
+      transparent 2px
+    );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   HOLOGRAM PANEL EFFECTS
+   ========================================================================== */
+
+.hologram-panel {
+  background: 
+    linear-gradient(
+      135deg,
+      rgba(0, 255, 255, 0.1) 0%,
+      rgba(0, 255, 65, 0.05) 50%,
+      rgba(0, 255, 255, 0.1) 100%
+    );
+  border: var(--border-width-1) solid rgba(0, 255, 255, 0.3);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-6);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(3px);
+  
+  animation: hologram-flicker 6s ease-in-out infinite;
+  
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.2),
+    inset 0 0 25px rgba(0, 255, 255, 0.1);
+}
+
+.hologram-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: slideInRight 3s ease-in-out infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hologram-panel-unstable {
+  background: 
+    linear-gradient(
+      135deg,
+      rgba(0, 255, 255, 0.15) 0%,
+      rgba(0, 255, 65, 0.08) 50%,
+      rgba(0, 255, 255, 0.15) 100%
+    );
+  border: var(--border-width-2) solid rgba(0, 255, 255, 0.4);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-6);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(2px);
+  
+  animation: 
+    hologram-distortion 3s ease-in-out infinite,
+    hologram-interference 4s ease-in-out infinite,
+    hologram-flicker 2s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   HOLOGRAM BUTTON EFFECTS
+   ========================================================================== */
+
+.hologram-btn {
+  background: rgba(0, 255, 255, 0.1);
+  border: var(--border-width-2) solid rgba(0, 255, 255, 0.4);
+  color: var(--color-secondary);
+  padding: var(--btn-padding-base);
+  border-radius: var(--border-radius-base);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(2px);
+  
+  text-shadow: 
+    0 0 5px var(--color-secondary);
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.2);
+  
+  transition: var(--transition-base);
+  animation: hologram-flicker 8s ease-in-out infinite;
+}
+
+.hologram-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 255, 0.3),
+    transparent
+  );
+  transition: left var(--duration-base) ease;
+  z-index: 1;
+}
+
+.hologram-btn:hover {
+  border-color: var(--color-secondary);
+  color: var(--color-white);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.4),
+    inset 0 0 20px rgba(0, 255, 255, 0.1);
+  animation: hologram-shimmer 1s ease-in-out infinite;
+}
+
+.hologram-btn:hover::before {
+  left: 100%;
+}
+
+.hologram-btn:active {
+  animation: 
+    hologram-interference 0.5s ease-in-out,
+    hologram-flicker 0.3s ease-in-out;
+}
+
+/* ==========================================================================
+   HOLOGRAM IMAGE EFFECTS
+   ========================================================================== */
+
+.hologram-img {
+  position: relative;
+  display: block;
+  border: var(--border-width-1) solid rgba(0, 255, 255, 0.3);
+  border-radius: var(--border-radius-base);
+  overflow: hidden;
+  
+  animation: hologram-flicker 5s ease-in-out infinite;
+  
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.2);
+}
+
+.hologram-img::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 255, 255, 0.1) 1px,
+      transparent 2px
+    );
+  z-index: 1;
+  pointer-events: none;
+  animation: hologram-scan 3s linear infinite;
+}
+
+.hologram-img::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(
+      45deg,
+      rgba(0, 255, 255, 0.05) 0%,
+      transparent 50%,
+      rgba(0, 255, 65, 0.05) 100%
+    );
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+.hologram-img:hover {
+  animation: 
+    hologram-shimmer 1s ease-in-out infinite,
+    hologram-distortion 2s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   HOLOGRAM OVERLAY EFFECTS
+   ========================================================================== */
+
+.hologram-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: var(--z-index-overlay);
+  pointer-events: none;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 255, 255, 0.01) 50%,
+      transparent 100%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 255, 65, 0.01) 50%,
+      transparent 100%
+    );
+  background-size: 3px 100%, 100% 2px;
+  animation: 
+    hologram-scan 5s linear infinite,
+    hologram-flicker 10s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   HOLOGRAM DATA STREAM
+   ========================================================================== */
+
+.hologram-data-stream {
+  position: absolute;
+  width: 2px;
+  height: 100px;
+  background: linear-gradient(
+    0deg,
+    transparent 0%,
+    var(--color-secondary) 50%,
+    transparent 100%
+  );
+  animation: 
+    matrix-drop 4s linear infinite,
+    hologram-flicker 2s ease-in-out infinite;
+  opacity: 0.7;
+  box-shadow: 
+    0 0 5px var(--color-secondary);
+}
+
+.hologram-data-stream:nth-child(odd) {
+  animation-delay: 0s;
+}
+
+.hologram-data-stream:nth-child(even) {
+  animation-delay: 2s;
+  background: linear-gradient(
+    0deg,
+    transparent 0%,
+    var(--color-primary) 50%,
+    transparent 100%
+  );
+  box-shadow: 
+    0 0 5px var(--color-primary);
+}
+
+/* ==========================================================================
+   HOLOGRAM GRID
+   ========================================================================== */
+
+.hologram-grid {
+  position: relative;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 255, 255, 0.1) 1px,
+      transparent 2px,
+      transparent 20px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 255, 255, 0.1) 1px,
+      transparent 2px,
+      transparent 20px
+    );
+  animation: hologram-flicker 8s ease-in-out infinite;
+}
+
+.hologram-grid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(
+      circle at 25% 25%,
+      rgba(0, 255, 255, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      rgba(0, 255, 65, 0.1) 0%,
+      transparent 50%
+    );
+  animation: hologram-phase 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   UTILITY CLASSES
+   ========================================================================== */
+
+/* Intensity modifiers */
+.hologram-subtle {
+  animation-duration: 8s;
+  opacity: 0.7;
+}
+
+.hologram-intense {
+  animation-duration: 1s;
+  opacity: 1;
+  filter: brightness(1.2);
+}
+
+/* Color variants */
+.hologram-blue {
+  color: var(--color-accent-blue);
+  border-color: rgba(0, 64, 255, 0.4);
+  background: rgba(0, 64, 255, 0.1);
+}
+
+.hologram-green {
+  color: var(--color-primary);
+  border-color: rgba(0, 255, 65, 0.4);
+  background: rgba(0, 255, 65, 0.1);
+}
+
+.hologram-purple {
+  color: var(--color-accent-purple);
+  border-color: rgba(128, 0, 255, 0.4);
+  background: rgba(128, 0, 255, 0.1);
+}
+
+/* Hover-only effects */
+.hologram-hover:hover {
+  animation: hologram-shimmer 1s ease-in-out infinite;
+}
+
+.hologram-hover-unstable:hover {
+  animation: 
+    hologram-distortion 1s ease-in-out infinite,
+    hologram-interference 0.5s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+
+/* Mobile optimizations */
+@media screen and (max-width: 768px) {
+  .hologram,
+  .hologram-container,
+  .hologram-panel {
+    animation-duration: 6s;
+  }
+  
+  .hologram-text-unstable {
+    animation: hologram-flicker 4s ease-in-out infinite;
+  }
+  
+  .hologram-overlay {
+    background-size: 5px 100%, 100% 3px;
+  }
+}
+
+/* Low-end device optimizations */
+@media screen and (max-width: 480px) {
+  .hologram-text-chromatic,
+  .hologram-text-unstable,
+  .hologram-container::before,
+  .hologram-panel::before,
+  .hologram-data-stream,
+  .hologram-overlay {
+    animation: none;
+  }
+  
+  .hologram-panel-unstable {
+    animation: hologram-flicker 6s ease-in-out infinite;
+  }
+  
+  .hologram::before,
+  .hologram::after {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .hologram,
+  .hologram-text,
+  .hologram-text-unstable,
+  .hologram-text-chromatic,
+  .hologram-text-projecting,
+  .hologram-container,
+  .hologram-panel,
+  .hologram-panel-unstable,
+  .hologram-btn,
+  .hologram-img,
+  .hologram-overlay,
+  .hologram-data-stream,
+  .hologram-grid,
+  .hologram-hover,
+  .hologram-hover-unstable {
+    animation: none !important;
+  }
+  
+  .hologram::before,
+  .hologram::after,
+  .hologram-container::before,
+  .hologram-panel::before,
+  .hologram-img::before,
+  .hologram-grid::before {
+    animation: none !important;
+  }
+  
+  /* Keep static visual effects */
+  .hologram,
+  .hologram-container,
+  .hologram-panel {
+    opacity: 0.8;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .hologram,
+  .hologram-container,
+  .hologram-panel,
+  .hologram-btn {
+    border-width: var(--high-contrast-border-width);
+    backdrop-filter: none;
+  }
+  
+  .hologram::before,
+  .hologram::after,
+  .hologram-container::before,
+  .hologram-panel::before,
+  .hologram-img::before,
+  .hologram-img::after,
+  .hologram-overlay {
+    display: none;
+  }
+}
+
+/* Battery saving mode */
+@media (prefers-reduced-data: reduce) {
+  .hologram-container::before,
+  .hologram-panel::before,
+  .hologram-overlay,
+  .hologram-data-stream {
+    display: none;
+  }
+  
+  .hologram-text-chromatic,
+  .hologram-text-unstable {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   PRINT STYLES
+   ========================================================================== */
+
+@media print {
+  .hologram,
+  .hologram-text,
+  .hologram-container,
+  .hologram-panel,
+  .hologram-btn,
+  .hologram-img {
+    background: white !important;
+    border-color: black !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    backdrop-filter: none !important;
+    animation: none !important;
+  }
+  
+  .hologram::before,
+  .hologram::after,
+  .hologram-container::before,
+  .hologram-panel::before,
+  .hologram-overlay,
+  .hologram-data-stream {
+    display: none !important;
+  }
+}

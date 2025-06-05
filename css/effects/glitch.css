@@ -1,0 +1,1015 @@
+/* ==========================================================================
+   GLITCH EFFECTS - T.I QUIZZMASTER
+   Efeitos glitch cyberpunk otimizados usando design tokens
+   ========================================================================== */
+
+/* ==========================================================================
+   GLITCH KEYFRAMES - Animações base dos efeitos glitch
+   ========================================================================== */
+
+@keyframes glitch-skew {
+  0%, 100% {
+    transform: skew(0deg);
+  }
+  10% {
+    transform: skew(2deg);
+  }
+  20% {
+    transform: skew(-1deg);
+  }
+  30% {
+    transform: skew(1deg);
+  }
+  40% {
+    transform: skew(-2deg);
+  }
+  50% {
+    transform: skew(0deg);
+  }
+  60% {
+    transform: skew(1deg);
+  }
+  70% {
+    transform: skew(-1deg);
+  }
+  80% {
+    transform: skew(2deg);
+  }
+  90% {
+    transform: skew(-1deg);
+  }
+}
+
+@keyframes glitch-anim-1 {
+  0% {
+    clip-path: polygon(0 2%, 100% 2%, 100% 5%, 0 5%);
+    transform: translateX(2px) rotateX(10deg);
+  }
+  5% {
+    clip-path: polygon(0 15%, 100% 15%, 100% 15%, 0 15%);
+    transform: translateX(-1px);
+  }
+  10% {
+    clip-path: polygon(0 10%, 100% 10%, 100% 20%, 0 20%);
+    transform: translateX(-1px);
+  }
+  15% {
+    clip-path: polygon(0 1%, 100% 1%, 100% 2%, 0 2%);
+    transform: translateX(1px);
+  }
+  20% {
+    clip-path: polygon(0 33%, 100% 33%, 100% 33%, 0 33%);
+    transform: translateX(1px);
+  }
+  25% {
+    clip-path: polygon(0 44%, 100% 44%, 100% 44%, 0 44%);
+    transform: translateX(-1px);
+  }
+  30% {
+    clip-path: polygon(0 50%, 100% 50%, 100% 20%, 0 20%);
+    transform: translateX(-1px) rotateX(-10deg);
+  }
+  35% {
+    clip-path: polygon(0 70%, 100% 70%, 100% 70%, 0 70%);
+    transform: translateX(1px);
+  }
+  40% {
+    clip-path: polygon(0 80%, 100% 80%, 100% 80%, 0 80%);
+    transform: translateX(-1px);
+  }
+  45% {
+    clip-path: polygon(0 50%, 100% 50%, 100% 55%, 0 55%);
+    transform: translateX(1px);
+  }
+  50% {
+    clip-path: polygon(0 70%, 100% 70%, 100% 80%, 0 80%);
+    transform: translateX(-1px) rotateX(10deg);
+  }
+  55% {
+    clip-path: polygon(0 2%, 100% 2%, 100% 40%, 0 40%);
+    transform: translateX(1px);
+  }
+  60% {
+    clip-path: polygon(0 15%, 100% 15%, 100% 50%, 0 50%);
+    transform: translateX(-1px) rotateX(-10deg);
+  }
+  65% {
+    clip-path: polygon(0 10%, 100% 10%, 100% 45%, 0 45%);
+    transform: translateX(1px);
+  }
+  70% {
+    clip-path: polygon(0 1%, 100% 1%, 100% 7%, 0 7%);
+    transform: translateX(-1px);
+  }
+  75% {
+    clip-path: polygon(0 33%, 100% 33%, 100% 39%, 0 39%);
+    transform: translateX(1px) rotateX(10deg);
+  }
+  80% {
+    clip-path: polygon(0 44%, 100% 44%, 100% 90%, 0 90%);
+    transform: translateX(-1px);
+  }
+  85% {
+    clip-path: polygon(0 50%, 100% 50%, 100% 52%, 0 52%);
+    transform: translateX(1px);
+  }
+  90% {
+    clip-path: polygon(0 70%, 100% 70%, 100% 90%, 0 90%);
+    transform: translateX(-1px) rotateX(-10deg);
+  }
+  95% {
+    clip-path: polygon(0 80%, 100% 80%, 100% 85%, 0 85%);
+    transform: translateX(1px);
+  }
+  100% {
+    clip-path: polygon(0 50%, 100% 50%, 100% 55%, 0 55%);
+    transform: translateX(-1px);
+  }
+}
+
+@keyframes glitch-anim-2 {
+  0% {
+    clip-path: polygon(0 25%, 100% 25%, 100% 30%, 0 30%);
+    transform: translateX(-2px) rotateY(10deg);
+  }
+  15% {
+    clip-path: polygon(0 3%, 100% 3%, 100% 3%, 0 3%);
+    transform: translateX(2px);
+  }
+  25% {
+    clip-path: polygon(0 5%, 100% 5%, 100% 20%, 0 20%);
+    transform: translateX(2px) rotateY(-10deg);
+  }
+  35% {
+    clip-path: polygon(0 10%, 100% 10%, 100% 10%, 0 10%);
+    transform: translateX(-2px);
+  }
+  45% {
+    clip-path: polygon(0 40%, 100% 40%, 100% 39%, 0 39%);
+    transform: translateX(2px);
+  }
+  55% {
+    clip-path: polygon(0 65%, 100% 65%, 100% 65%, 0 65%);
+    transform: translateX(-2px) rotateY(10deg);
+  }
+  65% {
+    clip-path: polygon(0 75%, 100% 75%, 100% 76%, 0 76%);
+    transform: translateX(2px);
+  }
+  75% {
+    clip-path: polygon(0 1%, 100% 1%, 100% 40%, 0 40%);
+    transform: translateX(-2px) rotateY(-10deg);
+  }
+  85% {
+    clip-path: polygon(0 15%, 100% 15%, 100% 65%, 0 65%);
+    transform: translateX(2px);
+  }
+  100% {
+    clip-path: polygon(0 25%, 100% 25%, 100% 30%, 0 30%);
+    transform: translateX(-2px);
+  }
+}
+
+@keyframes glitch-anim-3 {
+  0% {
+    clip-path: polygon(0 0%, 100% 0%, 100% 5%, 0 5%);
+    transform: translateX(1px) rotateZ(1deg);
+  }
+  10% {
+    clip-path: polygon(0 20%, 100% 20%, 100% 25%, 0 25%);
+    transform: translateX(-2px) rotateZ(-1deg);
+  }
+  20% {
+    clip-path: polygon(0 40%, 100% 40%, 100% 45%, 0 45%);
+    transform: translateX(1px) rotateZ(0.5deg);
+  }
+  30% {
+    clip-path: polygon(0 60%, 100% 60%, 100% 65%, 0 65%);
+    transform: translateX(-1px) rotateZ(-0.5deg);
+  }
+  40% {
+    clip-path: polygon(0 80%, 100% 80%, 100% 85%, 0 85%);
+    transform: translateX(2px) rotateZ(1deg);
+  }
+  50% {
+    clip-path: polygon(0 30%, 100% 30%, 100% 35%, 0 35%);
+    transform: translateX(-1px) rotateZ(-1deg);
+  }
+  60% {
+    clip-path: polygon(0 50%, 100% 50%, 100% 55%, 0 55%);
+    transform: translateX(1px) rotateZ(0.5deg);
+  }
+  70% {
+    clip-path: polygon(0 70%, 100% 70%, 100% 75%, 0 75%);
+    transform: translateX(-2px) rotateZ(-0.5deg);
+  }
+  80% {
+    clip-path: polygon(0 10%, 100% 10%, 100% 15%, 0 15%);
+    transform: translateX(1px) rotateZ(1deg);
+  }
+  90% {
+    clip-path: polygon(0 90%, 100% 90%, 100% 95%, 0 95%);
+    transform: translateX(-1px) rotateZ(-1deg);
+  }
+  100% {
+    clip-path: polygon(0 0%, 100% 0%, 100% 5%, 0 5%);
+    transform: translateX(1px) rotateZ(1deg);
+  }
+}
+
+@keyframes glitch-layer-1 {
+  0% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+  5% {
+    opacity: 1;
+    transform: translateX(5px);
+  }
+  10% {
+    opacity: 0;
+    transform: translateX(-3px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateX(2px);
+  }
+  20% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+  80% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+  85% {
+    opacity: 1;
+    transform: translateX(-4px);
+  }
+  90% {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+  95% {
+    opacity: 1;
+    transform: translateX(-2px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+}
+
+@keyframes glitch-layer-2 {
+  0% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+  12% {
+    opacity: 1;
+    transform: translateX(-3px);
+  }
+  18% {
+    opacity: 0;
+    transform: translateX(4px);
+  }
+  25% {
+    opacity: 1;
+    transform: translateX(-2px);
+  }
+  30% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+  70% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+  75% {
+    opacity: 1;
+    transform: translateX(3px);
+  }
+  82% {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  88% {
+    opacity: 1;
+    transform: translateX(2px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+}
+
+@keyframes glitch-layer-3 {
+  0% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+  8% {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+  14% {
+    opacity: 0;
+    transform: translateX(-2px);
+  }
+  22% {
+    opacity: 1;
+    transform: translateX(-3px);
+  }
+  28% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+  65% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+  72% {
+    opacity: 1;
+    transform: translateX(-4px);
+  }
+  78% {
+    opacity: 0;
+    transform: translateX(3px);
+  }
+  86% {
+    opacity: 1;
+    transform: translateX(-1px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+}
+
+@keyframes glitch-color-shift {
+  0%, 100% {
+    filter: hue-rotate(0deg);
+  }
+  20% {
+    filter: hue-rotate(90deg);
+  }
+  40% {
+    filter: hue-rotate(180deg);
+  }
+  60% {
+    filter: hue-rotate(270deg);
+  }
+  80% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes glitch-noise {
+  0%, 3%, 5%, 42%, 44%, 100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  4.3% {
+    opacity: 1;
+    transform: scaleY(1.7);
+  }
+  43% {
+    opacity: 1;
+    transform: scaleX(1.5);
+  }
+}
+
+@keyframes glitch-digital {
+  0% {
+    filter: blur(0px) contrast(1) brightness(1);
+  }
+  10% {
+    filter: blur(1px) contrast(1.2) brightness(1.1);
+  }
+  20% {
+    filter: blur(0px) contrast(0.8) brightness(0.9);
+  }
+  30% {
+    filter: blur(2px) contrast(1.5) brightness(1.2);
+  }
+  40% {
+    filter: blur(0px) contrast(1) brightness(1);
+  }
+  50% {
+    filter: blur(1px) contrast(0.9) brightness(0.8);
+  }
+  60% {
+    filter: blur(0px) contrast(1.3) brightness(1.1);
+  }
+  70% {
+    filter: blur(1px) contrast(1) brightness(1);
+  }
+  80% {
+    filter: blur(0px) contrast(1.1) brightness(0.9);
+  }
+  90% {
+    filter: blur(2px) contrast(0.7) brightness(1.3);
+  }
+  100% {
+    filter: blur(0px) contrast(1) brightness(1);
+  }
+}
+
+/* ==========================================================================
+   GLITCH TEXT EFFECTS - Efeitos de texto
+   ========================================================================== */
+
+.glitch-text {
+  position: relative;
+  display: inline-block;
+  animation: glitch-skew 1s infinite linear alternate-reverse;
+  color: var(--text-primary);
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.glitch-text::before {
+  animation: glitch-anim-1 0.6s infinite linear alternate-reverse;
+  color: var(--color-accent-red);
+  z-index: -1;
+}
+
+.glitch-text::after {
+  animation: glitch-anim-2 1s infinite linear alternate-reverse;
+  color: var(--color-accent-blue);
+  z-index: -2;
+}
+
+/* Enhanced glitch text with layers */
+.glitch-text-enhanced {
+  position: relative;
+  display: inline-block;
+  animation: glitch-skew 1s infinite linear alternate-reverse;
+  color: var(--text-primary);
+}
+
+.glitch-text-enhanced .glitch-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.glitch-text-enhanced .glitch-layer:nth-child(1) {
+  color: var(--color-secondary);
+  animation: glitch-layer-1 2s infinite linear;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.glitch-text-enhanced .glitch-layer:nth-child(2) {
+  color: var(--color-accent-purple);
+  animation: glitch-layer-2 2.3s infinite linear;
+  clip-path: polygon(0 45%, 100% 45%, 100% 85%, 0 85%);
+}
+
+.glitch-text-enhanced .glitch-layer:nth-child(3) {
+  color: var(--color-accent-yellow);
+  animation: glitch-layer-3 1.7s infinite linear;
+  clip-path: polygon(0 85%, 100% 85%, 100% 100%, 0 100%);
+}
+
+/* Glitch text with color shift */
+.glitch-text-colorful {
+  position: relative;
+  display: inline-block;
+  animation: 
+    glitch-skew 1s infinite linear alternate-reverse,
+    glitch-color-shift 3s infinite linear;
+}
+
+.glitch-text-colorful::before,
+.glitch-text-colorful::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.glitch-text-colorful::before {
+  animation: glitch-anim-2 0.8s infinite linear alternate-reverse;
+  color: var(--color-accent-red);
+  mix-blend-mode: multiply;
+}
+
+.glitch-text-colorful::after {
+  animation: glitch-anim-3 1.2s infinite linear alternate-reverse;
+  color: var(--color-accent-blue);
+  mix-blend-mode: screen;
+}
+
+/* ==========================================================================
+   GLITCH CONTAINER EFFECTS - Efeitos de container
+   ========================================================================== */
+
+.glitch-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.glitch-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 0, 64, 0.1) 20%,
+    transparent 40%,
+    rgba(0, 64, 255, 0.1) 60%,
+    transparent 80%,
+    rgba(0, 255, 255, 0.1) 100%
+  );
+  animation: glitch-noise 0.3s infinite;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+.glitch-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 0, 64, 0.03) 0px,
+      transparent 1px,
+      transparent 2px,
+      rgba(0, 255, 255, 0.03) 3px
+    );
+  animation: glitch-digital 2s infinite;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Glitch box effect */
+.glitch-box {
+  position: relative;
+  background: var(--bg-secondary);
+  border: var(--border-width-2) solid var(--color-primary);
+  border-radius: var(--border-radius-base);
+  overflow: hidden;
+}
+
+.glitch-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent-red),
+    transparent
+  );
+  animation: glitch-layer-1 2s infinite;
+  z-index: 1;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.glitch-box::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent-blue),
+    transparent
+  );
+  animation: glitch-layer-2 2.5s infinite;
+  z-index: 1;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   GLITCH BUTTON EFFECTS - Efeitos de botão
+   ========================================================================== */
+
+.glitch-btn {
+  position: relative;
+  background: var(--bg-secondary);
+  border: var(--border-width-2) solid var(--color-primary);
+  color: var(--color-primary);
+  padding: var(--btn-padding-base);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  cursor: pointer;
+  overflow: hidden;
+  transition: var(--transition-colors);
+}
+
+.glitch-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--color-primary);
+  transition: left var(--duration-base) var(--ease-out);
+  z-index: -1;
+}
+
+.glitch-btn:hover::before {
+  left: 0;
+}
+
+.glitch-btn:hover {
+  color: var(--color-black);
+  animation: glitch-skew 0.3s infinite linear alternate-reverse;
+}
+
+.glitch-btn:active {
+  animation: 
+    glitch-skew 0.1s infinite linear alternate-reverse,
+    glitch-noise 0.1s infinite;
+}
+
+/* Enhanced glitch button */
+.glitch-btn-enhanced {
+  position: relative;
+  background: transparent;
+  border: var(--border-width-2) solid var(--color-primary);
+  color: var(--color-primary);
+  padding: var(--btn-padding-base);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.glitch-btn-enhanced::before,
+.glitch-btn-enhanced::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.glitch-btn-enhanced::before {
+  background: var(--color-accent-red);
+  transform: translateX(-100%);
+}
+
+.glitch-btn-enhanced::after {
+  background: var(--color-accent-blue);
+  transform: translateX(100%);
+}
+
+.glitch-btn-enhanced:hover::before {
+  transform: translateX(0);
+  animation: glitch-anim-1 0.5s infinite;
+}
+
+.glitch-btn-enhanced:hover::after {
+  transform: translateX(0);
+  animation: glitch-anim-2 0.5s infinite;
+}
+
+.glitch-btn-enhanced:hover {
+  color: var(--color-white);
+  border-color: var(--color-secondary);
+  animation: glitch-skew 0.5s infinite linear alternate-reverse;
+}
+
+/* ==========================================================================
+   GLITCH IMAGE EFFECTS - Efeitos de imagem
+   ========================================================================== */
+
+.glitch-img {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.glitch-img::before,
+.glitch-img::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.glitch-img::before {
+  background-blend-mode: multiply;
+  background-color: var(--color-accent-red);
+  animation: glitch-anim-1 0.6s infinite linear alternate-reverse;
+  opacity: 0.7;
+}
+
+.glitch-img::after {
+  background-blend-mode: screen;
+  background-color: var(--color-accent-blue);
+  animation: glitch-anim-2 1s infinite linear alternate-reverse;
+  opacity: 0.7;
+}
+
+.glitch-img:hover {
+  animation: glitch-digital 1s infinite;
+}
+
+/* ==========================================================================
+   GLITCH UTILITY CLASSES
+   ========================================================================== */
+
+/* Glitch intensity modifiers */
+.glitch-subtle {
+  animation-duration: 2s;
+}
+
+.glitch-subtle::before,
+.glitch-subtle::after {
+  animation-duration: 3s;
+  opacity: 0.3;
+}
+
+.glitch-intense {
+  animation-duration: 0.3s;
+}
+
+.glitch-intense::before,
+.glitch-intense::after {
+  animation-duration: 0.2s;
+  opacity: 0.9;
+}
+
+/* Glitch color variants */
+.glitch-red::before {
+  color: var(--color-accent-red);
+}
+
+.glitch-red::after {
+  color: #ff4466;
+}
+
+.glitch-blue::before {
+  color: var(--color-accent-blue);
+}
+
+.glitch-blue::after {
+  color: #4466ff;
+}
+
+.glitch-cyan::before {
+  color: var(--color-secondary);
+}
+
+.glitch-cyan::after {
+  color: #44ffff;
+}
+
+.glitch-purple::before {
+  color: var(--color-accent-purple);
+}
+
+.glitch-purple::after {
+  color: #aa44ff;
+}
+
+/* Glitch on hover only */
+.glitch-hover:hover {
+  animation: glitch-skew 0.5s infinite linear alternate-reverse;
+}
+
+.glitch-hover:hover::before,
+.glitch-hover:hover::after {
+  animation-duration: 0.3s;
+}
+
+/* Glitch on focus */
+.glitch-focus:focus,
+.glitch-focus:focus-visible {
+  animation: glitch-skew 0.3s infinite linear alternate-reverse;
+}
+
+.glitch-focus:focus::before,
+.glitch-focus:focus::after,
+.glitch-focus:focus-visible::before,
+.glitch-focus:focus-visible::after {
+  animation-duration: 0.2s;
+}
+
+/* ==========================================================================
+   GLITCH BACKGROUND EFFECTS
+   ========================================================================== */
+
+.glitch-bg {
+  position: relative;
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+
+.glitch-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 0, 64, 0.05) 50%,
+      transparent 100%
+    );
+  background-size: 4px 100%;
+  animation: glitch-layer-1 3s infinite;
+  z-index: -1;
+}
+
+.glitch-bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 64, 255, 0.05) 50%,
+      transparent 100%
+    );
+  background-size: 100% 2px;
+  animation: glitch-layer-2 2s infinite;
+  z-index: -1;
+}
+
+/* ==========================================================================
+   RESPONSIVE & ACCESSIBILITY
+   ========================================================================== */
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .glitch-text,
+  .glitch-text-enhanced,
+  .glitch-text-colorful,
+  .glitch-container,
+  .glitch-box,
+  .glitch-btn,
+  .glitch-btn-enhanced,
+  .glitch-img,
+  .glitch-bg,
+  .glitch-hover,
+  .glitch-focus {
+    animation: none !important;
+  }
+  
+  .glitch-text::before,
+  .glitch-text::after,
+  .glitch-text-enhanced .glitch-layer,
+  .glitch-text-colorful::before,
+  .glitch-text-colorful::after,
+  .glitch-container::before,
+  .glitch-container::after,
+  .glitch-box::before,
+  .glitch-box::after,
+  .glitch-btn:hover,
+  .glitch-btn-enhanced:hover,
+  .glitch-img::before,
+  .glitch-img::after,
+  .glitch-bg::before,
+  .glitch-bg::after {
+    animation: none !important;
+  }
+  
+  /* Keep static visual effects */
+  .glitch-text::before {
+    opacity: 0.3;
+  }
+  
+  .glitch-text::after {
+    opacity: 0.3;
+  }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  .glitch-text::before,
+  .glitch-text::after,
+  .glitch-text-enhanced .glitch-layer,
+  .glitch-container::before,
+  .glitch-container::after {
+    display: none;
+  }
+  
+  .glitch-btn,
+  .glitch-btn-enhanced {
+    border-width: var(--high-contrast-border-width);
+  }
+}
+
+/* Mobile optimizations */
+@media screen and (max-width: 768px) {
+  .glitch-text,
+  .glitch-text-enhanced,
+  .glitch-text-colorful {
+    animation-duration: 2s;
+  }
+  
+  .glitch-subtle {
+    animation: none;
+  }
+  
+  .glitch-subtle::before,
+  .glitch-subtle::after {
+    animation: none;
+    opacity: 0.1;
+  }
+}
+
+/* Battery saving mode */
+@media (prefers-reduced-data: reduce) {
+  .glitch-container::before,
+  .glitch-container::after,
+  .glitch-bg::before,
+  .glitch-bg::after {
+    display: none;
+  }
+  
+  .glitch-intense {
+    animation-duration: 1s;
+  }
+}
+
+/* ==========================================================================
+   PERFORMANCE OPTIMIZATIONS
+   ========================================================================== */
+
+/* Enable hardware acceleration for glitch effects */
+.glitch-text,
+.glitch-text-enhanced,
+.glitch-text-colorful,
+.glitch-btn,
+.glitch-btn-enhanced,
+.glitch-img {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform;
+}
+
+.glitch-container,
+.glitch-box,
+.glitch-bg {
+  will-change: auto;
+}
+
+/* Optimize pseudo-elements */
+.glitch-text::before,
+.glitch-text::after,
+.glitch-text-enhanced .glitch-layer,
+.glitch-container::before,
+.glitch-container::after {
+  will-change: transform, opacity;
+}

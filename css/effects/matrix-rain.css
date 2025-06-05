@@ -1,0 +1,771 @@
+/* ==========================================================================
+   MATRIX RAIN EFFECTS - T.I QUIZZMASTER
+   Efeitos de chuva digital estilo Matrix otimizados
+   ========================================================================== */
+
+/* ==========================================================================
+   CANVAS BACKGROUND - Configuração do canvas principal
+   ========================================================================== */
+
+#canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: var(--z-index-hide);
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0, 255, 65, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(0, 255, 65, 0.02) 0%, transparent 50%),
+    var(--bg-primary);
+  
+  /* Optimize rendering */
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  
+  /* Enable hardware acceleration */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: auto;
+}
+
+/* ==========================================================================
+   MATRIX RAIN KEYFRAMES
+   ========================================================================== */
+
+@keyframes matrix-drop {
+  0% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+@keyframes matrix-fade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes matrix-glow {
+  0%, 100% {
+    text-shadow: 
+      0 0 5px var(--color-primary),
+      0 0 10px var(--color-primary);
+  }
+  50% {
+    text-shadow: 
+      0 0 10px var(--color-primary),
+      0 0 20px var(--color-primary),
+      0 0 30px var(--color-primary);
+  }
+}
+
+@keyframes matrix-flicker {
+  0%, 98% {
+    opacity: 1;
+  }
+  99% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes background-shift {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+    opacity: 0.5;
+  }
+  25% { 
+    transform: scale(1.1) rotate(1deg);
+    opacity: 0.7;
+  }
+  50% { 
+    transform: scale(0.9) rotate(-1deg);
+    opacity: 0.3;
+  }
+  75% { 
+    transform: scale(1.05) rotate(0.5deg);
+    opacity: 0.6;
+  }
+}
+
+@keyframes grid-pulse {
+  0%, 100% { 
+    opacity: 0.1; 
+  }
+  50% { 
+    opacity: 0.3; 
+  }
+}
+
+@keyframes scanlines {
+  0% { 
+    background-position: 0 0; 
+  }
+  100% { 
+    background-position: 0 4px; 
+  }
+}
+
+/* ==========================================================================
+   BACKGROUND GRID OVERLAY
+   ========================================================================== */
+
+#canvas::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.3;
+  pointer-events: none;
+  animation: grid-pulse 4s ease-in-out infinite;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   ENHANCED BACKGROUND EFFECTS
+   ========================================================================== */
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: 
+    radial-gradient(ellipse at top, rgba(0, 255, 65, 0.1) 0%, transparent 70%),
+    radial-gradient(ellipse at bottom, rgba(0, 255, 255, 0.05) 0%, transparent 70%);
+  z-index: var(--z-index-hide);
+  pointer-events: none;
+  animation: background-shift 20s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   SCANLINE EFFECTS
+   ========================================================================== */
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+    transparent 0%,
+    rgba(0, 255, 65, 0.03) 50%,
+    transparent 100%
+  );
+  background-size: 100% 4px;
+  z-index: var(--z-index-base);
+  pointer-events: none;
+  animation: scanlines 0.1s linear infinite;
+  opacity: 0.5;
+}
+
+/* ==========================================================================
+   CSS-ONLY MATRIX RAIN - Fallback quando JS não disponível
+   ========================================================================== */
+
+.matrix-rain-css {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: var(--z-index-hide);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.matrix-column {
+  position: absolute;
+  top: -100vh;
+  width: 20px;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  line-height: 1.2;
+  animation: matrix-drop linear infinite;
+  white-space: pre;
+}
+
+.matrix-column:nth-child(odd) {
+  animation-duration: 8s;
+  animation-delay: 0s;
+}
+
+.matrix-column:nth-child(even) {
+  animation-duration: 12s;
+  animation-delay: 2s;
+}
+
+.matrix-column:nth-child(3n) {
+  animation-duration: 10s;
+  animation-delay: 4s;
+  color: var(--color-primary-light);
+}
+
+.matrix-column:nth-child(5n) {
+  animation-duration: 15s;
+  animation-delay: 1s;
+  color: var(--color-secondary);
+}
+
+.matrix-column:nth-child(7n) {
+  animation-duration: 6s;
+  animation-delay: 3s;
+  font-size: var(--font-size-xs);
+}
+
+/* Matrix characters */
+.matrix-char {
+  display: block;
+  opacity: 1;
+  transition: opacity var(--duration-fast) ease-out;
+}
+
+.matrix-char.fading {
+  animation: matrix-fade 2s ease-out forwards;
+}
+
+.matrix-char.glowing {
+  animation: matrix-glow 1s ease-in-out infinite;
+}
+
+.matrix-char.flickering {
+  animation: matrix-flicker 0.1s linear infinite;
+}
+
+/* ==========================================================================
+   MATRIX OVERLAY EFFECTS
+   ========================================================================== */
+
+.matrix-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: var(--z-index-hide);
+  pointer-events: none;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      rgba(0, 255, 65, 0.01) 1px,
+      transparent 2px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      rgba(0, 255, 65, 0.01) 1px,
+      transparent 2px
+    );
+  animation: matrix-flicker 5s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   CONTAINER ADJUSTMENTS
+   ========================================================================== */
+
+.container {
+  position: relative;
+  z-index: var(--z-index-docked);
+}
+
+/* Ensure content is above background */
+.main-content {
+  position: relative;
+  z-index: var(--z-index-docked);
+}
+
+/* ==========================================================================
+   PARTICLE SYSTEM - CSS-only particles
+   ========================================================================== */
+
+.matrix-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: var(--z-index-hide);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.matrix-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--color-primary);
+  border-radius: var(--border-radius-full);
+  animation: matrix-drop linear infinite;
+  box-shadow: 0 0 6px var(--color-primary);
+}
+
+.matrix-particle:nth-child(1) {
+  left: 5%;
+  animation-duration: 3s;
+  animation-delay: 0s;
+}
+
+.matrix-particle:nth-child(2) {
+  left: 15%;
+  animation-duration: 4s;
+  animation-delay: 1s;
+}
+
+.matrix-particle:nth-child(3) {
+  left: 25%;
+  animation-duration: 5s;
+  animation-delay: 0.5s;
+}
+
+.matrix-particle:nth-child(4) {
+  left: 35%;
+  animation-duration: 3.5s;
+  animation-delay: 2s;
+}
+
+.matrix-particle:nth-child(5) {
+  left: 45%;
+  animation-duration: 4.5s;
+  animation-delay: 1.5s;
+}
+
+.matrix-particle:nth-child(6) {
+  left: 55%;
+  animation-duration: 6s;
+  animation-delay: 0.2s;
+}
+
+.matrix-particle:nth-child(7) {
+  left: 65%;
+  animation-duration: 3.8s;
+  animation-delay: 2.5s;
+}
+
+.matrix-particle:nth-child(8) {
+  left: 75%;
+  animation-duration: 4.2s;
+  animation-delay: 0.8s;
+}
+
+.matrix-particle:nth-child(9) {
+  left: 85%;
+  animation-duration: 5.5s;
+  animation-delay: 1.8s;
+}
+
+.matrix-particle:nth-child(10) {
+  left: 95%;
+  animation-duration: 3.2s;
+  animation-delay: 2.2s;
+}
+
+/* ==========================================================================
+   MATRIX CIRCUIT LINES
+   ========================================================================== */
+
+.matrix-circuits {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: var(--z-index-hide);
+  pointer-events: none;
+}
+
+.circuit-line {
+  position: absolute;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-primary) 50%,
+    transparent 100%
+  );
+  height: 1px;
+  opacity: 0.3;
+  animation: matrix-glow 3s ease-in-out infinite;
+}
+
+.circuit-line.horizontal {
+  width: 200px;
+  left: -200px;
+  animation: 
+    matrix-glow 3s ease-in-out infinite,
+    matrix-drop 8s linear infinite;
+}
+
+.circuit-line.vertical {
+  width: 1px;
+  height: 200px;
+  top: -200px;
+  background: linear-gradient(
+    0deg,
+    transparent 0%,
+    var(--color-primary) 50%,
+    transparent 100%
+  );
+  animation: 
+    matrix-glow 3s ease-in-out infinite,
+    matrix-drop 10s linear infinite;
+}
+
+/* ==========================================================================
+   MATRIX TEXT STREAMING
+   ========================================================================== */
+
+.matrix-stream {
+  position: fixed;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-primary);
+  z-index: var(--z-index-hide);
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0.7;
+}
+
+.matrix-stream.stream-1 {
+  top: 10%;
+  left: -100%;
+  animation: 
+    slideInRight 15s linear infinite,
+    matrix-flicker 0.5s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.matrix-stream.stream-2 {
+  top: 30%;
+  right: -100%;
+  animation: 
+    slideInLeft 12s linear infinite,
+    matrix-flicker 0.3s ease-in-out infinite;
+  animation-delay: 3s;
+}
+
+.matrix-stream.stream-3 {
+  top: 50%;
+  left: -100%;
+  animation: 
+    slideInRight 18s linear infinite,
+    matrix-flicker 0.7s ease-in-out infinite;
+  animation-delay: 6s;
+}
+
+.matrix-stream.stream-4 {
+  top: 70%;
+  right: -100%;
+  animation: 
+    slideInLeft 14s linear infinite,
+    matrix-flicker 0.4s ease-in-out infinite;
+  animation-delay: 9s;
+}
+
+.matrix-stream.stream-5 {
+  top: 90%;
+  left: -100%;
+  animation: 
+    slideInRight 16s linear infinite,
+    matrix-flicker 0.6s ease-in-out infinite;
+  animation-delay: 12s;
+}
+
+/* ==========================================================================
+   MATRIX DATA BLOCKS
+   ========================================================================== */
+
+.matrix-data-block {
+  position: fixed;
+  width: 60px;
+  height: 20px;
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid var(--color-primary);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-index-hide);
+  pointer-events: none;
+  animation: matrix-drop 6s linear infinite;
+  opacity: 0.8;
+}
+
+.matrix-data-block:nth-child(odd) {
+  animation-delay: 0s;
+  left: 10%;
+}
+
+.matrix-data-block:nth-child(even) {
+  animation-delay: 2s;
+  right: 10%;
+}
+
+.matrix-data-block:nth-child(3n) {
+  animation-delay: 4s;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+
+/* Tablets */
+@media screen and (max-width: 768px) {
+  #canvas::before {
+    background-size: 15px 15px;
+    opacity: 0.2;
+  }
+  
+  body::before {
+    animation-duration: 30s;
+  }
+  
+  body::after {
+    opacity: 0.3;
+  }
+  
+  .matrix-column {
+    width: 15px;
+    font-size: var(--font-size-xs);
+  }
+  
+  .matrix-stream {
+    font-size: calc(var(--font-size-xs) * 0.8);
+  }
+  
+  .matrix-data-block {
+    width: 40px;
+    height: 15px;
+    font-size: calc(var(--font-size-xs) * 0.7);
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 480px) {
+  #canvas {
+    background: var(--bg-primary);
+  }
+  
+  #canvas::before,
+  body::before,
+  body::after {
+    display: none;
+  }
+  
+  .matrix-rain-css,
+  .matrix-particles,
+  .matrix-circuits,
+  .matrix-overlay {
+    display: none;
+  }
+  
+  /* Show minimal effects only */
+  .matrix-minimal {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: var(--z-index-hide);
+    background: 
+      radial-gradient(circle at center, rgba(0, 255, 65, 0.02) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+/* Ultra-wide screens */
+@media screen and (min-width: 1920px) {
+  #canvas::before {
+    background-size: 25px 25px;
+  }
+  
+  .matrix-column {
+    width: 25px;
+  }
+}
+
+/* ==========================================================================
+   PERFORMANCE OPTIMIZATIONS
+   ========================================================================== */
+
+/* Low-end device optimizations */
+@media screen and (max-device-width: 480px) and (orientation: portrait) {
+  .matrix-rain-css,
+  .matrix-particles,
+  .matrix-circuits,
+  .matrix-stream,
+  .matrix-data-block,
+  .matrix-overlay {
+    display: none;
+  }
+}
+
+/* Battery optimization */
+@media (prefers-reduced-data: reduce) {
+  .matrix-particles,
+  .matrix-circuits,
+  .matrix-stream,
+  .matrix-data-block {
+    display: none;
+  }
+  
+  body::before,
+  body::after {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  #canvas::before,
+  body::before,
+  body::after,
+  .matrix-column,
+  .matrix-char,
+  .matrix-particle,
+  .circuit-line,
+  .matrix-stream,
+  .matrix-data-block,
+  .matrix-overlay {
+    animation: none !important;
+  }
+  
+  /* Keep static background */
+  #canvas {
+    background: var(--bg-primary);
+  }
+  
+  .matrix-rain-css,
+  .matrix-particles,
+  .matrix-circuits,
+  .matrix-stream,
+  .matrix-data-block,
+  .matrix-overlay {
+    display: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  #canvas {
+    background: var(--bg-primary);
+    filter: contrast(2);
+  }
+  
+  #canvas::before {
+    background-image: 
+      linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+  }
+  
+  .matrix-column,
+  .matrix-particle,
+  .circuit-line {
+    filter: contrast(2);
+  }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+  #canvas {
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(0, 255, 65, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.05) 0%, transparent 50%),
+      var(--bg-primary);
+  }
+}
+
+/* ==========================================================================
+   PRINT STYLES
+   ========================================================================== */
+
+@media print {
+  #canvas,
+  #canvas::before,
+  body::before,
+  body::after,
+  .matrix-rain-css,
+  .matrix-particles,
+  .matrix-circuits,
+  .matrix-stream,
+  .matrix-data-block,
+  .matrix-overlay {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   UTILITY CLASSES
+   ========================================================================== */
+
+/* Enable/disable matrix effects */
+.matrix-disabled #canvas,
+.matrix-disabled .matrix-rain-css,
+.matrix-disabled .matrix-particles,
+.matrix-disabled .matrix-circuits,
+.matrix-disabled .matrix-stream,
+.matrix-disabled .matrix-data-block,
+.matrix-disabled .matrix-overlay {
+  display: none !important;
+}
+
+/* Intensity modifiers */
+.matrix-subtle #canvas::before,
+.matrix-subtle body::before,
+.matrix-subtle body::after {
+  opacity: 0.5;
+}
+
+.matrix-intense #canvas::before,
+.matrix-intense body::before,
+.matrix-intense body::after {
+  opacity: 1;
+}
+
+/* Performance mode */
+.matrix-performance .matrix-particles,
+.matrix-performance .matrix-circuits,
+.matrix-performance .matrix-stream,
+.matrix-performance .matrix-data-block {
+  display: none;
+}
+
+.matrix-performance .matrix-column:nth-child(n+6) {
+  display: none;
+}

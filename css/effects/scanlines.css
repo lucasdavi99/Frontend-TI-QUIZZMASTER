@@ -1,0 +1,878 @@
+/* ==========================================================================
+   SCANLINES EFFECTS - T.I QUIZZMASTER
+   Efeitos de linhas de varredura estilo CRT/TV antiga
+   ========================================================================== */
+
+/* ==========================================================================
+   SCANLINES KEYFRAMES - Animações de varredura
+   ========================================================================== */
+
+@keyframes scanlines-vertical {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 4px;
+  }
+}
+
+@keyframes scanlines-horizontal {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 4px 0;
+  }
+}
+
+@keyframes scanlines-diagonal {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 4px 4px;
+  }
+}
+
+@keyframes scanline-sweep {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(calc(100vh + 100%));
+    opacity: 0;
+  }
+}
+
+@keyframes scanline-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    height: 2px;
+  }
+  50% {
+    opacity: 1;
+    height: 4px;
+  }
+}
+
+@keyframes scanline-flicker {
+  0%, 94%, 100% {
+    opacity: 0.8;
+  }
+  95% {
+    opacity: 0.2;
+  }
+  97% {
+    opacity: 1;
+  }
+  98% {
+    opacity: 0.1;
+  }
+  99% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes scanline-interference {
+  0%, 100% {
+    transform: scaleY(1);
+    opacity: 0.6;
+  }
+  10% {
+    transform: scaleY(1.5);
+    opacity: 0.8;
+  }
+  20% {
+    transform: scaleY(0.5);
+    opacity: 0.4;
+  }
+  30% {
+    transform: scaleY(1.2);
+    opacity: 0.7;
+  }
+  40% {
+    transform: scaleY(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 0.6;
+  }
+}
+
+@keyframes crt-flicker {
+  0%, 96%, 100% {
+    opacity: 1;
+    filter: brightness(1) contrast(1);
+  }
+  97% {
+    opacity: 0.9;
+    filter: brightness(1.1) contrast(0.9);
+  }
+  98% {
+    opacity: 0.8;
+    filter: brightness(0.9) contrast(1.1);
+  }
+  99% {
+    opacity: 0.95;
+    filter: brightness(1.05) contrast(0.95);
+  }
+}
+
+@keyframes tv-static {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  10% {
+    background-position: -5% 5%;
+  }
+  20% {
+    background-position: 5% -5%;
+  }
+  30% {
+    background-position: -3% 3%;
+  }
+  40% {
+    background-position: 3% -3%;
+  }
+  50% {
+    background-position: -8% 8%;
+  }
+  60% {
+    background-position: 8% -8%;
+  }
+  70% {
+    background-position: -2% 2%;
+  }
+  80% {
+    background-position: 2% -2%;
+  }
+  90% {
+    background-position: -6% 6%;
+  }
+}
+
+/* ==========================================================================
+   BASE SCANLINES EFFECTS
+   ========================================================================== */
+
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 255, 65, 0.03) 50%,
+      transparent 100%
+    );
+  background-size: 100% 4px;
+  animation: scanlines-vertical 0.1s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+.scanlines-horizontal {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines-horizontal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 255, 65, 0.03) 50%,
+      transparent 100%
+    );
+  background-size: 4px 100%;
+  animation: scanlines-horizontal 0.1s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+.scanlines-diagonal {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines-diagonal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      45deg,
+      transparent 0%,
+      rgba(0, 255, 65, 0.02) 50%,
+      transparent 100%
+    );
+  background-size: 3px 3px;
+  animation: scanlines-diagonal 0.15s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+}
+
+/* ==========================================================================
+   CRT MONITOR EFFECTS
+   ========================================================================== */
+
+.crt-monitor {
+  position: relative;
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: 
+    inset 0 0 50px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(0, 255, 65, 0.2);
+}
+
+.crt-monitor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 255, 65, 0.04) 1px,
+      transparent 2px,
+      transparent 3px
+    );
+  animation: scanlines-vertical 0.08s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.crt-monitor::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(
+      ellipse at center,
+      transparent 0%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+  animation: crt-flicker 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.crt-screen {
+  position: relative;
+  background: var(--bg-primary);
+  animation: crt-flicker 6s ease-in-out infinite;
+  filter: contrast(1.1) brightness(1.05);
+}
+
+/* ==========================================================================
+   TV STATIC EFFECTS
+   ========================================================================== */
+
+.tv-static {
+  position: relative;
+  overflow: hidden;
+}
+
+.tv-static::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(255, 255, 255, 0.02) 1deg,
+      transparent 2deg
+    );
+  background-size: 2px 2px;
+  animation: tv-static 0.1s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.3;
+}
+
+.tv-static::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.01) 50%,
+      transparent 100%
+    );
+  background-size: 100% 1px;
+  animation: scanlines-vertical 0.05s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.4;
+}
+
+/* ==========================================================================
+   SWEEP SCANLINE EFFECTS
+   ========================================================================== */
+
+.scanline-sweep {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-primary) 20%,
+    var(--color-secondary) 50%,
+    var(--color-primary) 80%,
+    transparent 100%
+  );
+  box-shadow: 
+    0 0 10px var(--color-primary),
+    0 0 20px var(--color-primary);
+  animation: scanline-sweep 3s ease-in-out infinite;
+  z-index: var(--z-index-tooltip);
+  pointer-events: none;
+}
+
+.scanline-sweep-slow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-secondary) 50%,
+    transparent 100%
+  );
+  box-shadow: 
+    0 0 8px var(--color-secondary);
+  animation: scanline-sweep 8s ease-in-out infinite;
+  z-index: var(--z-index-tooltip);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   SCANLINE CONTAINERS
+   ========================================================================== */
+
+.scanline-container {
+  position: relative;
+  background: rgba(0, 0, 0, 0.9);
+  border: var(--border-width-2) solid var(--color-primary);
+  border-radius: var(--border-radius-base);
+  padding: var(--space-6);
+  overflow: hidden;
+}
+
+.scanline-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 255, 65, 0.05) 1px,
+      transparent 2px,
+      transparent 4px
+    );
+  animation: scanlines-vertical 0.12s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scanline-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(
+      180deg,
+      rgba(0, 255, 65, 0.1) 0%,
+      transparent 20%,
+      transparent 80%,
+      rgba(0, 255, 65, 0.1) 100%
+    );
+  animation: scanline-pulse 2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   INTERACTIVE SCANLINES
+   ========================================================================== */
+
+.scanline-interactive {
+  position: relative;
+  transition: var(--transition-base);
+}
+
+.scanline-interactive::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 255, 65, 0.02) 50%,
+      transparent 100%
+    );
+  background-size: 100% 6px;
+  animation: scanlines-vertical 0.2s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity var(--duration-base) ease;
+}
+
+.scanline-interactive:hover::before {
+  opacity: 1;
+  animation-duration: 0.1s;
+}
+
+.scanline-interactive:focus::before {
+  opacity: 1;
+  animation-duration: 0.08s;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 255, 255, 0.04) 50%,
+      transparent 100%
+    );
+}
+
+/* ==========================================================================
+   TERMINAL SCANLINES
+   ========================================================================== */
+
+.terminal-scanlines {
+  position: relative;
+  background: var(--bg-primary);
+  font-family: var(--font-mono);
+  color: var(--color-primary);
+  overflow: hidden;
+}
+
+.terminal-scanlines::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 255, 65, 0.06) 1px,
+      transparent 2px
+    );
+  animation: scanlines-vertical 0.1s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.terminal-scanlines::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(
+      180deg,
+      rgba(0, 255, 65, 0.1) 0%,
+      transparent 10%,
+      transparent 90%,
+      rgba(0, 255, 65, 0.1) 100%
+    );
+  animation: scanline-flicker 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   SCANLINE TEXT EFFECTS
+   ========================================================================== */
+
+.scanline-text {
+  position: relative;
+  color: var(--color-primary);
+  text-shadow: 
+    0 0 5px var(--color-primary);
+}
+
+.scanline-text::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 255, 65, 0.1) 50%,
+      transparent 100%
+    );
+  background-size: 100% 2px;
+  animation: scanlines-vertical 0.15s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+
+.scanline-text-interference {
+  position: relative;
+  color: var(--color-primary);
+  animation: scanline-interference 2s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   INTENSITY MODIFIERS
+   ========================================================================== */
+
+.scanlines-subtle::before {
+  opacity: 0.2;
+  background-size: 100% 6px;
+  animation-duration: 0.2s;
+}
+
+.scanlines-intense::before {
+  opacity: 0.8;
+  background-size: 100% 2px;
+  animation-duration: 0.05s;
+}
+
+.scanlines-slow::before {
+  animation-duration: 0.3s;
+}
+
+.scanlines-fast::before {
+  animation-duration: 0.03s;
+}
+
+/* ==========================================================================
+   COLOR VARIANTS
+   ========================================================================== */
+
+.scanlines-green::before {
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 255, 65, 0.05) 50%,
+      transparent 100%
+    );
+}
+
+.scanlines-cyan::before {
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 255, 255, 0.05) 50%,
+      transparent 100%
+    );
+}
+
+.scanlines-red::before {
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(255, 0, 64, 0.05) 50%,
+      transparent 100%
+    );
+}
+
+.scanlines-blue::before {
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 64, 255, 0.05) 50%,
+      transparent 100%
+    );
+}
+
+.scanlines-purple::before {
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(128, 0, 255, 0.05) 50%,
+      transparent 100%
+    );
+}
+
+.scanlines-amber::before {
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(255, 191, 0, 0.05) 50%,
+      transparent 100%
+    );
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+
+/* Tablets */
+@media screen and (max-width: 768px) {
+  .scanlines::before,
+  .scanlines-horizontal::before,
+  .scanlines-diagonal::before {
+    background-size: 100% 6px, 6px 100%, 4px 4px;
+    opacity: 0.3;
+    animation-duration: 0.15s;
+  }
+  
+  .crt-monitor::before {
+    background-size: 100% 4px;
+    animation-duration: 0.12s;
+  }
+  
+  .scanline-sweep,
+  .scanline-sweep-slow {
+    height: 2px;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 480px) {
+  .scanlines::before,
+  .scanlines-horizontal::before,
+  .scanlines-diagonal::before,
+  .crt-monitor::before,
+  .tv-static::before,
+  .tv-static::after {
+    display: none;
+  }
+  
+  .scanline-sweep,
+  .scanline-sweep-slow {
+    display: none;
+  }
+  
+  .crt-monitor {
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+  }
+  
+  .scanlines-minimal::before {
+    display: block;
+    opacity: 0.1;
+    background-size: 100% 8px;
+    animation-duration: 0.3s;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .scanlines::before,
+  .scanlines-horizontal::before,
+  .scanlines-diagonal::before,
+  .crt-monitor::before,
+  .crt-monitor::after,
+  .crt-screen,
+  .tv-static::before,
+  .tv-static::after,
+  .scanline-sweep,
+  .scanline-sweep-slow,
+  .scanline-container::before,
+  .scanline-container::after,
+  .scanline-interactive::before,
+  .terminal-scanlines::before,
+  .terminal-scanlines::after,
+  .scanline-text::before,
+  .scanline-text-interference {
+    animation: none !important;
+  }
+  
+  /* Keep static scanlines */
+  .scanlines::before,
+  .scanlines-horizontal::before {
+    opacity: 0.1;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .scanlines::before,
+  .scanlines-horizontal::before,
+  .scanlines-diagonal::before,
+  .crt-monitor::before,
+  .tv-static::before,
+  .tv-static::after {
+    display: none;
+  }
+  
+  .crt-monitor,
+  .scanline-container {
+    border-width: var(--high-contrast-border-width);
+  }
+}
+
+/* Battery saving mode */
+@media (prefers-reduced-data: reduce) {
+  .tv-static::before,
+  .tv-static::after,
+  .scanline-sweep,
+  .scanline-sweep-slow,
+  .scanline-container::after,
+  .terminal-scanlines::after {
+    display: none;
+  }
+  
+  .scanlines-intense::before {
+    animation-duration: 0.1s;
+    opacity: 0.4;
+  }
+}
+
+/* ==========================================================================
+   PRINT STYLES
+   ========================================================================== */
+
+@media print {
+  .scanlines::before,
+  .scanlines-horizontal::before,
+  .scanlines-diagonal::before,
+  .crt-monitor::before,
+  .crt-monitor::after,
+  .tv-static::before,
+  .tv-static::after,
+  .scanline-sweep,
+  .scanline-sweep-slow,
+  .scanline-container::before,
+  .scanline-container::after,
+  .scanline-interactive::before,
+  .terminal-scanlines::before,
+  .terminal-scanlines::after,
+  .scanline-text::before {
+    display: none !important;
+  }
+  
+  .crt-monitor,
+  .scanline-container,
+  .terminal-scanlines {
+    background: white !important;
+    border-color: black !important;
+    box-shadow: none !important;
+  }
+  
+  .scanline-text,
+  .scanline-text-interference {
+    color: black !important;
+    text-shadow: none !important;
+  }
+}
+
+/* ==========================================================================
+   UTILITY CLASSES
+   ========================================================================== */
+
+/* Enable/disable scanlines */
+.scanlines-disabled .scanlines::before,
+.scanlines-disabled .scanlines-horizontal::before,
+.scanlines-disabled .scanlines-diagonal::before,
+.scanlines-disabled .crt-monitor::before {
+  display: none !important;
+}
+
+/* Performance mode */
+.scanlines-performance .tv-static::before,
+.scanlines-performance .tv-static::after,
+.scanlines-performance .scanline-container::after,
+.scanlines-performance .terminal-scanlines::after {
+  display: none;
+}
+
+.scanlines-performance .scanlines::before,
+.scanlines-performance .scanlines-horizontal::before {
+  animation-duration: 0.2s;
+  opacity: 0.3;
+}
+
+/* Hover effects */
+.scanlines-hover:hover::before {
+  opacity: 1;
+  animation-duration: 0.05s;
+}
+
+/* Focus effects */
+.scanlines-focus:focus::before,
+.scanlines-focus:focus-visible::before {
+  opacity: 1;
+  animation-duration: 0.08s;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(0, 255, 255, 0.06) 50%,
+      transparent 100%
+    );
+}
