@@ -1,0 +1,452 @@
+/* ==========================================================================
+   T.I QUIZZMASTER - CSS SYSTEM INDEX
+   Ponto de entrada único para o sistema CSS
+   ========================================================================== */
+
+/*
+  ORDEM DE IMPORTAÇÃO:
+  1. Base - Fundações do sistema (variáveis, reset, tipografia, utilitários)
+  2. Layout - Sistema de layout e grid
+  3. Components - Componentes reutilizáveis
+  4. Effects - Efeitos visuais e animações
+  
+  NOTA: Os arquivos específicos de páginas devem ser importados 
+  individualmente nas páginas correspondentes APÓS este index.css
+*/
+
+/* ==========================================================================
+   1. BASE SYSTEM - Fundações
+   ========================================================================== */
+
+/* Design tokens - SEMPRE primeiro */
+@import url('base/variables.css');
+
+/* Reset e configurações base */
+@import url('base/base.css');
+
+/* Sistema tipográfico */
+@import url('base/typography.css');
+
+/* Classes utilitárias */
+@import url('base/utilities.css');
+
+/* ==========================================================================
+   2. LAYOUT SYSTEM - Estrutura e Grid
+   ========================================================================== */
+
+/* Sistema de grid responsivo */
+@import url('layout/grid.css');
+
+/* Containers e wrappers */
+@import url('layout/containers.css');
+
+/* Media queries e responsividade global */
+@import url('layout/pages.css');
+
+/* ==========================================================================
+   3. COMPONENTS SYSTEM - Componentes Reutilizáveis
+   ========================================================================== */
+
+/* Sistema de botões */
+@import url('components/buttons.css');
+
+/* Cards e containers de conteúdo */
+@import url('components/cards.css');
+
+/* Modais e overlays */
+@import url('components/modals.css');
+
+/* Navegação e menus */
+@import url('components/navigation.css');
+
+/* Formulários e inputs */
+@import url('components/forms.css');
+
+/* ==========================================================================
+   4. EFFECTS SYSTEM - Efeitos Visuais e Animações
+   ========================================================================== */
+
+/* Animações base e reutilizáveis */
+@import url('effects/animations.css');
+
+/* Efeitos glitch - tema cyberpunk */
+@import url('effects/glitch.css');
+
+/* Background matrix rain */
+@import url('effects/matrix-rain.css');
+
+/* Efeitos de distorção */
+@import url('effects/distortion.css');
+
+/* Efeitos holográficos */
+@import url('effects/hologram.css');
+
+/* Efeitos neon */
+@import url('effects/neon.css');
+
+/* Efeitos de scanlines */
+@import url('effects/scanlines.css');
+
+/* ==========================================================================
+   SYSTEM INITIALIZATION - Inicialização do Sistema
+   ========================================================================== */
+
+/* 
+  Estilos globais que dependem de todo o sistema estar carregado
+  Aplicados após todos os imports
+*/
+
+:root {
+  /* Confirma que o sistema está totalmente carregado */
+  --css-system-loaded: true;
+  
+  /* Performance global */
+  --font-display: swap;
+  
+  /* Scrollbar global consistency */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary-darker) var(--color-black);
+}
+
+/* ==========================================================================
+   GLOBAL SYSTEM OVERRIDES - Ajustes Globais
+   ========================================================================== */
+
+/* Garante que o sistema de cores está aplicado globalmente */
+* {
+  /* Force hardware acceleration em elementos animados */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Otimizações globais de performance */
+img,
+video,
+iframe {
+  /* Lazy loading deve ser aplicado no HTML: <img loading="lazy" src="..."> */
+  /* Otimizações CSS para performance */
+  max-width: 100%;
+  height: auto;
+}
+
+/* ==========================================================================
+   CYBERPUNK THEME INTEGRATION - Integração do Tema
+   ========================================================================== */
+
+/* Aplica tema cyberpunk globalmente quando todos os sistemas estão carregados */
+body {
+  /* Confirma aplicação do tema */
+  --theme-applied: cyberpunk;
+  
+  /* Efeitos de fundo globais */
+  position: relative;
+}
+
+/* Grid de fundo global (opcional - pode ser ativado via classe) */
+.debug-grid {
+  background-image: 
+    linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+  background-size: var(--space-8) var(--space-8);
+}
+
+/* ==========================================================================
+   SYSTEM STATUS INDICATORS - Indicadores de Estado do Sistema
+   ========================================================================== */
+
+/* Debug: Mostra se o sistema está carregado (apenas em desenvolvimento) */
+.css-system-status::before {
+  content: "CSS System: " attr(data-status);
+  position: fixed;
+  top: 0;
+  right: 0;
+  background: var(--color-primary);
+  color: var(--color-black);
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  z-index: var(--z-index-tooltip);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Ativa o indicador apenas quando solicitado */
+.debug-mode .css-system-status::before {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   FALLBACKS - Sistema de Fallbacks
+   ========================================================================== */
+
+/* Fallback para quando o sistema não carregar completamente */
+@supports not (--css-system-loaded: true) {
+  body {
+    font-family: 'Arial', sans-serif;
+    background: #000;
+    color: #fff;
+  }
+  
+  .fallback-notice {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ff0000;
+    color: #fff;
+    padding: 1rem;
+    border-radius: 4px;
+    z-index: 9999;
+    text-align: center;
+  }
+}
+
+/* ==========================================================================
+   PRINT OPTIMIZATION - Otimização para Impressão
+   ========================================================================== */
+
+@media print {
+  /* Remove todos os efeitos visuais para impressão */
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  /* Mantém apenas estruturas essenciais */
+  .no-print {
+    display: none !important;
+  }
+  
+  /* Otimiza quebras de página */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  
+  p, li {
+    page-break-inside: avoid;
+  }
+  
+  /* Mostra URLs em links */
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+}
+
+/* ==========================================================================
+   REDUCED MOTION GLOBAL - Preferências de Movimento Reduzido
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Remove TODAS as animações quando solicitado */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Remove transformações que podem causar enjoo */
+  .no-motion-transform {
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   HIGH CONTRAST GLOBAL - Alto Contraste
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+  /* Aumenta contraste globalmente */
+  * {
+    filter: contrast(1.2);
+  }
+  
+  /* Remove sombras e efeitos sutis */
+  *,
+  *::before,
+  *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  /* Fortalece bordas */
+  button,
+  input,
+  textarea,
+  select {
+    border-width: 2px !important;
+  }
+}
+
+/* ==========================================================================
+   SYSTEM PERFORMANCE MONITORING - Monitoramento de Performance
+   ========================================================================== */
+
+/* Performance hint para navegadores */
+.performance-critical {
+  contain: layout style paint;
+  will-change: transform;
+}
+
+/* Otimização para elementos que mudam frequentemente */
+.dynamic-content {
+  contain: layout;
+}
+
+/* ==========================================================================
+   EMERGENCY STYLES - Estilos de Emergência
+   ========================================================================== */
+
+/* Estilos de emergência caso o sistema falhe */
+.css-emergency {
+  font-family: Arial, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.4 !important;
+  color: #000 !important;
+  background: #fff !important;
+  padding: 1rem !important;
+  border: 1px solid #ccc !important;
+  margin: 0.5rem !important;
+}
+
+/* ==========================================================================
+   DEVELOPMENT HELPERS - Auxiliares para Desenvolvimento
+   ========================================================================== */
+
+/* Apenas ativo em modo de desenvolvimento */
+.dev-mode {
+  /* Outline para debug de layout */
+  .debug-layout * {
+    outline: 1px solid rgba(255, 0, 0, 0.3) !important;
+  }
+  
+  /* Mostra informações de breakpoint */
+  .breakpoint-indicator::before {
+    content: "XS";
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: var(--color-accent-red);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    z-index: 10000;
+  }
+  
+  @media screen and (min-width: 481px) {
+    .breakpoint-indicator::before {
+      content: "SM";
+      background: var(--color-accent-yellow);
+      color: black;
+    }
+  }
+  
+  @media screen and (min-width: 769px) {
+    .breakpoint-indicator::before {
+      content: "MD";
+      background: var(--color-primary);
+      color: black;
+    }
+  }
+  
+  @media screen and (min-width: 1025px) {
+    .breakpoint-indicator::before {
+      content: "LG";
+      background: var(--color-secondary);
+      color: black;
+    }
+  }
+  
+  @media screen and (min-width: 1400px) {
+    .breakpoint-indicator::before {
+      content: "XL";
+      background: var(--color-accent-blue);
+      color: white;
+    }
+  }
+}
+
+/* ==========================================================================
+   FINAL SYSTEM CONFIRMATION - Confirmação Final do Sistema
+   ========================================================================== */
+
+/* Confirma que todo o sistema foi carregado com sucesso */
+html[data-css-system="loaded"] {
+  /* Sistema pronto para uso */
+  --system-status: ready;
+}
+
+/* Indica se JavaScript está disponível (será adicionado via JS) */
+html[data-js-available="true"] {
+  --js-enhanced: true;
+}
+
+/* ==========================================================================
+   USAGE INSTRUCTIONS - Instruções de Uso
+   ========================================================================== */
+
+/*
+  COMO USAR ESTE SISTEMA:
+  
+  1. Importe este arquivo index.css em todas as páginas:
+     <link rel="stylesheet" href="css/index.css">
+  
+  2. Importe o CSS específico da página DEPOIS:
+     <link rel="stylesheet" href="css/pages/home.css">
+  
+  3. Para debug, adicione as classes:
+     <body class="debug-mode dev-mode">
+  
+  4. Para indicar carregamento completo (via JavaScript):
+     document.documentElement.setAttribute('data-css-system', 'loaded');
+     document.documentElement.setAttribute('data-js-available', 'true');
+  
+  5. Para páginas específicas, use as classes:
+     <body class="page-home"> ou <body class="page-login"> etc.
+  
+  ESTRUTURA DE ARQUIVOS ESPERADA:
+  css/
+  ├── index.css (este arquivo)
+  ├── base/
+  │   ├── variables.css
+  │   ├── base.css
+  │   ├── typography.css
+  │   └── utilities.css
+  ├── layout/
+  │   ├── grid.css
+  │   ├── containers.css
+  │   └── responsive.css
+  ├── components/
+  │   ├── buttons.css
+  │   ├── cards.css
+  │   ├── modals.css
+  │   ├── navigation.css
+  │   └── forms.css
+  ├── effects/
+  │   ├── animations.css
+  │   ├── glitch.css
+  │   ├── matrix-rain.css
+  │   ├── distortion.css
+  │   ├── hologram.css
+  │   ├── neon.css
+  │   └── scanlines.css
+  └── pages/
+      ├── home.css
+      ├── login.css
+      ├── quiz.css
+      ├── ranking.css
+      ├── credit.css
+      └── history.css
+*/
