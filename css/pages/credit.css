@@ -1,0 +1,759 @@
+/* ==========================================================================
+   CREDIT PAGE STYLES - T.I QUIZZMASTER
+   Estilos específicos para a página de créditos (credit.html)
+   ========================================================================== */
+
+/* ==========================================================================
+   PAGE SETUP
+   ========================================================================== */
+
+.credit-page {
+  overflow: hidden;
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ==========================================================================
+   MAIN WRAPPER CONTAINER
+   ========================================================================== */
+
+.credit-wrapper {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: min(600px, 90vw);
+  color: var(--text-primary);
+  text-align: center;
+  margin-left: -50%;
+  animation-delay: var(--duration-base);
+  font-family: var(--font-tertiary);
+  animation: credits-scroll 80s linear infinite;
+  z-index: var(--z-index-base);
+  padding: 0 var(--space-4);
+}
+
+@keyframes credits-scroll {
+  0% {
+    top: 100%;
+  }
+  100% {
+    top: -500%;
+  }
+}
+
+/* ==========================================================================
+   CREDIT TITLES AND CONTENT
+   ========================================================================== */
+
+.credit-video-title {
+  font-size: var(--fluid-text-6xl);
+  margin-bottom: var(--space-12);
+  letter-spacing: var(--letter-spacing-normal);
+  text-decoration: none;
+  text-shadow: 
+    2px 2px #878787,
+    var(--text-shadow-neon);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-black);
+  text-transform: uppercase;
+  animation: title-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes title-glow {
+  0% {
+    text-shadow: 
+      2px 2px #878787,
+      var(--text-shadow-neon);
+  }
+  100% {
+    text-shadow: 
+      2px 2px #878787,
+      var(--text-shadow-neon-lg);
+  }
+}
+
+.credit-job-title {
+  font-size: var(--fluid-text-2xl);
+  margin-bottom: var(--space-2);
+  text-shadow: 
+    2px 2px #878787,
+    var(--text-shadow-neon);
+  color: var(--color-secondary);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  position: relative;
+}
+
+.credit-job-title::after {
+  content: '';
+  position: absolute;
+  bottom: -var(--space-1);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-secondary), transparent);
+  opacity: 0.7;
+}
+
+.credit-person-name {
+  font-size: var(--fluid-text-3xl);
+  margin-bottom: var(--space-12);
+  font-variant: small-caps;
+  text-shadow: 
+    2px 2px #878787,
+    var(--text-shadow-neon);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  transition: var(--transition-colors);
+  position: relative;
+}
+
+.credit-person-name:hover {
+  color: var(--color-secondary);
+  text-shadow: 
+    2px 2px #878787,
+    var(--text-shadow-cyber);
+}
+
+/* ==========================================================================
+   SPECIAL CREDIT SECTIONS
+   ========================================================================== */
+
+.credit-special-thanks {
+  background: var(--bg-secondary);
+  border: var(--border-width-2) solid var(--color-primary);
+  border-radius: var(--border-radius-xl);
+  padding: var(--space-8);
+  margin: var(--space-8) 0;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-neon-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.credit-special-thanks::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--color-primary-alpha), transparent);
+  animation: special-shine 3s ease-in-out infinite;
+}
+
+@keyframes special-shine {
+  0%, 100% { left: -100%; }
+  50% { left: 100%; }
+}
+
+.credit-special-thanks .credit-job-title {
+  color: var(--color-gold);
+  text-shadow: 
+    2px 2px #878787,
+    0 0 10px var(--color-gold);
+}
+
+.credit-special-thanks .credit-person-name {
+  color: var(--color-gold);
+  text-shadow: 
+    2px 2px #878787,
+    0 0 15px var(--color-gold);
+}
+
+/* ==========================================================================
+   IMAGE CREDITS
+   ========================================================================== */
+
+.credit-image-section {
+  margin: var(--space-16) 0;
+  padding: var(--space-8);
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius-lg);
+  border: var(--border-width-1) solid var(--color-primary-darker);
+}
+
+.credit-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: var(--space-6) 0;
+}
+
+.credit-image {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: var(--border-radius-lg);
+  border: var(--border-width-2) solid var(--color-primary);
+  box-shadow: var(--shadow-neon-base);
+  transition: var(--transition-transform);
+  object-fit: cover;
+}
+
+.credit-image:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-neon-lg);
+}
+
+/* ==========================================================================
+   ENDING MESSAGE
+   ========================================================================== */
+
+.credit-ending-message {
+  font-size: var(--fluid-text-xl);
+  color: var(--color-secondary);
+  text-shadow: var(--text-shadow-cyber);
+  margin: var(--space-16) 0;
+  padding: var(--space-6);
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  border: var(--border-width-2) solid var(--color-secondary);
+  animation: ending-pulse 2s ease-in-out infinite alternate;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes ending-pulse {
+  0% {
+    box-shadow: var(--shadow-cyber-sm);
+  }
+  100% {
+    box-shadow: var(--shadow-cyber-lg);
+  }
+}
+
+.credit-ending-message::before {
+  content: '♪';
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  font-size: var(--font-size-xl);
+  color: var(--color-secondary);
+  animation: music-note 1s ease-in-out infinite alternate;
+}
+
+.credit-ending-message::after {
+  content: '♫';
+  position: absolute;
+  bottom: var(--space-2);
+  right: var(--space-2);
+  font-size: var(--font-size-xl);
+  color: var(--color-secondary);
+  animation: music-note 1s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes music-note {
+  0% { opacity: 0.5; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.2); }
+}
+
+/* ==========================================================================
+   SKIP BUTTON
+   ========================================================================== */
+
+.credit-skip-btn {
+  position: fixed;
+  bottom: var(--space-8);
+  right: var(--space-8);
+  display: none;
+  color: var(--text-primary);
+  text-decoration: none;
+  z-index: var(--z-index-sticky);
+  padding: var(--space-4) var(--space-6);
+  background: var(--bg-secondary);
+  border: var(--border-width-2) solid var(--color-primary);
+  border-radius: var(--border-radius-lg);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-neon-sm);
+  transition: var(--transition-base);
+  
+  /* Show after animation starts */
+  animation: skip-btn-appear 2s ease-out 3s forwards;
+}
+
+@keyframes skip-btn-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    display: block;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    display: block;
+  }
+}
+
+.credit-skip-btn:hover {
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+  box-shadow: var(--shadow-cyber-lg);
+  transform: translateY(-2px);
+}
+
+.credit-skip-btn:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* ==========================================================================
+   AUDIO CONTROLS
+   ========================================================================== */
+
+.credit-audio {
+  position: fixed;
+  bottom: var(--space-8);
+  left: var(--space-8);
+  z-index: var(--z-index-sticky);
+}
+
+.credit-audio-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-secondary);
+  border: var(--border-width-2) solid var(--color-primary-darker);
+  border-radius: var(--border-radius-lg);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-neon-sm);
+}
+
+.credit-audio-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-primary);
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+  transition: var(--transition-colors);
+  padding: var(--space-1);
+  border-radius: var(--border-radius-base);
+  min-width: var(--space-8);
+  min-height: var(--space-8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.credit-audio-btn:hover {
+  color: var(--color-secondary);
+  background: var(--color-primary-alpha);
+}
+
+.credit-audio-btn:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-primary);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.credit-audio-btn.muted {
+  color: var(--color-accent-red);
+}
+
+.credit-volume-control {
+  width: 80px;
+  height: 4px;
+  background: var(--color-primary-darker);
+  border-radius: var(--border-radius-full);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+.credit-volume-control::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--color-primary);
+  border-radius: var(--border-radius-full);
+  cursor: pointer;
+  box-shadow: 0 0 5px var(--color-primary);
+}
+
+.credit-volume-control::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: var(--color-primary);
+  border-radius: var(--border-radius-full);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 5px var(--color-primary);
+}
+
+/* ==========================================================================
+   ROLE-BASED STYLING
+   ========================================================================== */
+
+/* Director credits */
+.credit-director .credit-person-name {
+  color: var(--color-gold);
+  text-shadow: 
+    2px 2px #878787,
+    0 0 15px var(--color-gold);
+  font-size: var(--fluid-text-4xl);
+}
+
+/* Producer credits */
+.credit-producer .credit-job-title {
+  color: var(--color-primary);
+}
+
+.credit-producer .credit-person-name {
+  color: var(--color-primary-dark);
+}
+
+/* Development team */
+.credit-frontend .credit-person-name,
+.credit-backend .credit-person-name {
+  color: var(--color-secondary);
+  text-shadow: 
+    2px 2px #878787,
+    var(--text-shadow-cyber);
+}
+
+/* Special thanks */
+.credit-thanks .credit-person-name {
+  color: var(--color-accent-yellow);
+  text-shadow: 
+    2px 2px #878787,
+    0 0 10px var(--color-accent-yellow);
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+
+/* Tablets */
+@media screen and (max-width: 768px) {
+  .credit-wrapper {
+    width: 95vw;
+    margin-left: -47.5%;
+    left: 50%;
+  }
+  
+  .credit-video-title {
+    font-size: var(--fluid-text-4xl);
+    margin-bottom: var(--space-8);
+  }
+  
+  .credit-job-title {
+    font-size: var(--fluid-text-xl);
+  }
+  
+  .credit-person-name {
+    font-size: var(--fluid-text-2xl);
+    margin-bottom: var(--space-8);
+  }
+  
+  .credit-skip-btn {
+    right: var(--space-4);
+    bottom: var(--space-6);
+    font-size: var(--font-size-sm);
+    padding: var(--space-3) var(--space-4);
+  }
+  
+  .credit-audio {
+    bottom: var(--space-6);
+    left: var(--space-4);
+  }
+  
+  .credit-ending-message {
+    font-size: var(--fluid-text-lg);
+    margin: var(--space-12) 0;
+    padding: var(--space-4);
+  }
+  
+  .credit-image {
+    max-width: 150px;
+    max-height: 150px;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 480px) {
+  .credit-wrapper {
+    width: 98vw;
+    margin-left: -49%;
+    animation: credits-scroll-mobile 80s linear infinite;
+  }
+  
+  @keyframes credits-scroll-mobile {
+    0% {
+      top: 100%;
+    }
+    100% {
+      top: -600%;
+    }
+  }
+  
+  .credit-video-title {
+    font-size: var(--fluid-text-3xl);
+    margin-bottom: var(--space-6);
+    line-height: var(--line-height-snug);
+  }
+  
+  .credit-job-title {
+    font-size: var(--fluid-text-lg);
+    margin-bottom: var(--space-1);
+  }
+  
+  .credit-person-name {
+    font-size: var(--fluid-text-xl);
+    margin-bottom: var(--space-6);
+  }
+  
+  .credit-skip-btn {
+    right: var(--space-2);
+    bottom: var(--space-4);
+    font-size: var(--font-size-xs);
+    padding: var(--space-2) var(--space-3);
+  }
+  
+  .credit-audio {
+    bottom: var(--space-4);
+    left: var(--space-2);
+  }
+  
+  .credit-audio-controls {
+    padding: var(--space-2);
+    gap: var(--space-2);
+  }
+  
+  .credit-volume-control {
+    width: 60px;
+  }
+  
+  .credit-ending-message {
+    font-size: var(--fluid-text-base);
+    margin: var(--space-8) 0;
+    padding: var(--space-3);
+  }
+  
+  .credit-image {
+    max-width: 120px;
+    max-height: 120px;
+  }
+  
+  .credit-special-thanks {
+    padding: var(--space-4);
+    margin: var(--space-6) 0;
+  }
+  
+  .credit-director .credit-person-name {
+    font-size: var(--fluid-text-2xl);
+  }
+}
+
+/* Mobile landscape */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  .credit-wrapper {
+    animation: credits-scroll-landscape 100s linear infinite;
+  }
+  
+  @keyframes credits-scroll-landscape {
+    0% {
+      top: 100%;
+    }
+    100% {
+      top: -400%;
+    }
+  }
+  
+  .credit-video-title {
+    font-size: var(--fluid-text-2xl);
+    margin-bottom: var(--space-4);
+  }
+  
+  .credit-person-name {
+    font-size: var(--fluid-text-lg);
+    margin-bottom: var(--space-4);
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & PREFERENCES
+   ========================================================================== */
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .credit-wrapper {
+    animation: none;
+    position: static;
+    top: auto;
+    left: auto;
+    margin: 0 auto;
+    transform: none;
+    max-width: 600px;
+    padding: var(--space-8);
+  }
+  
+  .credit-video-title,
+  .credit-ending-message,
+  .credit-special-thanks::before,
+  .credit-ending-message::before,
+  .credit-ending-message::after,
+  .credit-skip-btn {
+    animation: none;
+  }
+  
+  .credit-skip-btn {
+    display: block;
+    position: static;
+    margin: var(--space-8) auto 0;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .credit-image:hover {
+    transform: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .credit-video-title,
+  .credit-job-title,
+  .credit-person-name {
+    text-shadow: none;
+  }
+  
+  .credit-special-thanks,
+  .credit-ending-message {
+    border-width: var(--high-contrast-border-width);
+    box-shadow: none;
+  }
+  
+  .credit-image {
+    border-width: var(--high-contrast-border-width);
+    box-shadow: none;
+  }
+}
+
+/* ==========================================================================
+   PRINT STYLES
+   ========================================================================== */
+
+@media print {
+  .credit-page {
+    background: white;
+    overflow: visible;
+  }
+  
+  .credit-wrapper {
+    position: static;
+    animation: none;
+    color: black;
+    top: auto;
+    left: auto;
+    margin: 0 auto;
+    transform: none;
+    width: 100%;
+    max-width: none;
+  }
+  
+  .credit-video-title,
+  .credit-job-title,
+  .credit-person-name,
+  .credit-ending-message {
+    color: black;
+    text-shadow: none;
+  }
+  
+  .credit-skip-btn,
+  .credit-audio {
+    display: none;
+  }
+  
+  .credit-special-thanks,
+  .credit-ending-message {
+    border: 1pt solid black;
+    box-shadow: none;
+    background: #f9f9f9;
+    page-break-inside: avoid;
+  }
+  
+  .credit-image {
+    border: 1pt solid black;
+    box-shadow: none;
+  }
+  
+  .credit-wrapper {
+    page-break-after: always;
+  }
+}
+
+/* ==========================================================================
+   DARK THEME ENHANCEMENTS
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  .credit-special-thanks {
+    box-shadow: 
+      var(--shadow-neon-lg),
+      inset 0 0 20px var(--color-primary-alpha);
+  }
+  
+  .credit-ending-message {
+    box-shadow: 
+      var(--shadow-cyber-lg),
+      inset 0 0 20px var(--color-secondary-alpha);
+  }
+}
+
+/* ==========================================================================
+   ANIMATION STATES
+   ========================================================================== */
+
+/* Pause animation on hover */
+.credit-wrapper:hover {
+  animation-play-state: paused;
+}
+
+/* Resume on mouse leave */
+.credit-wrapper:not(:hover) {
+  animation-play-state: running;
+}
+
+/* Focus states for accessibility */
+.credit-wrapper:focus-within {
+  animation-play-state: paused;
+}
+
+/* ==========================================================================
+   EASTER EGGS
+   ========================================================================== */
+
+.credit-person-name[data-special="true"] {
+  background: linear-gradient(45deg, var(--color-primary), var(--color-secondary), var(--color-accent-red));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow-text 3s ease-in-out infinite;
+}
+
+@keyframes rainbow-text {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.credit-person-name[data-special="chatgpt"]::after {
+  content: ' 🤖';
+  font-size: 0.8em;
+  -webkit-text-fill-color: initial;
+  color: var(--color-secondary);
+}
+
+.credit-person-name[data-special="team"]::after {
+  content: ' 👨‍💻';
+  font-size: 0.8em;
+  -webkit-text-fill-color: initial;
+  color: var(--color-primary);
+}
