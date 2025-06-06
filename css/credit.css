@@ -1,75 +1,892 @@
-body {
-  overflow: hidden;
-  background-color: #000000;
-}
-.wrapper {
-  top: 100%;
-  left: 50%;
-  width: 600px;
-  color: #fff;
-  position: absolute;
-  text-align: center;
-  margin-left: -300px;
-  animation-delay: 1s;
-  font-family: Abadi MT Condensed;
-  animation: 80s credits linear infinite;
-}
-.video_title {
-  font-size: 80px;
-  margin-bottom: 50px;
-  letter-spacing: 0px;
-  text-decoration: none;
-  text-shadow: 2px 2px #878787;
+/* ==========================================================================
+   ENHANCED CREDITS PAGE - T.I QUIZZMASTER
+   Página de créditos com visual cyberpunk melhorado
+   ========================================================================== */
+
+:root {
+  --primary-green: #00ff41;
+  --secondary-green: #00d300;
+  --dark-green: #003300;
+  --neon-blue: #00ffff;
+  --neon-purple: #8000ff;
+  --neon-pink: #ff0080;
+  --background-black: #000000;
+  --text-white: #ffffff;
+  --glitch-red: #ff0040;
+  --glitch-blue: #0040ff;
+  --shadow-color: rgba(0, 255, 65, 0.3);
 }
 
-.job_title {
-  font-size: 30px;
-  margin-bottom: 5px;
-  text-shadow: 2px 2px #878787;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.person_name {
-  font-size: 50px;
-  margin-bottom: 50px;
-  font-variant: small-caps;
-  text-shadow: 2px 2px #878787;
+
+body {
+  min-height: 100vh;
+  background: var(--background-black);
+  color: var(--text-white);
+  font-family: 'Orbitron', 'Arial', sans-serif;
+  overflow: hidden; /* 🔧 Remove todas as barras de rolagem */
+  position: relative;
 }
-@keyframes credits {
+
+/* ==========================================================================
+   CANVAS E EFEITOS DE FUNDO
+   ========================================================================== */
+
+#credits-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -20;
+  opacity: 0.3;
+}
+
+.background-effects {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -10;
+  pointer-events: none;
+}
+
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridPulse 4s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.4; }
+}
+
+.scan-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 255, 65, 0.02) 2%,
+    transparent 4%
+  );
+  background-size: 100% 4px;
+  animation: scanlines 0.1s linear infinite;
+}
+
+@keyframes scanlines {
+  0% { background-position: 0 0px; }
+  100% { background-position: 0 4px; }
+}
+
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 20%, rgba(0, 255, 65, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 40% 60%, rgba(128, 0, 255, 0.03) 0%, transparent 50%);
+  animation: particleFloat 20s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+  0%, 100% { 
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.3;
+  }
+  25% { 
+    transform: translateY(-20px) rotate(90deg);
+    opacity: 0.6;
+  }
+  50% { 
+    transform: translateY(-40px) rotate(180deg);
+    opacity: 0.4;
+  }
+  75% { 
+    transform: translateY(-20px) rotate(270deg);
+    opacity: 0.7;
+  }
+}
+
+/* ==========================================================================
+   WRAPPER PRINCIPAL DOS CRÉDITOS - COM CONTROLE DE VELOCIDADE
+   ========================================================================== */
+
+.credits-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  top: 100vh;
+  animation: creditsRoll var(--credits-speed, 120s) linear infinite;
+  z-index: 10;
+}
+
+/* Variáveis CSS para controle dinâmico de velocidade */
+:root {
+  --credits-speed: 120s;
+  --credits-speed-fast: 60s;
+  --credits-speed-normal: 120s;
+}
+
+@keyframes creditsRoll {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-600vh);
+  }
+}
+
+/* ==========================================================================
+   TÍTULO PRINCIPAL
+   ========================================================================== */
+
+.main-title-section {
+  text-align: center;
+  margin-bottom: 8rem;
+  position: relative;
+}
+
+.title-glow-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 255, 65, 0.1) 0%, transparent 70%);
+  filter: blur(50px);
+  animation: titleGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.8; }
+}
+
+.main-title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: clamp(3rem, 8vw, 8rem);
+  color: var(--primary-green);
+  text-shadow: 
+    0 0 10px var(--primary-green),
+    0 0 20px var(--primary-green),
+    0 0 40px var(--primary-green),
+    0 0 80px var(--primary-green);
+  letter-spacing: 0.1em;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.glitch-text {
+  position: relative;
+  animation: titlePulse 3s ease-in-out infinite alternate;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.glitch-text::before {
+  color: var(--glitch-red);
+  animation: glitchEffect1 4s infinite linear alternate-reverse;
+  z-index: -1;
+}
+
+.glitch-text::after {
+  color: var(--glitch-blue);
+  animation: glitchEffect2 3s infinite linear alternate-reverse;
+  z-index: -2;
+}
+
+@keyframes titlePulse {
   0% {
-    top: 100%;
+    text-shadow: 
+      0 0 10px var(--primary-green),
+      0 0 20px var(--primary-green),
+      0 0 40px var(--primary-green);
   }
   100% {
-    top: -500%;
+    text-shadow: 
+      0 0 20px var(--primary-green),
+      0 0 40px var(--primary-green),
+      0 0 80px var(--primary-green),
+      0 0 120px var(--primary-green);
   }
 }
+
+@keyframes glitchEffect1 {
+  0% { opacity: 0; }
+  2% { opacity: 1; transform: translateX(2px) skew(1deg); }
+  4% { opacity: 0; transform: translateX(0) skew(0deg); }
+  96% { opacity: 0; }
+  98% { opacity: 1; transform: translateX(-2px) skew(-1deg); }
+  100% { opacity: 0; }
+}
+
+@keyframes glitchEffect2 {
+  0% { opacity: 0; }
+  5% { opacity: 1; transform: translateX(-2px) skew(-1deg); }
+  7% { opacity: 0; transform: translateX(0) skew(0deg); }
+  93% { opacity: 0; }
+  95% { opacity: 1; transform: translateX(2px) skew(1deg); }
+  100% { opacity: 0; }
+}
+
+.title-subtitle {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  color: var(--secondary-green);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+}
+
+.title-underline {
+  width: 300px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--primary-green), var(--neon-blue), var(--primary-green), transparent);
+  margin: 0 auto;
+  animation: underlineFlow 3s ease-in-out infinite;
+}
+
+@keyframes underlineFlow {
+  0%, 100% { 
+    transform: scaleX(0.5);
+    opacity: 0.6;
+  }
+  50% { 
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   SEÇÕES DE CRÉDITOS
+   ========================================================================== */
+
+.credits-section {
+  margin-bottom: 6rem;
+  text-align: center;
+  position: relative;
+  padding: 3rem 2rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 255, 65, 0.2);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 0 30px rgba(0, 255, 65, 0.1),
+    inset 0 0 30px rgba(0, 255, 65, 0.05);
+  transition: all 0.5s ease;
+}
+
+.credits-section:hover {
+  border-color: rgba(0, 255, 255, 0.4);
+  box-shadow: 
+    0 0 50px rgba(0, 255, 255, 0.2),
+    inset 0 0 50px rgba(0, 255, 255, 0.1);
+  transform: translateY(-10px);
+}
+
+.section-icon {
+  font-size: clamp(2rem, 5vw, 4rem);
+  margin-bottom: 2rem;
+  display: block;
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.section-title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  color: var(--neon-blue);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 3rem;
+  text-shadow: 
+    0 0 10px var(--neon-blue),
+    0 0 20px var(--neon-blue);
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+}
+
+/* ==========================================================================
+   ITENS DE CRÉDITO
+   ========================================================================== */
+
+.credit-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem 0;
+  padding: 2rem;
+  background: rgba(0, 51, 0, 0.2);
+  border: 1px solid var(--dark-green);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.credit-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+  transition: all 0.7s ease;
+}
+
+.credit-item:hover::before {
+  left: 100%;
+}
+
+.credit-item:hover {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+  transform: translateY(-5px) scale(1.02);
+}
+
+.credit-item .name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  color: var(--primary-green);
+  text-shadow: 0 0 10px var(--primary-green);
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.credit-item .role {
+  font-size: clamp(0.7rem, 2vw, 0.9rem);
+  color: var(--secondary-green);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+  position: relative;
+  z-index: 2;
+}
+
+/* Variações especiais */
+.credit-item.featured {
+  border-color: var(--neon-blue);
+  background: rgba(0, 255, 255, 0.1);
+}
+
+.credit-item.featured .name {
+  color: var(--neon-blue);
+  text-shadow: 0 0 15px var(--neon-blue);
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+}
+
+.credit-item.special {
+  border-color: var(--neon-purple);
+  background: rgba(128, 0, 255, 0.1);
+}
+
+.credit-item.special .name {
+  color: var(--neon-purple);
+  text-shadow: 0 0 15px var(--neon-purple);
+}
+
+.credit-item.ai-credit {
+  border-color: var(--neon-pink);
+  background: rgba(255, 0, 128, 0.1);
+}
+
+.credit-item.ai-credit .name {
+  color: var(--neon-pink);
+  text-shadow: 0 0 15px var(--neon-pink);
+}
+
+.credit-item.fun {
+  border-color: #ffff00;
+  background: rgba(255, 255, 0, 0.1);
+  animation: funnyPulse 2s ease-in-out infinite;
+}
+
+.credit-item.fun .name {
+  color: #ffff00;
+  text-shadow: 0 0 15px #ffff00;
+}
+
+@keyframes funnyPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* ==========================================================================
+   LAYOUTS ESPECIAIS
+   ========================================================================== */
+
+.team-grid, .tech-section, .thanks-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.tech-item {
+  padding: 1rem 2rem;
+  background: linear-gradient(45deg, var(--dark-green), rgba(0, 255, 65, 0.2));
+  border: 1px solid var(--primary-green);
+  border-radius: 25px;
+  color: var(--primary-green);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
+}
+
+.tech-item:hover {
+  background: linear-gradient(45deg, var(--primary-green), rgba(0, 255, 65, 0.3));
+  color: var(--background-black);
+  box-shadow: 0 0 20px var(--primary-green);
+  transform: translateY(-3px);
+}
+
+/* ==========================================================================
+   SEÇÕES ESPECIAIS
+   ========================================================================== */
+
+.story-section .story-images {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.story-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 3px solid var(--primary-green);
+  box-shadow: 0 0 20px var(--primary-green);
+  transition: all 0.3s ease;
+  object-fit: cover;
+}
+
+.story-img:hover {
+  transform: scale(1.1) rotate(5deg);
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 30px var(--neon-blue);
+}
+
+.humor-section {
+  border-color: var(--glitch-red);
+  background: rgba(255, 0, 64, 0.05);
+}
+
+.final-section {
+  background: linear-gradient(135deg, rgba(0, 255, 65, 0.1), rgba(0, 255, 255, 0.05));
+  border: 2px solid var(--primary-green);
+}
+
+.final-message {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  line-height: 1.8;
+  color: var(--text-white);
+  margin-bottom: 2rem;
+}
+
+.final-message p {
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.copyright {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(0, 255, 65, 0.3);
+  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+  opacity: 0.7;
+}
+
+.outro-section {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--neon-purple);
+}
+
+.outro-message h3 {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  color: var(--neon-purple);
+  margin-bottom: 1rem;
+  text-shadow: 0 0 15px var(--neon-purple);
+}
+
+.outro-message p {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: var(--secondary-green);
+  margin-bottom: 2rem;
+}
+
+.music-visualizer {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 2rem;
+}
+
+.bar {
+  width: 4px;
+  height: 20px;
+  background: var(--primary-green);
+  border-radius: 2px;
+  animation: musicBeat 0.8s ease-in-out infinite;
+  box-shadow: 0 0 10px var(--primary-green);
+}
+
+.bar:nth-child(1) { animation-delay: 0s; }
+.bar:nth-child(2) { animation-delay: 0.1s; }
+.bar:nth-child(3) { animation-delay: 0.2s; }
+.bar:nth-child(4) { animation-delay: 0.3s; }
+.bar:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes musicBeat {
+  0%, 100% { 
+    height: 20px;
+    background: var(--primary-green);
+  }
+  50% { 
+    height: 40px;
+    background: var(--neon-blue);
+  }
+}
+
+.credits-spacer {
+  height: 200vh;
+}
+
+/* ==========================================================================
+   BOTÃO DE PULAR COMPACTO NO CANTO SUPERIOR ESQUERDO
+   ========================================================================== */
 
 #back-home {
-  display: none;
-  color: white;
   position: fixed;
+  top: 2rem; /* 🔧 Movido para o topo */
+  left: 2rem; /* 🔧 Movido para a esquerda */
+  display: none;
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid var(--primary-green);
+  border-radius: 25px; /* 🔧 Menos arredondado */
+  padding: 0.6rem 1rem; /* 🔧 Padding menor */
   text-decoration: none;
+  color: var(--primary-green);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.6rem; /* 🔧 Fonte menor */
+  transition: all 0.3s ease;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3); /* 🔧 Sombra menor */
+  z-index: 1000;
+  overflow: hidden;
+  position: fixed;
+  min-width: auto; /* 🔧 Remove largura mínima */
 }
 
-/*          Responsive            */
+.skip-glow {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.3), transparent);
+  transition: all 0.6s ease;
+}
 
-@media (max-width: 768px) {
-  body {
-    overflow: hidden;
-    background-color: #000000;
+#back-home:hover .skip-glow {
+  left: 100%;
+}
+
+#back-home:hover {
+  border-color: var(--neon-blue);
+  color: var(--neon-blue);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.5); /* 🔧 Sombra hover menor */
+  transform: translateY(-2px) scale(1.05); /* 🔧 Scale menor */
+}
+
+.skip-icon {
+  margin-right: 0.3rem; /* 🔧 Margin menor */
+  font-size: 0.8rem; /* 🔧 Ícone menor */
+}
+
+.skip-text {
+  position: relative;
+  z-index: 2;
+  font-size: 0.5rem; /* 🔧 Texto menor */
+}
+
+/* ==========================================================================
+   DICA DE CONTROLE DE VELOCIDADE
+   ========================================================================== */
+
+.speed-hint {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--neon-purple);
+  border-radius: 20px;
+  padding: 0.8rem 1.2rem;
+  color: var(--neon-purple);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(128, 0, 255, 0.3);
+  animation: hintPulse 3s ease-in-out infinite;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.5s ease; /* 🔧 Adicionado para transições suaves */
+  transform: translateY(0); /* 🔧 Para controle de posição */
+}
+
+.hint-icon {
+  font-size: 0.8rem;
+  animation: iconBounce 2s ease-in-out infinite;
+}
+
+.hint-text {
+  letter-spacing: 0.05em;
+}
+
+@keyframes hintPulse {
+  0%, 100% { 
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes iconBounce {
+  0%, 100% { 
+    transform: translateY(0);
+  }
+  50% { 
+    transform: translateY(-3px);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE
+   ========================================================================== */
+
+@media screen and (max-width: 768px) {
+  .credits-wrapper {
+    padding: 1rem;
   }
   
-  .wrapper {
-    width: 100%;
-    left: 73%;
-    position: fixed;
-    
-    
+  .credits-section {
+    padding: 2rem 1rem;
+    margin-bottom: 4rem;
   }
-
-  .video_title{
-    font-size: 55px;
+  
+  .team-grid, .tech-section, .thanks-section {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
+  
+  .story-images {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .tech-stack {
+    gap: 0.5rem;
+  }
+  
+  .tech-item {
+    padding: 0.5rem 1rem;
+    font-size: 0.7rem;
+  }
+  
+  #back-home {
+    top: 1rem; /* 🔧 Ajustado para mobile */
+    left: 1rem; /* 🔧 Ajustado para mobile */
+    padding: 0.5rem 0.8rem; /* 🔧 Ainda menor no mobile */
+    font-size: 0.5rem; /* 🔧 Fonte ainda menor */
+  }
+  
+  .skip-icon {
+    font-size: 0.7rem; /* 🔧 Ícone menor no mobile */
+    margin-right: 0.2rem;
+  }
+  
+  .skip-text {
+    font-size: 0.4rem; /* 🔧 Texto menor no mobile */
+  }
+  
+  .speed-hint {
+    bottom: 1rem;
+    left: 1rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.4rem;
+  }
+  
+  .hint-icon {
+    font-size: 0.6rem;
+  }
+}
 
-  #back-home{
-    right: 78%;
+@media screen and (max-width: 480px) {
+  .main-title {
+    font-size: 2.5rem;
+  }
+  
+  .credits-section {
+    padding: 1.5rem 0.5rem;
+  }
+  
+  .credit-item {
+    padding: 1rem;
+  }
+  
+  .music-visualizer {
+    gap: 3px;
+  }
+  
+  .bar {
+    width: 3px;
+  }
+  
+  .speed-hint {
+    bottom: 0.5rem;
+    left: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.3rem;
+    border-radius: 15px;
+  }
+  
+  .hint-text {
+    display: none; /* 🔧 Esconde texto em telas muito pequenas */
+  }
+  
+  .hint-icon {
+    font-size: 0.8rem;
+  }
+}
+
+/* ==========================================================================
+   ACESSIBILIDADE E PERFORMANCE
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .credits-wrapper,
+  .glitch-text::before,
+  .glitch-text::after,
+  .titlePulse,
+  .gridPulse,
+  .scanlines,
+  .particleFloat,
+  .iconFloat,
+  .musicBeat,
+  .funnyPulse {
+    animation: none;
+  }
+  
+  .credit-item,
+  .tech-item,
+  #back-home {
+    transition: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .credits-section {
+    border-width: 3px;
+  }
+  
+  .credit-item {
+    border-width: 2px;
+  }
+  
+  #back-home {
+    border-width: 3px;
+  }
+}
+
+/* ==========================================================================
+   ANIMAÇÕES DE ENTRADA
+   ========================================================================== */
+
+.credits-section {
+  opacity: 0;
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+.credits-section:nth-child(1) { animation-delay: 0.5s; }
+.credits-section:nth-child(2) { animation-delay: 1s; }
+.credits-section:nth-child(3) { animation-delay: 1.5s; }
+.credits-section:nth-child(4) { animation-delay: 2s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

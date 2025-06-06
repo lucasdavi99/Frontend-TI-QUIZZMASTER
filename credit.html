@@ -6,73 +6,236 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/credit.css">
-  <title>T.I QUIZZMASTER</title>
+  <link rel="stylesheet" href="css/enhanced-credits.css">
+  <title>T.I QUIZZMASTER - Credits</title>
 </head>
 
 <body>
-  <div class="wrapper">
-    <div class="video_title">T.I QUIZZMASTER</div>
+  <!-- Canvas para efeito Matrix Rain -->
+  <canvas id="credits-canvas"></canvas>
+  
+  <!-- Efeitos de fundo -->
+  <div class="background-effects">
+    <div class="grid-overlay"></div>
+    <div class="scan-lines"></div>
+    <div class="particles"></div>
+  </div>
 
-    <div class="job_title">directed by</div>
-    <div class="person_name">Panela</div>
-
-    <div class="job_title">produced by</div>
-    <div class="person_name">Alejandro Estevan</div>
-    <div class="person_name">Jean Honorio</div>
-    <div class="person_name">João Marcos</div>
-    <div class="person_name">Julio Cezar</div>
-    <div class="person_name">Lucas Davi</div>
-    <div class="person_name">Lucas Ramos</div>
-    <div class="person_name">Kerven Kildhery</div>
-    <div class="person_name">Weslley Pereira</div>
-
-
-    <div class="job_title">Front-End</div>
-    <div class="person_name">João Marcos</div>
-    <div class="person_name">Lucas Davi</div>
-
-    <div class="job_title">director of photography</div>
-    <div class="person_name">Não Temos</div>
-
-    <div class="job_title">Back-End</div>
-    <div class="person_name">João Marcos</div>
-    <div class="person_name">Julio Cezar</div>
-    <div class="person_name">Lucas Ramos</div>
-    <div class="person_name">Weslley Pereira</div>
-    <div class="person_name">Jean Honorio</div>
-
-    <div class="job_title">Agradecimentos</div>
-    <div class="person_name">Lucas Davi</div>
-    <div class="person_name">Lucas Davi</div>
-    <div class="person_name">Lucas Davi</div>
-    <div class="person_name">ChatGPT</div>
-    <div class="person_name">Sou foda</div>
-
-    <div class="job_title">Agradecimentos Especiais</div>
-    <div class="person_name">ChatGPT</div>
-
+  <!-- Wrapper principal dos créditos -->
+  <div class="credits-wrapper">
     
-    <div class="job_title">story</div>
-    <div class="person_name"><img src="img/images.jpeg" alt=""></div>
-    
-    <div class="job_title">story</div>
-    <div class="person_name"><img
-      src="https://static-cdn.jtvnw.net/jtv_user_pictures/64d44235-1dee-4bca-95da-bee1ee96eea3-profile_image-300x300.png"
-      alt=""></div>
-      
-      <div class="person_name">Agora fique escutando essa bela música enquanto os créditos são repetidos</div>
-      <div class="job_title"></div>
+    <!-- Título principal -->
+    <div class="main-title-section">
+      <div class="title-glow-bg"></div>
+      <h1 class="main-title glitch-text" data-text="T.I QUIZZMASTER">T.I QUIZZMASTER</h1>
+      <div class="title-subtitle">Sistema de Quiz Interativo</div>
+      <div class="title-underline"></div>
     </div>
-    
-  <a id="back-home" href="index.html">PULAR</a>
 
+    <!-- Seção de Direção -->
+    <div class="credits-section">
+      <div class="section-icon">🎬</div>
+      <h2 class="section-title">Direção</h2>
+      <div class="credit-item featured">
+        <span class="name">Panela</span>
+        <span class="role">Diretor Criativo</span>
+      </div>
+    </div>
+
+    <!-- Seção de Produção -->
+    <div class="credits-section">
+      <div class="section-icon">🎯</div>
+      <h2 class="section-title">Equipe de Produção</h2>
+      <div class="team-grid">
+        <div class="credit-item">
+          <span class="name">Alejandro Estevan</span>
+          <span class="role">Produtor Executivo</span>
+        </div>
+        <div class="credit-item">
+          <span class="name">Jean Honorio</span>
+          <span class="role">Produtor</span>
+        </div>
+        <div class="credit-item">
+          <span class="name">João Marcos</span>
+          <span class="role">Produtor Técnico</span>
+        </div>
+        <div class="credit-item">
+          <span class="name">Julio Cezar</span>
+          <span class="role">Produtor</span>
+        </div>
+        <div class="credit-item">
+          <span class="name">Lucas Davi</span>
+          <span class="role">Produtor</span>
+        </div>
+        <div class="credit-item">
+          <span class="name">Lucas Ramos</span>
+          <span class="role">Produtor</span>
+        </div>
+        <div class="credit-item">
+          <span class="name">Kerven Kildhery</span>
+          <span class="role">Produtor</span>
+        </div>
+        <div class="credit-item">
+          <span class="name">Weslley Pereira</span>
+          <span class="role">Produtor</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção Front-End -->
+    <div class="credits-section">
+      <div class="section-icon">🎨</div>
+      <h2 class="section-title">Desenvolvimento Front-End</h2>
+      <div class="tech-section">
+        <div class="credit-item">
+          <span class="name">João Marcos</span>
+          <span class="role">UI/UX Developer</span>
+        </div>
+        <div class="credit-item">
+          <span class="name">Lucas Davi</span>
+          <span class="role">Frontend Developer</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção Back-End -->
+    <div class="credits-section">
+      <div class="section-icon">⚙️</div>
+      <h2 class="section-title">Desenvolvimento Back-End</h2>
+      <div class="tech-section">
+        <div class="credit-item">
+          <span class="name">João Marcos</span>
+          <span class="role">Arquiteto de Sistema</span>
+        </div>
+        <div class="credit-item">
+          <span class="name">Julio Cezar</span>
+          <span class="role">Backend Developer</span>
+        </div>
+        <div class="credit-item">
+          <span class="name">Lucas Ramos</span>
+          <span class="role">API Developer</span>
+        </div>
+        <div class="credit-item">
+          <span class="name">Weslley Pereira</span>
+          <span class="role">Database Engineer</span>
+        </div>
+        <div class="credit-item">
+          <span class="name">Jean Honorio</span>
+          <span class="role">DevOps Engineer</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção de Fotografia (Humor) -->
+    <div class="credits-section humor-section">
+      <div class="section-icon">📸</div>
+      <h2 class="section-title">Direção de Fotografia</h2>
+      <div class="credit-item special">
+        <span class="name">Não Temos</span>
+        <span class="role">Fotógrafo Invisível</span>
+      </div>
+    </div>
+
+    <!-- Seção de Agradecimentos -->
+    <div class="credits-section">
+      <div class="section-icon">🙏</div>
+      <h2 class="section-title">Agradecimentos Especiais</h2>
+      <div class="thanks-section">
+        <div class="credit-item">
+          <span class="name">Lucas Davi</span>
+          <span class="role">Por sua dedicação extraordinária</span>
+        </div>
+        <div class="credit-item ai-credit">
+          <span class="name">Claude.ia</span>
+          <span class="role">Assistente de IA</span>
+        </div>
+        <div class="credit-item fun">
+          <span class="name">Sou foda</span>
+          <span class="role">Autoestima Level 100</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção de Tecnologias -->
+    <div class="credits-section tech-credits">
+      <div class="section-icon">💻</div>
+      <h2 class="section-title">Tecnologias Utilizadas</h2>
+      <div class="tech-stack">
+        <div class="tech-item">HTML5</div>
+        <div class="tech-item">CSS3</div>
+        <div class="tech-item">JavaScript ES6+</div>
+        <div class="tech-item">Canvas API</div>
+        <div class="tech-item">Web Audio API</div>
+        <div class="tech-item">REST API JAVA</div>
+      </div>
+    </div>
+
+    <!-- Seção Final -->
+    <div class="credits-section final-section">
+      <div class="section-icon">🎮</div>
+      <h2 class="section-title">Obrigado por Jogar!</h2>
+      <div class="final-message">
+        <p>Este projeto foi desenvolvido com paixão pela tecnologia</p>
+        <p>e dedicação em criar uma experiência única de aprendizado</p>
+        <div class="copyright">
+          <p>© 2025 T.I QUIZZMASTER - Todos os direitos reservados</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Imagens Story (mantidas do original) -->
+    <div class="credits-section story-section">
+      <div class="section-icon">📖</div>
+      <h2 class="section-title">Story</h2>
+      <div class="story-images">
+        <img src="img/images.jpeg" alt="Story Image 1" class="story-img">
+        <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/64d44235-1dee-4bca-95da-bee1ee96eea3-profile_image-300x300.png" alt="Story Image 2" class="story-img">
+      </div>
+    </div>
+
+    <!-- Mensagem final especial -->
+    <div class="credits-section outro-section">
+      <div class="outro-message">
+        <h3>Agora aproveite esta bela trilha sonora</h3>
+        <p>enquanto os créditos se repetem em loop infinito...</p>
+        <div class="music-visualizer">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Espaçamento final para permitir scroll completo -->
+    <div class="credits-spacer"></div>
+  </div>
+  
+  <!-- Botão de pular compacto no canto superior esquerdo -->
+  <a id="back-home" href="index.html" class="skip-button">
+    <span class="skip-icon">⏭️</span>
+    <span class="skip-text">PULAR</span>
+    <div class="skip-glow"></div>
+  </a>
+
+  <!-- Dica de controle de velocidade -->
+  <div id="speed-hint" class="speed-hint">
+    <span class="hint-icon">⚡</span>
+    <span class="hint-text">Segure → para acelerar</span>
+  </div>
+
+  <!-- Áudio mantido do original -->
   <audio autoplay class="credit-music">
     <source id="linda" src="audio/stay-with-me-mp3.mp3">
     <source src="audio/stay-with-me-ogg.ogg">
     <source src="audio/stay-with-me-wav.wav">
   </audio>
 
+  <!-- Scripts -->
   <script src="js/credit.js"></script>
 </body>
 
