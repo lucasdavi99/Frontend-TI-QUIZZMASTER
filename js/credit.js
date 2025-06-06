@@ -12,6 +12,8 @@ class EnhancedCreditsController {
     this.animationFrame = null;
     this.skipButton = null;
     this.music = null;
+    this.creditsSpeed = 'normal'; // 🔧 NOVO: Controle de velocidade
+    this.speedIndicator = null; // 🔧 NOVO: Indicador visual
     
     this.config = {
       particleCount: 100,
@@ -31,6 +33,8 @@ class EnhancedCreditsController {
     this.setupParticles();
     this.setupGlitchEffects();
     this.setupScrollEffects();
+    this.setupSpeedControls(); // 🔧 NOVO: Controles de velocidade
+    this.createSpeedIndicator(); // 🔧 NOVO: Indicador visual
     this.startAnimation();
     
     console.log('🎬 Enhanced Credits Controller initialized');
@@ -339,14 +343,14 @@ class EnhancedCreditsController {
   }
 
   createHoverEffect() {
-    // Create ripple effect around skip button
+    // Create ripple effect around skip button (posição atualizada)
     const ripple = document.createElement('div');
     ripple.style.cssText = `
       position: fixed;
-      bottom: 3rem;
-      right: 3rem;
-      width: 100px;
-      height: 100px;
+      top: 2rem; /* 🔧 Atualizado para nova posição */
+      left: 2rem; /* 🔧 Atualizado para nova posição */
+      width: 60px; /* 🔧 Menor para o botão compacto */
+      height: 60px;
       border: 2px solid #00ffff;
       border-radius: 50%;
       pointer-events: none;
@@ -378,6 +382,117 @@ class EnhancedCreditsController {
       `;
       document.head.appendChild(style);
     }
+  }
+
+  // 🔧 NOVO: Configuração dos controles de velocidade
+  setupSpeedControls() {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        this.accelerateCredits();
+        this.hideSpeedHint(); // 🔧 Esconde a dica quando usa pela primeira vez
+      }
+    });
+    
+    document.addEventListener('keyup', (e) => {
+      if (e.key === 'ArrowRight') {
+        this.normalizeCredits();
+      }
+    });
+    
+    // 🔧 Esconde a dica automaticamente após 15 segundos
+    setTimeout(() => {
+      this.hideSpeedHint();
+    }, 15000);
+  }
+
+  // 🔧 NOVO: Esconder dica de velocidade
+  hideSpeedHint() {
+    const hint = document.getElementById('speed-hint');
+    if (hint) {
+      hint.style.opacity = '0';
+      hint.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        hint.style.display = 'none';
+      }, 500);
+    }
+  }
+
+  // 🔧 NOVO: Acelerar créditos
+  accelerateCredits() {
+    if (this.creditsSpeed === 'fast') return;
+    
+    this.creditsSpeed = 'fast';
+    document.documentElement.style.setProperty('--credits-speed', 'var(--credits-speed-fast)');
+    this.showSpeedIndicator('ACELERADO');
+    
+    console.log('⚡ Créditos acelerados!');
+  }
+
+  // 🔧 NOVO: Normalizar velocidade dos créditos
+  normalizeCredits() {
+    if (this.creditsSpeed === 'normal') return;
+    
+    this.creditsSpeed = 'normal';
+    document.documentElement.style.setProperty('--credits-speed', 'var(--credits-speed-normal)');
+    this.showSpeedIndicator('NORMAL');
+    
+    console.log('🎬 Velocidade normal dos créditos');
+  }
+
+  // 🔧 NOVO: Criar indicador de velocidade
+  createSpeedIndicator() {
+    this.speedIndicator = document.createElement('div');
+    this.speedIndicator.id = 'speed-indicator';
+    this.speedIndicator.style.cssText = `
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid var(--neon-blue);
+      border-radius: 20px;
+      padding: 0.5rem 1rem;
+      color: var(--neon-blue);
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.5rem;
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    `;
+    this.speedIndicator.innerHTML = `
+      <div style="text-align: center;">
+        <div style="margin-bottom: 0.2rem;">VELOCIDADE</div>
+        <div id="speed-value">NORMAL</div>
+      </div>
+    `;
+    
+    document.body.appendChild(this.speedIndicator);
+  }
+
+  // 🔧 NOVO: Mostrar indicador de velocidade
+  showSpeedIndicator(speed) {
+    const speedValue = document.getElementById('speed-value');
+    if (speedValue) {
+      speedValue.textContent = speed;
+    }
+    
+    // Cores diferentes baseadas na velocidade
+    const color = speed === 'ACELERADO' ? 'var(--glitch-red)' : 'var(--neon-blue)';
+    this.speedIndicator.style.borderColor = color;
+    this.speedIndicator.style.color = color;
+    this.speedIndicator.style.boxShadow = `0 0 20px ${color === 'var(--glitch-red)' ? 'rgba(255, 0, 64, 0.3)' : 'rgba(0, 255, 255, 0.3)'}`;
+    
+    // Mostrar indicador
+    this.speedIndicator.style.opacity = '1';
+    this.speedIndicator.style.transform = 'translateY(0)';
+    
+    // Esconder após 2 segundos
+    setTimeout(() => {
+      this.speedIndicator.style.opacity = '0';
+      this.speedIndicator.style.transform = 'translateY(-20px)';
+    }, 2000);
   }
 
   // Public methods for external control
@@ -479,6 +594,8 @@ function setupKeyboardShortcuts() {
           window.enhancedCredits.resumeAnimation();
         }
         break;
+      // 🔧 NOVO: Controle de velocidade já está no setupSpeedControls()
+      // Mas mantemos aqui para referência e possíveis outros controles
     }
   });
 }
@@ -510,6 +627,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   console.log('🎬 Enhanced Credits initialized');
   console.log('💡 Keyboard shortcuts:');
+  console.log('   → (Seta Direita) - Acelerar créditos (segurar)'); // 🔧 NOVO
   console.log('   G - Trigger global glitch effect');
   console.log('   +/- - Adjust particle count');
   console.log('   Space - Pause/resume animation');

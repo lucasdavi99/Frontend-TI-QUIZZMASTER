@@ -1,6 +1,6 @@
 /* ==========================================================================
-   CREDITS PAGE - T.I QUIZZMASTER
-   Página de créditos com visual cyberpunk'
+   ENHANCED CREDITS PAGE - T.I QUIZZMASTER
+   Página de créditos com visual cyberpunk melhorado
    ========================================================================== */
 
 :root {
@@ -28,7 +28,7 @@ body {
   background: var(--background-black);
   color: var(--text-white);
   font-family: 'Orbitron', 'Arial', sans-serif;
-  overflow-x: hidden;
+  overflow: hidden; /* 🔧 Remove todas as barras de rolagem */
   position: relative;
 }
 
@@ -127,7 +127,7 @@ body {
 }
 
 /* ==========================================================================
-   WRAPPER PRINCIPAL DOS CRÉDITOS
+   WRAPPER PRINCIPAL DOS CRÉDITOS - COM CONTROLE DE VELOCIDADE
    ========================================================================== */
 
 .credits-wrapper {
@@ -137,8 +137,15 @@ body {
   margin: 0 auto;
   padding: 2rem;
   top: 100vh;
-  animation: creditsRoll 120s linear infinite;
+  animation: creditsRoll var(--credits-speed, 120s) linear infinite;
   z-index: 10;
+}
+
+/* Variáveis CSS para controle dinâmico de velocidade */
+:root {
+  --credits-speed: 120s;
+  --credits-speed-fast: 60s;
+  --credits-speed-normal: 120s;
 }
 
 @keyframes creditsRoll {
@@ -608,28 +615,29 @@ body {
 }
 
 /* ==========================================================================
-   BOTÃO DE PULAR MELHORADO
+   BOTÃO DE PULAR COMPACTO NO CANTO SUPERIOR ESQUERDO
    ========================================================================== */
 
 #back-home {
   position: fixed;
-  bottom: 3rem;
-  right: 3rem;
+  top: 2rem; /* 🔧 Movido para o topo */
+  left: 2rem; /* 🔧 Movido para a esquerda */
   display: none;
   background: rgba(0, 0, 0, 0.9);
   border: 2px solid var(--primary-green);
-  border-radius: 50px;
-  padding: 1rem 2rem;
+  border-radius: 25px; /* 🔧 Menos arredondado */
+  padding: 0.6rem 1rem; /* 🔧 Padding menor */
   text-decoration: none;
   color: var(--primary-green);
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.8rem;
+  font-size: 0.6rem; /* 🔧 Fonte menor */
   transition: all 0.3s ease;
   backdrop-filter: blur(15px);
-  box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3); /* 🔧 Sombra menor */
   z-index: 1000;
   overflow: hidden;
-  position: relative;
+  position: fixed;
+  min-width: auto; /* 🔧 Remove largura mínima */
 }
 
 .skip-glow {
@@ -649,18 +657,75 @@ body {
 #back-home:hover {
   border-color: var(--neon-blue);
   color: var(--neon-blue);
-  box-shadow: 0 0 40px rgba(0, 255, 255, 0.5);
-  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.5); /* 🔧 Sombra hover menor */
+  transform: translateY(-2px) scale(1.05); /* 🔧 Scale menor */
 }
 
 .skip-icon {
-  margin-right: 0.5rem;
-  font-size: 1rem;
+  margin-right: 0.3rem; /* 🔧 Margin menor */
+  font-size: 0.8rem; /* 🔧 Ícone menor */
 }
 
 .skip-text {
   position: relative;
   z-index: 2;
+  font-size: 0.5rem; /* 🔧 Texto menor */
+}
+
+/* ==========================================================================
+   DICA DE CONTROLE DE VELOCIDADE
+   ========================================================================== */
+
+.speed-hint {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--neon-purple);
+  border-radius: 20px;
+  padding: 0.8rem 1.2rem;
+  color: var(--neon-purple);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(128, 0, 255, 0.3);
+  animation: hintPulse 3s ease-in-out infinite;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.5s ease; /* 🔧 Adicionado para transições suaves */
+  transform: translateY(0); /* 🔧 Para controle de posição */
+}
+
+.hint-icon {
+  font-size: 0.8rem;
+  animation: iconBounce 2s ease-in-out infinite;
+}
+
+.hint-text {
+  letter-spacing: 0.05em;
+}
+
+@keyframes hintPulse {
+  0%, 100% { 
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes iconBounce {
+  0%, 100% { 
+    transform: translateY(0);
+  }
+  50% { 
+    transform: translateY(-3px);
+  }
 }
 
 /* ==========================================================================
@@ -697,14 +762,30 @@ body {
   }
   
   #back-home {
-    bottom: 1rem;
-    right: 1rem;
-    padding: 0.8rem 1.5rem;
-    font-size: 0.6rem;
+    top: 1rem; /* 🔧 Ajustado para mobile */
+    left: 1rem; /* 🔧 Ajustado para mobile */
+    padding: 0.5rem 0.8rem; /* 🔧 Ainda menor no mobile */
+    font-size: 0.5rem; /* 🔧 Fonte ainda menor */
   }
   
   .skip-icon {
-    font-size: 0.8rem;
+    font-size: 0.7rem; /* 🔧 Ícone menor no mobile */
+    margin-right: 0.2rem;
+  }
+  
+  .skip-text {
+    font-size: 0.4rem; /* 🔧 Texto menor no mobile */
+  }
+  
+  .speed-hint {
+    bottom: 1rem;
+    left: 1rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.4rem;
+  }
+  
+  .hint-icon {
+    font-size: 0.6rem;
   }
 }
 
@@ -727,6 +808,22 @@ body {
   
   .bar {
     width: 3px;
+  }
+  
+  .speed-hint {
+    bottom: 0.5rem;
+    left: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.3rem;
+    border-radius: 15px;
+  }
+  
+  .hint-text {
+    display: none; /* 🔧 Esconde texto em telas muito pequenas */
+  }
+  
+  .hint-icon {
+    font-size: 0.8rem;
   }
 }
 
