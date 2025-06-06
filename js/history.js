@@ -5,7 +5,7 @@
 
 const API_BASE_URL = 'http://localhost:8080';
 
-console.log('📜 History.js carregado - versão completa v1.0');
+console.log('📜 History.js carregado - versão completa v1.1 - TODAS AS CORREÇÕES');
 
 // Estado global da página
 let currentHistoryData = [];
@@ -60,6 +60,9 @@ async function loadHistoryData() {
         if (historyData.status === 'fulfilled' && historyData.value) {
             console.log('✅ Histórico carregado:', historyData.value.length, 'partidas');
             currentHistoryData = historyData.value;
+            
+            // 🔧 CORREÇÃO: Garante que loading seja escondido antes de aplicar filtros
+            hideLoadingState();
             applyFilters();
         } else {
             console.error('❌ Erro ao carregar histórico:', historyData.reason);
@@ -79,6 +82,8 @@ async function loadHistoryData() {
         showErrorState('Erro inesperado ao carregar dados');
     } finally {
         isLoading = false;
+        // 🔧 SEGURANÇA: Garante que loading seja sempre escondido no final
+        hideLoadingState();
     }
 }
 
@@ -141,6 +146,54 @@ async function loadUserStats() {
     }
 }
 
+// 🔧 NOVA FUNÇÃO: Determina se uma partida foi completada
+function isSessionCompleted(session) {
+    console.log('🔍 Verificando status da sessão:', session.sessionId, session);
+    
+    // Múltiplas verificações para determinar se foi completada
+    const checks = {
+        // Verificação principal
+        wasCompleted: session.wasCompleted === true,
+        
+        // Verificações alternativas (caso o campo tenha nome diferente)
+        completed: session.completed === true,
+        isCompleted: session.isCompleted === true,
+        status: session.status === 'completed' || session.status === 'COMPLETED',
+        
+        // Verificação por finalização
+        hasFinishTime: !!session.finishedAt,
+        
+        // Verificação por pontuação (se tem pontuação final, provavelmente foi completada)
+        hasScore: (session.finalScore || 0) > 0,
+        
+        // Verificação por duração razoável (se durou mais que 30 segundos, provavelmente foi completada)
+        reasonableDuration: session.finishedAt && session.createdAt && 
+                           (new Date(session.finishedAt) - new Date(session.createdAt)) > 30000
+    };
+    
+    console.log('🔍 Verificações de status:', checks);
+    
+    // Se qualquer verificação principal for verdadeira, considera completada
+    const isCompleted = checks.wasCompleted || 
+                       checks.completed || 
+                       checks.isCompleted || 
+                       checks.status;
+    
+    // Se não há indicação clara, usa heurísticas
+    if (!isCompleted) {
+        const heuristicCompleted = checks.hasFinishTime && 
+                                  (checks.hasScore || checks.reasonableDuration);
+        
+        if (heuristicCompleted) {
+            console.log('⚠️ Status determinado por heurística para sessão', session.sessionId);
+            return true;
+        }
+    }
+    
+    console.log(`✅ Sessão ${session.sessionId} determinada como:`, isCompleted ? 'COMPLETADA' : 'INTERROMPIDA');
+    return isCompleted;
+}
+
 // Exibe estatísticas do usuário
 function displayUserStats(stats) {
     console.log('📊 Exibindo estatísticas do usuário...');
@@ -182,9 +235,9 @@ function displayUserStats(stats) {
     console.log('✅ Estatísticas exibidas');
 }
 
-// Aplica filtros aos dados
+// 🔧 FUNÇÃO CORRIGIDA: Aplica filtros com status corrigido
 function applyFilters() {
-    console.log('🔍 === APLICANDO FILTROS ===');
+    console.log('🔍 === APLICANDO FILTROS (VERSÃO CORRIGIDA) ===');
     console.log('🔍 Filtros atuais:', currentFilters);
     console.log('📊 Dados originais:', currentHistoryData ? currentHistoryData.length : 'undefined', 'itens');
     
@@ -204,16 +257,32 @@ function applyFilters() {
         let filtered = [...currentHistoryData];
         console.log('🔄 Copiados', filtered.length, 'itens para filtro');
         
-        // Filtro por status
+        // Debug dos dados recebidos
+        console.log('📊 Amostra dos dados recebidos:');
+        filtered.slice(0, 3).forEach((session, i) => {
+            console.log(`   Sessão ${i + 1}:`, {
+                id: session.sessionId,
+                wasCompleted: session.wasCompleted,
+                completed: session.completed,
+                status: session.status,
+                finalScore: session.finalScore,
+                finishedAt: session.finishedAt,
+                createdAt: session.createdAt
+            });
+        });
+        
+        // Filtro por status com lógica corrigida
         if (currentFilters.status !== 'all') {
             console.log('🔍 Aplicando filtro de status:', currentFilters.status);
             const originalLength = filtered.length;
             
             filtered = filtered.filter(session => {
+                const isCompleted = isSessionCompleted(session);
+                
                 if (currentFilters.status === 'completed') {
-                    return session.wasCompleted === true;
+                    return isCompleted;
                 } else if (currentFilters.status === 'interrupted') {
-                    return session.wasCompleted === false;
+                    return !isCompleted;
                 }
                 return true;
             });
@@ -241,7 +310,7 @@ function applyFilters() {
         filteredHistoryData = filtered;
         console.log('📋 Dados filtrados salvos em filteredHistoryData:', filteredHistoryData.length, 'itens');
         
-        currentPage = 1; // Reset para primeira página
+        currentPage = 1;
         console.log('📄 Página resetada para 1');
         
         console.log('🎨 Chamando renderHistoryGrid...');
@@ -270,7 +339,7 @@ function applyFilters() {
     console.log('🔍 === FILTROS FINALIZADOS ===');
 }
 
-// Renderiza o grid de histórico
+// FUNÇÃO CORRIGIDA: Renderiza o grid de histórico
 function renderHistoryGrid() {
     console.log('🎨 Renderizando grid de histórico...');
     
@@ -293,8 +362,8 @@ function renderHistoryGrid() {
         return;
     }
     
-    // Esconde estado vazio e mostra grid
-    hideEmptyState();
+    // CORREÇÃO PRINCIPAL: Esconde TODOS os estados (incluindo loading) antes de mostrar o grid
+    hideAllStates();
     showHistoryGrid();
     
     // Renderiza cada card
@@ -306,30 +375,38 @@ function renderHistoryGrid() {
     console.log('✅ Grid renderizado com', pageItems.length, 'itens');
 }
 
-// Cria um card de histórico
 function createHistoryCard(session, index) {
+    console.log('🎨 Criando card para sessão:', session.sessionId);
+    
+    // Usa a função corrigida para determinar status
+    const isCompleted = isSessionCompleted(session);
+    const statusClass = isCompleted ? 'completed' : 'interrupted';
+    const statusText = isCompleted ? 'Completada' : 'Interrompida';
+    
     const card = document.createElement('div');
-    card.className = `history-card ${session.wasCompleted ? 'completed' : 'interrupted'}`;
+    card.className = `history-card ${statusClass}`;
     
-    // Marca como recente se for dos últimos 3 dias
+    // 🔧 CORREÇÃO: Verificação mais rigorosa para "recente"
     const sessionDate = new Date(session.createdAt);
-    const threeDaysAgo = new Date();
-    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+    const now = new Date();
+    const hoursDiff = (now - sessionDate) / (1000 * 60 * 60); // diferença em horas
     
-    if (sessionDate > threeDaysAgo) {
+    // Considera recente apenas se for das últimas 24 horas E completada
+    if (hoursDiff <= 24 && isCompleted) {
         card.classList.add('recent');
+        console.log(`🆕 Sessão ${session.sessionId} marcada como recente (${hoursDiff.toFixed(1)}h atrás)`);
     }
     
     // Marca como destaque se for o melhor score
-    if (currentUserStats && session.finalScore === currentUserStats.bestScore) {
+    if (currentUserStats && session.finalScore === currentUserStats.bestScore && isCompleted) {
         card.classList.add('featured');
     }
     
     card.innerHTML = `
         <div class="card-header">
             <div class="session-id">Partida #${session.sessionId}</div>
-            <div class="session-status ${session.wasCompleted ? 'completed' : 'interrupted'}">
-                ${session.wasCompleted ? 'Completada' : 'Interrompida'}
+            <div class="session-status ${statusClass}">
+                ${statusText}
             </div>
         </div>
         
@@ -466,6 +543,15 @@ function showLoadingState() {
     if (loadingState) loadingState.style.display = 'block';
 }
 
+// Para garantir que loading seja escondido
+function hideLoadingState() {
+    const loadingState = document.getElementById('loading-state');
+    if (loadingState) {
+        loadingState.style.display = 'none';
+        console.log('🔄 Loading state escondido');
+    }
+}
+
 function showEmptyState() {
     hideAllStates();
     const emptyState = document.getElementById('empty-state');
@@ -496,13 +582,18 @@ function hideAllStates() {
     const states = ['loading-state', 'empty-state', 'error-state', 'not-logged-state', 'history-grid'];
     states.forEach(id => {
         const element = document.getElementById(id);
-        if (element) element.style.display = 'none';
+        if (element) {
+            element.style.display = 'none';
+        }
     });
 }
 
 function showHistoryGrid() {
     const historyGrid = document.getElementById('history-grid');
-    if (historyGrid) historyGrid.style.display = 'grid';
+    if (historyGrid) {
+        historyGrid.style.display = 'grid';
+        console.log('✅ Grid de histórico exibido');
+    }
 }
 
 function showFilterControls() {
@@ -513,6 +604,43 @@ function showFilterControls() {
 function showQuickActions() {
     const quickActions = document.getElementById('quick-actions');
     if (quickActions) quickActions.style.display = 'flex';
+}
+
+// FUNÇÃO ADICIONAL: Debug de dados do histórico
+function debugHistoryData() {
+    console.log('🐛 === DEBUG DOS DADOS DO HISTÓRICO ===');
+    
+    if (!currentHistoryData || !Array.isArray(currentHistoryData)) {
+        console.log('❌ Nenhum dado de histórico disponível');
+        return;
+    }
+    
+    console.log('📊 Total de sessões:', currentHistoryData.length);
+    
+    currentHistoryData.forEach((session, index) => {
+        const isCompleted = isSessionCompleted(session);
+        const duration = calculateDuration(session);
+        
+        console.log(`\n📋 Sessão ${index + 1} (ID: ${session.sessionId}):`);
+        console.log('   Status detectado:', isCompleted ? '✅ COMPLETADA' : '❌ INTERROMPIDA');
+        console.log('   Campos de status:', {
+            wasCompleted: session.wasCompleted,
+            completed: session.completed,
+            status: session.status
+        });
+        console.log('   Pontuação:', session.finalScore || 0);
+        console.log('   Duração:', duration);
+        console.log('   Criada em:', formatDate(session.createdAt));
+        console.log('   Finalizada em:', session.finishedAt ? formatDate(session.finishedAt) : 'N/A');
+    });
+    
+    const completedCount = currentHistoryData.filter(s => isSessionCompleted(s)).length;
+    const interruptedCount = currentHistoryData.length - completedCount;
+    
+    console.log(`\n📈 Resumo:`);
+    console.log(`   ✅ Completadas: ${completedCount}`);
+    console.log(`   ❌ Interrompidas: ${interruptedCount}`);
+    console.log('🐛 === FIM DO DEBUG ===');
 }
 
 // Exportar dados
@@ -533,7 +661,7 @@ function generateCSV() {
     const rows = currentHistoryData.map(session => [
         formatDate(session.createdAt),
         `#${session.sessionId}`,
-        session.wasCompleted ? 'Completada' : 'Interrompida',
+        isSessionCompleted(session) ? 'Completada' : 'Interrompida',
         session.finalScore || 0,
         session.totalQuestions || 0,
         `${calculatePerformance(session)}%`,
@@ -732,10 +860,15 @@ document.addEventListener('DOMContentLoaded', () => {
         displayUserStats(currentUserStats);
     };
     
-    console.log('💡 Função de teste disponível: testHistoryWithMockData()');
+    // Adiciona função de debug global
+    window.debugHistory = debugHistoryData;
+    
+    console.log('💡 Funções de teste disponíveis:');
+    console.log('   - testHistoryWithMockData() - testa com dados mock');
+    console.log('   - debugHistory() - mostra análise completa dos dados');
     console.log('📜 === CONFIGURAÇÃO INICIAL COMPLETA ===');
 });
 
 // Log de inicialização
-console.log('📜 History.js carregado completamente');
+console.log('📜 History.js carregado completamente - VERSÃO FINAL CORRIGIDA');
 console.log('🌐 API Base URL:', API_BASE_URL);
