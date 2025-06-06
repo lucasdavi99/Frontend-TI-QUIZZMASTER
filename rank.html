@@ -35,10 +35,17 @@
             </a>
         </div>
         
-        <!-- History Button -->
-        <div class="history-button-container">
+        <!-- 🆕 NOVO: Navigation Menu -->
+        <div class="nav-menu" id="nav-menu">
+            <!-- Profile Button (visible when logged in) -->
+            <a href="profile.html" id="profile-nav-btn" class="nav-btn profile-nav" style="display: none;">
+                <img src="img/user-icon.png" alt="Perfil" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(180deg) brightness(101%) contrast(107%);" onerror="this.style.display='none'; this.nextElementSibling.textContent='👤';">
+                <span class="nav-tooltip">Meu Perfil</span>
+            </a>
+            
+            <!-- History Button -->
             <a href="history.html" id="history-btn" class="nav-btn">
-                <img src="img/history-icon.png" alt="Histórico" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(92deg) brightness(101%) contrast(107%);">
+                <img src="img/history-icon.png" alt="Histórico" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(92deg) brightness(101%) contrast(107%);" onerror="this.style.display='none'; this.nextElementSibling.textContent='📜';">
                 <span class="nav-tooltip">Meu Histórico</span>
             </a>
         </div>
@@ -75,6 +82,12 @@
         
         <!-- Quick Actions -->
         <div class="quick-actions" id="user-actions" style="display: none;">
+            <!-- 🆕 NOVO: Profile Action -->
+            <a href="profile.html" class="action-btn profile-action">
+                <span class="action-icon">👤</span>
+                <span class="action-text">Gerenciar Perfil</span>
+            </a>
+            
             <a href="history.html" class="action-btn history-action">
                 <span class="action-icon">📜</span>
                 <span class="action-text">Ver Meu Histórico</span>
@@ -154,7 +167,7 @@
         <div class="info-banner" id="login-banner" style="display: none;">
             <div class="banner-content">
                 <span class="banner-icon">ℹ️</span>
-                <span class="banner-text">Faça login para ver sua posição no ranking e acessar seu histórico</span>
+                <span class="banner-text">Faça login para ver sua posição no ranking e acessar seu perfil</span>
                 <a href="login.html" class="banner-action">Fazer Login</a>
             </div>
         </div>
@@ -164,5 +177,56 @@
     <script src="js/rain_code.js"></script>
     <script src="js/rank.js"></script>
     <script src="js/decoding_effect.js"></script>
+    
+    <!-- 🆕 NOVO: Script para controle de navegação com perfil -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Função para verificar se usuário está logado
+            function checkUserLogin() {
+                const token = localStorage.getItem('token') || 
+                             (window.authData && window.authData.token) ||
+                             sessionStorage.getItem('token');
+                const isLoggedIn = localStorage.getItem('loggedIn') === 'true' ||
+                               (window.authData && window.authData.loggedIn) ||
+                               sessionStorage.getItem('loggedIn') === 'true';
+                
+                return !!(token && isLoggedIn);
+            }
+            
+            // Função para atualizar visibilidade dos elementos de perfil
+            function updateProfileElements() {
+                const profileNavBtn = document.getElementById('profile-nav-btn');
+                const profileActionBtn = document.querySelector('.profile-action');
+                
+                if (checkUserLogin()) {
+                    if (profileNavBtn) profileNavBtn.style.display = 'flex';
+                    if (profileActionBtn) profileActionBtn.style.display = 'flex';
+                    console.log('👤 Elementos de perfil exibidos');
+                } else {
+                    if (profileNavBtn) profileNavBtn.style.display = 'none';
+                    if (profileActionBtn) profileActionBtn.style.display = 'none';
+                    console.log('👤 Elementos de perfil ocultados');
+                }
+            }
+            
+            // Verificar inicialmente
+            updateProfileElements();
+            
+            // Verificar quando o authHandler for carregado
+            setTimeout(() => {
+                updateProfileElements();
+            }, 1000);
+            
+            // Listener para mudanças no localStorage
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'token' || e.key === 'loggedIn') {
+                    updateProfileElements();
+                }
+            });
+            
+            // Verificar periodicamente (fallback)
+            setInterval(updateProfileElements, 5000);
+        });
+    </script>
 </body>
 </html>
