@@ -1,75 +1,311 @@
 body {
-  overflow: hidden;
-  background-color: #000000;
+    overflow: hidden;
+    background: linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #16213e 100%);
+    margin: 0;
+    padding: 0;
+    font-family: 'Abadi MT Condensed', Arial, sans-serif;
+    background-color: #000;
 }
+
+/* Efeito de estrelas */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { 
+        opacity: 0.3; 
+        transform: scale(1); 
+    }
+    50% { 
+        opacity: 1; 
+        transform: scale(1.2); 
+    }
+}
+
+/* Container principal dos créditos */
 .wrapper {
-  top: 100%;
-  left: 50%;
-  width: 600px;
-  color: #fff;
-  position: absolute;
-  text-align: center;
-  margin-left: -300px;
-  animation-delay: 1s;
-  font-family: Abadi MT Condensed;
-  animation: 80s credits linear infinite;
+    top: 100%;
+    left: 50%;
+    width: 600px;
+    color: #fff;
+    position: absolute;
+    text-align: center;
+    margin-left: -300px;
+    animation-delay: 1s;
+    font-family: 'Abadi MT Condensed', Arial, sans-serif;
+    animation: 80s credits linear infinite;
 }
+
+@keyframes credits {
+    0% {
+        top: 100%;
+    }
+    100% {
+        top: -500%;
+    }
+}
+
+/* Título principal */
 .video_title {
-  font-size: 80px;
-  margin-bottom: 50px;
-  letter-spacing: 0px;
-  text-decoration: none;
-  text-shadow: 2px 2px #878787;
+    font-size: 80px;
+    margin-bottom: 50px;
+    letter-spacing: 0px;
+    text-decoration: none;
+    text-shadow: 2px 2px #878787, 0 0 20px rgba(255, 255, 255, 0.5);
+    background: linear-gradient(45deg, #ffffff, #ffd700, #ffffff);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s ease-in-out infinite;
 }
 
 .job_title {
-  font-size: 30px;
-  margin-bottom: 5px;
-  text-shadow: 2px 2px #878787;
+    font-size: 30px;
+    margin-bottom: 5px;
+    text-shadow: 2px 2px #878787;
+    color: #ffd700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
+
 .person_name {
-  font-size: 50px;
-  margin-bottom: 50px;
-  font-variant: small-caps;
-  text-shadow: 2px 2px #878787;
-}
-@keyframes credits {
-  0% {
-    top: 100%;
-  }
-  100% {
-    top: -500%;
-  }
+    font-size: 50px;
+    margin-bottom: 50px;
+    font-variant: small-caps;
+    text-shadow: 2px 2px #878787;
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
+.person_name:hover {
+    color: #ffd700;
+    transform: scale(1.05);
+    text-shadow: 2px 2px #878787, 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+/* Animação shimmer para o título */
+@keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Imagens nos créditos */
+.person_name img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #ffd700;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.person_name img:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.6);
+}
+
+/* Mensagem especial */
+.special-message {
+    font-size: 28px !important;
+    font-style: italic;
+    color: #e0e0e0 !important;
+    margin: 40px 0 !important;
+    padding: 20px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 10px;
+    background: rgba(255, 215, 0, 0.05);
+}
+
+/* Botão de pular */
 #back-home {
-  display: none;
-  color: white;
-  position: fixed;
-  text-decoration: none;
+    display: none;
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    padding: 15px 30px;
+    background: linear-gradient(45deg, #ff6b6b, #ffd700);
+    color: #000;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    z-index: 10;
+    box-shadow: 0 5px 20px rgba(255, 107, 107, 0.3);
 }
 
-/*          Responsive            */
+#back-home.show {
+    display: block;
+    animation: pulse 2s infinite;
+}
 
-@media (max-width: 768px) {
-  body {
-    overflow: hidden;
-    background-color: #000000;
-  }
-  
-  .wrapper {
-    width: 100%;
-    left: 73%;
+#back-home:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5);
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Controles de música */
+.music-controls {
     position: fixed;
-    
-    
-  }
+    bottom: 30px;
+    left: 30px;
+    display: flex;
+    gap: 15px;
+    z-index: 10;
+    align-items: center;
+}
 
-  .video_title{
-    font-size: 55px;
-  }
+.music-btn {
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
 
-  #back-home{
-    right: 78%;
-  }
+.music-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+/* Volume slider */
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.volume-icon {
+    color: white;
+    font-size: 14px;
+}
+
+.volume-slider {
+    width: 100px;
+    height: 5px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.3);
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #ffd700;
+    cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #ffd700;
+    cursor: pointer;
+    border: none;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    body {
+        overflow: hidden;
+        background: linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #16213e 100%);
+    }
+    
+    .wrapper {
+        width: 100%;
+        left: 50%;
+        margin-left: -50%;
+        position: absolute;
+    }
+
+    .video_title {
+        font-size: 55px;
+    }
+
+    #back-home {
+        right: 15px;
+        top: 15px;
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+
+    .music-controls {
+        bottom: 15px;
+        left: 15px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .volume-control {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .volume-slider {
+        width: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .video_title {
+        font-size: 45px;
+    }
+
+    .job_title {
+        font-size: 24px;
+    }
+
+    .person_name {
+        font-size: 35px;
+    }
+
+    .person_name img {
+        width: 100px;
+        height: 100px;
+    }
+
+    #back-home {
+        padding: 10px 15px;
+        font-size: 12px;
+    }
+
+    .music-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
 }
