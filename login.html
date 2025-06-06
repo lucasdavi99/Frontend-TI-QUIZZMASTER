@@ -72,19 +72,20 @@
                         <form id="loginForm" class="auth-form">
                             <h2 class="form-title">FAZER LOGIN</h2>
                             
+                            <!-- 🔧 CORREÇÃO: Adicionado autocomplete e placeholder vazios -->
                             <div class="input-group">
-                                <input type="text" id="loginUsername" required autocomplete="username">
+                                <input type="text" id="loginUsername" required autocomplete="username" placeholder=" ">
                                 <label for="loginUsername">Username</label>
                                 <div class="input-line"></div>
                             </div>
                             
                             <div class="input-group">
-                                <input type="password" id="loginPassword" required autocomplete="current-password">
+                                <input type="password" id="loginPassword" required autocomplete="current-password" placeholder=" ">
                                 <label for="loginPassword">Senha</label>
                                 <div class="input-line"></div>
                             </div>
                             
-                            <button type="submit" class="submit-btn" id="login-submit">
+                            <button type="submit" class="submit-btn" id="login-submit" disabled>
                                 <span class="btn-text">ACESSAR SISTEMA</span>
                                 <span class="btn-bg"></span>
                                 <div class="loading-spinner" style="display: none;"></div>
@@ -124,33 +125,36 @@
                         <form id="registerForm" class="auth-form">
                             <h2 class="form-title">CRIAR CONTA</h2>
                             
+                            <!-- 🔧 CORREÇÃO: Adicionado placeholder vazios para todos os campos -->
                             <div class="input-group">
-                                <input type="text" id="registerUsername" required autocomplete="username">
+                                <input type="text" id="registerUsername" required autocomplete="username" placeholder=" ">
                                 <label for="registerUsername">Username</label>
                                 <div class="input-line"></div>
                             </div>
                             
+                            <!-- 🔧 CORREÇÃO: Campo de email com validação HTML5 adicional -->
                             <div class="input-group">
-                                <input type="email" id="registerEmail" required autocomplete="email">
+                                <input type="email" id="registerEmail" required autocomplete="email" placeholder=" " pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                                 <label for="registerEmail">Email</label>
                                 <div class="input-line"></div>
                             </div>
                             
                             <div class="input-group">
-                                <input type="password" id="registerPassword" required autocomplete="new-password">
+                                <input type="password" id="registerPassword" required autocomplete="new-password" placeholder=" " minlength="6">
                                 <label for="registerPassword">Senha</label>
                                 <div class="input-line"></div>
                             </div>
                             
+                            <!-- 🔧 CORREÇÃO: Checkbox com melhor estrutura e IDs únicos -->
                             <div class="checkbox-group">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="terms-checkbox" required>
+                                <label class="checkbox-label" for="terms-checkbox">
+                                    <input type="checkbox" id="terms-checkbox" name="terms" required value="accepted">
                                     <span class="checkbox-custom"></span>
                                     <span class="checkbox-text">Aceito os termos e condições</span>
                                 </label>
                             </div>
                             
-                            <button type="submit" class="submit-btn" id="register-submit">
+                            <button type="submit" class="submit-btn" id="register-submit" disabled>
                                 <span class="btn-text">CRIAR CONTA</span>
                                 <span class="btn-bg"></span>
                                 <div class="loading-spinner" style="display: none;"></div>
@@ -187,5 +191,90 @@
     <script src="js/rain_code.js"></script>
     <script src="js/glitch-effects.js"></script>
     <script src="js/login.js"></script>
+    
+    <!-- 🔧 CORREÇÃO: Script adicional para garantir funcionalidade -->
+    <script>
+        // Correção adicional para labels e checkbox
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔧 Aplicando correções adicionais...');
+            
+            // Correção para labels que ficam em cima dos campos
+            const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]');
+            inputs.forEach(input => {
+                // Força atualização do label quando há valor
+                function updateLabel() {
+                    const label = input.nextElementSibling;
+                    if (label && label.tagName === 'LABEL') {
+                        if (input.value.trim() !== '') {
+                            label.style.top = '0';
+                            label.style.fontSize = '0.5rem';
+                            label.style.color = 'var(--primary-green)';
+                            label.style.transform = 'translateY(-10px)';
+                        } else if (input !== document.activeElement) {
+                            label.style.top = '1rem';
+                            label.style.fontSize = '0.6rem';
+                            label.style.color = 'var(--secondary-green)';
+                            label.style.transform = 'translateY(0)';
+                        }
+                    }
+                }
+                
+                // Múltiplos event listeners para capturar todas as mudanças
+                input.addEventListener('input', updateLabel);
+                input.addEventListener('change', updateLabel);
+                input.addEventListener('blur', updateLabel);
+                input.addEventListener('focus', updateLabel);
+                
+                // Verifica estado inicial
+                updateLabel();
+            });
+            
+            // Correção específica para o checkbox de termos
+            const termsCheckbox = document.getElementById('terms-checkbox');
+            const checkboxLabel = document.querySelector('.checkbox-label');
+            
+            if (termsCheckbox && checkboxLabel) {
+                console.log('🔧 Configurando correção do checkbox...');
+                
+                function updateCheckboxVisualState() {
+                    const isChecked = termsCheckbox.checked;
+                    console.log('🔧 Checkbox state updated:', isChecked);
+                    
+                    if (isChecked) {
+                        checkboxLabel.classList.add('active');
+                    } else {
+                        checkboxLabel.classList.remove('active');
+                    }
+                    
+                    // Dispara evento personalizado para o sistema de validação
+                    termsCheckbox.dispatchEvent(new CustomEvent('checkboxValidation', {
+                        detail: { checked: isChecked }
+                    }));
+                }
+                
+                // Event listeners para o checkbox
+                termsCheckbox.addEventListener('change', updateCheckboxVisualState);
+                termsCheckbox.addEventListener('click', function() {
+                    // Pequeno delay para garantir que o estado seja atualizado
+                    setTimeout(updateCheckboxVisualState, 10);
+                });
+                
+                // Event listener para clique no label
+                checkboxLabel.addEventListener('click', function(e) {
+                    // Se clicou no próprio checkbox, não faz nada (evita duplo clique)
+                    if (e.target === termsCheckbox) return;
+                    
+                    // Força mudança do checkbox
+                    termsCheckbox.checked = !termsCheckbox.checked;
+                    updateCheckboxVisualState();
+                });
+                
+                // Estado inicial
+                updateCheckboxVisualState();
+            }
+            
+            console.log('✅ Correções adicionais aplicadas');
+        });
+    </script>
 </body>
 </html>

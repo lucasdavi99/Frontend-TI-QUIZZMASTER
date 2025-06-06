@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ENHANCED LOGIN PAGE STYLES - T.I QUIZZMASTER
+    LOGIN PAGE STYLES - T.I QUIZZMASTER
    ========================================================================== */
 
 :root {
@@ -337,18 +337,40 @@ body {
   outline: none;
 }
 
+/*  Melhorada a lógica de validação dos labels */
 .input-group input:focus,
-.input-group input:valid {
+.input-group input:valid,
+.input-group input:not(:placeholder-shown) {
   border-bottom-color: var(--primary-green);
   box-shadow: 0 2px 10px rgba(0, 255, 65, 0.3);
 }
 
 .input-group input:focus + label,
-.input-group input:valid + label {
+.input-group input:valid + label,
+.input-group input:not(:placeholder-shown) + label {
   top: 0;
   font-size: 0.5rem;
   color: var(--primary-green);
   text-shadow: 0 0 5px var(--primary-green);
+  transform: translateY(-10px);
+}
+
+/*  Validação específica para email */
+.input-group input[type="email"]:valid + label {
+  top: 0;
+  font-size: 0.5rem;
+  color: var(--primary-green);
+  text-shadow: 0 0 5px var(--primary-green);
+  transform: translateY(-10px);
+}
+
+/*  Força a validação quando há valor */
+.input-group input[value]:not([value=""]) + label {
+  top: 0;
+  font-size: 0.5rem;
+  color: var(--primary-green);
+  text-shadow: 0 0 5px var(--primary-green);
+  transform: translateY(-10px);
 }
 
 .input-group label {
@@ -360,6 +382,7 @@ body {
   pointer-events: none;
   transition: all 0.3s ease;
   letter-spacing: 0.05em;
+  transform: translateY(0);
 }
 
 .input-line {
@@ -373,7 +396,8 @@ body {
 }
 
 .input-group input:focus ~ .input-line,
-.input-group input:valid ~ .input-line {
+.input-group input:valid ~ .input-line,
+.input-group input:not(:placeholder-shown) ~ .input-line {
   width: 100%;
 }
 
@@ -393,6 +417,12 @@ body {
   font-size: 0.6rem;
   color: var(--secondary-green);
   line-height: 1.4;
+  transition: all 0.3s ease;
+}
+
+/*  Melhor estado hover para o checkbox */
+.checkbox-label:hover {
+  color: var(--primary-green);
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -407,6 +437,7 @@ body {
   position: relative;
   transition: all 0.3s ease;
   flex-shrink: 0;
+  border-radius: 3px;
 }
 
 .checkbox-custom::after {
@@ -420,10 +451,20 @@ body {
   transform: translate(-50%, -50%) scale(0);
   transition: transform 0.3s ease;
   box-shadow: 0 0 10px var(--primary-green);
+  border-radius: 1px;
+}
+
+/*  Estado checked do checkbox */
+.checkbox-label input[type="checkbox"]:checked + .checkbox-custom {
+  border-color: var(--neon-blue);
+  background: rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
 }
 
 .checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
   transform: translate(-50%, -50%) scale(1);
+  background: var(--neon-blue);
+  box-shadow: 0 0 15px var(--neon-blue);
 }
 
 .checkbox-label:hover .checkbox-custom {
@@ -431,8 +472,17 @@ body {
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
+/*  NOVA: Classe para indicar checkbox ativo */
+.checkbox-label.active {
+  color: var(--neon-blue);
+}
+
+.checkbox-label.active .checkbox-custom {
+  border-color: var(--neon-blue);
+}
+
 /* ==========================================================================
-   SUBMIT BUTTON
+   SUBMIT BUTTON 
    ========================================================================== */
 
 .submit-btn {
@@ -455,7 +505,7 @@ body {
     inset 0 0 20px rgba(0, 255, 65, 0.1);
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
   color: var(--background-black);
   border-color: var(--neon-blue);
   box-shadow: 
@@ -464,14 +514,39 @@ body {
   transform: translateY(-2px);
 }
 
-.submit-btn:active {
+.submit-btn:active:not(:disabled) {
   transform: translateY(0);
 }
 
+/* Estado desabilitado mais claro */
 .submit-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.4;
   cursor: not-allowed;
   pointer-events: none;
+  border-color: var(--dark-green);
+  color: var(--dark-green);
+  box-shadow: none;
+  transform: none;
+}
+
+/* Estado válido do botão */
+.submit-btn.valid {
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+  opacity: 1;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 65, 0.3),
+    inset 0 0 20px rgba(0, 255, 65, 0.1);
+}
+
+.submit-btn.valid:hover {
+  border-color: var(--neon-blue);
+  color: var(--background-black);
+  box-shadow: 
+    0 0 30px var(--neon-blue),
+    inset 0 0 30px rgba(0, 255, 255, 0.2);
 }
 
 .btn-text {
@@ -491,11 +566,11 @@ body {
   z-index: 1;
 }
 
-.submit-btn:hover .btn-bg {
+.submit-btn:hover:not(:disabled) .btn-bg {
   left: 0;
 }
 
-.submit-btn:hover .btn-text {
+.submit-btn:hover:not(:disabled) .btn-text {
   color: var(--background-black);
 }
 
@@ -726,6 +801,17 @@ body {
   
   .form-footer p {
     font-size: 0.5rem;
+  }
+  
+  /* Checkbox menor em mobile */
+  .checkbox-custom {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .checkbox-custom::after {
+    width: 6px;
+    height: 6px;
   }
 }
 
