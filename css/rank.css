@@ -32,65 +32,101 @@ body {
 }
 
 /* ==========================================================================
-   BACK BUTTON
+   NAVIGATION CONTAINER 
    ========================================================================== */
 
-.back-home-container {
+.navigation-container {
   position: fixed;
-  top: 2rem;
-  left: 2rem;
+  top: 3rem; 
+  left: 4rem;
+  right: 4rem;
   z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
 }
 
-.back-btn {
+.back-home-container,
+.history-button-container {
+  position: relative;
+}
+
+.back-btn,
+.nav-btn {
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0.8rem;
-  background: rgba(0, 0, 0, 0.8);
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  background: rgba(0, 0, 0, 0.9);
   border: 2px solid var(--primary-green);
   border-radius: 8px;
   text-decoration: none;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+  font-size: 0.7rem;
+  color: var(--primary-green);
 }
 
-.back-btn:hover {
+.nav-btn {
+  border-color: var(--secondary-green);
+  color: var(--secondary-green);
+}
+
+.back-btn:hover,
+.nav-btn:hover {
   border-color: var(--neon-blue);
+  color: var(--neon-blue);
   box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
-  transform: translateX(-5px);
+  transform: translateY(-2px);
 }
 
-.back-btn img {
-  width: 24px;
-  height: 24px;
+.back-btn img,
+.nav-btn img {
+  width: 20px;
+  height: 20px;
   filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(92deg) brightness(101%) contrast(107%);
   transition: filter 0.3s ease;
 }
 
-.back-btn:hover img {
+.back-btn:hover img,
+.nav-btn:hover img {
   filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(180deg) brightness(101%) contrast(107%);
 }
 
-.back-tooltip {
+.back-tooltip,
+.nav-tooltip {
   position: absolute;
-  top: -3rem;
+  bottom: -3rem;
   left: 50%;
   transform: translateX(-50%);
   background: var(--background-black);
   color: var(--primary-green);
   padding: 0.5rem 1rem;
   border-radius: 4px;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
   border: 1px solid var(--primary-green);
   white-space: nowrap;
+  z-index: 10;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
 }
 
-.back-btn:hover .back-tooltip {
+
+@media screen and (max-height: 600px) {
+  .back-tooltip,
+  .nav-tooltip {
+    bottom: auto;
+    top: 100%;
+    margin-top: 0.5rem;
+  }
+}
+
+.back-btn:hover .back-tooltip,
+.nav-btn:hover .nav-tooltip {
   opacity: 1;
 }
 
@@ -101,7 +137,7 @@ body {
 .ranking-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 6rem 2rem 2rem;
+  padding: 8rem 2rem 2rem;
   position: relative;
   z-index: 10;
 }
@@ -153,6 +189,19 @@ body {
 @keyframes underlineGlow {
   0% { opacity: 0.6; }
   100% { opacity: 1; }
+}
+
+/* ==========================================================================
+   ENHANCED TITLE SECTION
+   ========================================================================== */
+
+.title-subtitle {
+  color: var(--secondary-green);
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 1rem;
+  opacity: 0.8;
+  letter-spacing: 0.05em;
 }
 
 /* ==========================================================================
@@ -217,773 +266,6 @@ body {
   letter-spacing: 0.1em;
   position: relative;
   z-index: 2;
-}
-
-/* ==========================================================================
-   SECTION TITLES
-   ========================================================================== */
-
-.section-title {
-  font-size: 1.5rem;
-  color: var(--secondary-green);
-  text-align: center;
-  margin-bottom: 2rem;
-  text-shadow: 0 0 10px var(--secondary-green);
-  letter-spacing: 0.1em;
-}
-
-/* ==========================================================================
-   HISTORY SECTION
-   ========================================================================== */
-
-.history-section {
-  margin-bottom: 4rem;
-}
-
-.history-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-
-.history-item {
-  background: rgba(0, 0, 0, 0.6);
-  border: 2px solid var(--secondary-green);
-  border-radius: 8px;
-  padding: 1.5rem;
-  backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
-}
-
-.history-item:hover {
-  border-color: var(--primary-green);
-  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
-}
-
-.history-item p {
-  color: var(--primary-green);
-  font-size: 0.7rem;
-  line-height: 1.6;
-  margin-bottom: 0.5rem;
-}
-
-/* ==========================================================================
-   RANKING TABLE
-   ========================================================================== */
-
-.table-container {
-  margin-bottom: 4rem;
-}
-
-.table-wrapper {
-  background: rgba(0, 0, 0, 0.8);
-  border: 2px solid var(--primary-green);
-  border-radius: 12px;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
-}
-
-.ranking-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: 'Press Start 2P', monospace;
-}
-
-.ranking-table thead {
-  background: linear-gradient(90deg, var(--dark-green), var(--secondary-green));
-}
-
-.ranking-table th {
-  padding: 1.5rem 1rem;
-  text-align: center;
-  border-bottom: 2px solid var(--primary-green);
-  color: var(--background-black);
-  font-size: 0.8rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.header-icon {
-  font-size: 1rem;
-}
-
-.ranking-table tbody tr {
-  background: rgba(0, 0, 0, 0.6);
-  border-bottom: 1px solid var(--dark-green);
-  transition: all 0.3s ease;
-}
-
-.ranking-table tbody tr:hover {
-  background: rgba(0, 255, 65, 0.1);
-  box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.2);
-}
-
-.ranking-table tbody tr:nth-child(1) {
-  background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), rgba(0, 0, 0, 0.6));
-}
-
-.ranking-table tbody tr:nth-child(2) {
-  background: linear-gradient(90deg, rgba(192, 192, 192, 0.1), rgba(0, 0, 0, 0.6));
-}
-
-.ranking-table tbody tr:nth-child(3) {
-  background: linear-gradient(90deg, rgba(205, 127, 50, 0.1), rgba(0, 0, 0, 0.6));
-}
-
-.ranking-table td {
-  padding: 1.2rem 1rem;
-  text-align: center;
-  color: var(--primary-green);
-  font-size: 0.8rem;
-  border-right: 1px solid var(--dark-green);
-}
-
-.ranking-table td:last-child {
-  border-right: none;
-}
-
-/* Rank styling */
-.ranking-table tbody tr:nth-child(1) td:first-child {
-  color: var(--gold);
-  font-weight: bold;
-  text-shadow: 0 0 10px var(--gold);
-}
-
-.ranking-table tbody tr:nth-child(2) td:first-child {
-  color: var(--silver);
-  font-weight: bold;
-  text-shadow: 0 0 10px var(--silver);
-}
-
-.ranking-table tbody tr:nth-child(3) td:first-child {
-  color: var(--bronze);
-  font-weight: bold;
-  text-shadow: 0 0 10px var(--bronze);
-}
-
-/* Loading row */
-.loading-row td {
-  padding: 3rem;
-}
-
-.loading-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  color: var(--secondary-green);
-}
-
-.loading-spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--dark-green);
-  border-top: 2px solid var(--primary-green);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* ==========================================================================
-   EMPTY STATE
-   ========================================================================== */
-
-.empty-state {
-  text-align: center;
-  padding: 4rem 2rem;
-  background: rgba(0, 0, 0, 0.6);
-  border: 2px solid var(--secondary-green);
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-}
-
-.empty-icon {
-  font-size: 4rem;
-  margin-bottom: 2rem;
-  opacity: 0.7;
-}
-
-.empty-state h3 {
-  color: var(--primary-green);
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  text-shadow: 0 0 10px var(--primary-green);
-}
-
-.empty-state p {
-  color: var(--secondary-green);
-  font-size: 0.8rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
-}
-
-.play-btn {
-  display: inline-block;
-  padding: 1rem 2rem;
-  background: transparent;
-  border: 2px solid var(--primary-green);
-  color: var(--primary-green);
-  text-decoration: none;
-  border-radius: 8px;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.8rem;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.play-btn:hover {
-  background: var(--primary-green);
-  color: var(--background-black);
-  box-shadow: 0 0 20px var(--primary-green);
-  transform: translateY(-2px);
-}
-
-/* ==========================================================================
-   REFRESH BUTTON
-   ========================================================================== */
-
-.refresh-container {
-  text-align: center;
-  margin-top: 2rem;
-}
-
-.refresh-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.8rem;
-  padding: 1rem 2rem;
-  background: rgba(0, 0, 0, 0.8);
-  border: 2px solid var(--secondary-green);
-  color: var(--secondary-green);
-  border-radius: 8px;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.7rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-}
-
-.refresh-btn:hover {
-  border-color: var(--neon-blue);
-  color: var(--neon-blue);
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-  transform: translateY(-2px);
-}
-
-.refresh-btn:active {
-  transform: translateY(0);
-}
-
-.refresh-icon {
-  font-size: 1rem;
-  transition: transform 0.3s ease;
-}
-
-.refresh-btn:hover .refresh-icon {
-  transform: rotate(180deg);
-}
-
-/* ==========================================================================
-   RESPONSIVE DESIGN
-   ========================================================================== */
-
-/* Tablets */
-@media screen and (max-width: 768px) {
-  .ranking-container {
-    padding: 5rem 1rem 2rem;
-  }
-  
-  .ranking-title {
-    font-size: 1.8rem;
-  }
-  
-  .stats-container {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .stat-card {
-    padding: 1.5rem 1rem;
-  }
-  
-  .stat-number {
-    font-size: 1.5rem;
-  }
-  
-  .ranking-table th,
-  .ranking-table td {
-    padding: 1rem 0.5rem;
-    font-size: 0.6rem;
-  }
-  
-  .header-content {
-    flex-direction: column;
-    gap: 0.3rem;
-  }
-  
-  .header-icon {
-    font-size: 0.8rem;
-  }
-}
-
-/* Mobile */
-@media screen and (max-width: 480px) {
-  .ranking-title {
-    font-size: 1.2rem;
-    letter-spacing: 0.1em;
-  }
-  
-  .section-title {
-    font-size: 1rem;
-  }
-  
-  .ranking-table th,
-  .ranking-table td {
-    padding: 0.8rem 0.3rem;
-    font-size: 0.5rem;
-  }
-  
-  .stat-number {
-    font-size: 1.2rem;
-  }
-  
-  .stat-label {
-    font-size: 0.6rem;
-  }
-  
-  .back-home-container {
-    top: 1rem;
-    left: 1rem;
-  }
-  
-  .empty-state {
-    padding: 2rem 1rem;
-  }
-  
-  .empty-state h3 {
-    font-size: 0.9rem;
-  }
-  
-  .empty-state p {
-    font-size: 0.6rem;
-  }
-  
-  .play-btn {
-    font-size: 0.6rem;
-    padding: 0.8rem 1.5rem;
-  }
-}
-
-/* ==========================================================================
-   ESTILOS ADICIONAIS PARA RANKING DINÂMICO
-   ========================================================================== */
-
-/* Player Info Styling */
-.player-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.player-name {
-  font-weight: bold;
-  color: var(--primary-green);
-}
-
-.medal {
-  font-size: 1.2rem;
-  animation: medalGlow 2s ease-in-out infinite alternate;
-}
-
-.medal-1 { filter: hue-rotate(45deg); } /* Gold */
-.medal-2 { filter: hue-rotate(200deg); } /* Silver */
-.medal-3 { filter: hue-rotate(25deg); } /* Bronze */
-
-@keyframes medalGlow {
-  0% { transform: scale(1); text-shadow: 0 0 5px currentColor; }
-  100% { transform: scale(1.1); text-shadow: 0 0 15px currentColor; }
-}
-
-/* Score Info Styling */
-.score-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
-}
-
-.best-score {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: var(--neon-blue);
-  text-shadow: 0 0 10px var(--neon-blue);
-}
-
-.average-score {
-  font-size: 0.6rem;
-  color: var(--secondary-green);
-  opacity: 0.8;
-}
-
-/* Games Info Styling */
-.games-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
-}
-
-.total-games {
-  font-size: 1rem;
-  color: var(--primary-green);
-}
-
-.total-points {
-  font-size: 0.6rem;
-  color: var(--secondary-green);
-  opacity: 0.8;
-}
-
-/* Position Styling */
-.position-1, .position-2, .position-3 {
-  font-weight: bold;
-  text-shadow: 0 0 10px currentColor;
-}
-
-.position-1 { color: var(--gold); }
-.position-2 { color: var(--silver); }
-.position-3 { color: var(--bronze); }
-.position-other { color: var(--primary-green); }
-
-/* Top Players Row Styling */
-.ranking-table tbody tr.top-1 {
-  background: linear-gradient(90deg, rgba(255, 215, 0, 0.15), rgba(0, 0, 0, 0.6));
-  border: 2px solid rgba(255, 215, 0, 0.3);
-}
-
-.ranking-table tbody tr.top-2 {
-  background: linear-gradient(90deg, rgba(192, 192, 192, 0.15), rgba(0, 0, 0, 0.6));
-  border: 2px solid rgba(192, 192, 192, 0.3);
-}
-
-.ranking-table tbody tr.top-3 {
-  background: linear-gradient(90deg, rgba(205, 127, 50, 0.15), rgba(0, 0, 0, 0.6));
-  border: 2px solid rgba(205, 127, 50, 0.3);
-}
-
-/* History Items Enhanced */
-.history-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--dark-green);
-}
-
-.session-number {
-  font-weight: bold;
-  color: var(--primary-green);
-  font-size: 0.8rem;
-}
-
-.session-status {
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.session-status.completed {
-  background: var(--secondary-green);
-  color: var(--background-black);
-}
-
-.session-status.interrupted {
-  background: var(--glitch-red);
-  color: var(--text-white);
-}
-
-.history-details {
-  font-size: 0.7rem;
-  line-height: 1.4;
-}
-
-.history-details p {
-  margin: 0.3rem 0;
-  color: var(--secondary-green);
-}
-
-.history-details strong {
-  color: var(--primary-green);
-}
-
-/* Error and Loading States */
-.error-row {
-  background: rgba(255, 0, 64, 0.1);
-  border: 2px solid var(--glitch-red);
-}
-
-.error-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  color: var(--glitch-red);
-  padding: 2rem;
-}
-
-.error-icon {
-  font-size: 2rem;
-}
-
-.error-message {
-  font-size: 0.8rem;
-}
-
-/* Enhanced Loading Spinner */
-.loading-spinner {
-  width: 30px;
-  height: 30px;
-  border: 3px solid var(--dark-green);
-  border-top: 3px solid var(--primary-green);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-/* Number Animation */
-.stat-number {
-  transition: all 0.3s ease;
-}
-
-.stat-number.updating {
-  color: var(--neon-blue);
-  text-shadow: 0 0 15px var(--neon-blue);
-  transform: scale(1.1);
-}
-
-/* Enhanced Hover Effects */
-.ranking-table tbody tr:hover .player-name {
-  color: var(--neon-blue);
-  text-shadow: 0 0 10px var(--neon-blue);
-}
-
-.ranking-table tbody tr:hover .best-score {
-  transform: scale(1.05);
-  text-shadow: 0 0 15px var(--neon-blue);
-}
-
-/* Responsive Enhancements */
-@media screen and (max-width: 768px) {
-  .player-info {
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-  
-  .score-info, .games-info {
-    gap: 0.1rem;
-  }
-  
-  .best-score {
-    font-size: 0.9rem;
-  }
-  
-  .average-score, .total-points {
-    font-size: 0.5rem;
-  }
-  
-  .medal {
-    font-size: 1rem;
-  }
-  
-  .history-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.3rem;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .player-info {
-    text-align: center;
-  }
-  
-  .score-info, .games-info {
-    text-align: center;
-  }
-  
-  .average-score, .total-points {
-    display: none; /* Hide secondary info on very small screens */
-  }
-  
-  .medal {
-    font-size: 0.8rem;
-  }
-  
-  .history-details {
-    font-size: 0.6rem;
-  }
-}
-
-/* Accessibility Improvements */
-.ranking-table tbody tr:focus-within {
-  outline: 2px solid var(--primary-green);
-  outline-offset: 2px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .medal {
-    animation: none;
-  }
-  
-  .loading-spinner {
-    animation: none;
-    border: 3px solid var(--primary-green);
-    border-top: 3px solid var(--neon-blue);
-  }
-  
-  .stat-number {
-    transition: none;
-  }
-}
-
-/* High Contrast Mode */
-.high-contrast .player-name,
-.high-contrast .best-score,
-.high-contrast .total-games {
-  font-weight: 900;
-  text-shadow: none;
-}
-
-.high-contrast .medal {
-  filter: none;
-}
-
-.high-contrast .ranking-table tbody tr.top-1,
-.high-contrast .ranking-table tbody tr.top-2,
-.high-contrast .ranking-table tbody tr.top-3 {
-  border-width: 4px;
-}
-
-/* ==========================================================================
-   ACCESSIBILITY & PERFORMANCE
-   ========================================================================== */
-
-@media (prefers-reduced-motion: reduce) {
-  .ranking-title,
-  .title-underline,
-  .stat-card,
-  .loading-spinner,
-  .refresh-icon {
-    animation: none;
-  }
-  
-  .stat-card,
-  .ranking-table tbody tr,
-  .refresh-btn {
-    transition: none;
-  }
-}
-
-/* High contrast mode */
-.high-contrast .ranking-table {
-  border-width: 3px;
-}
-
-.high-contrast .stat-card {
-  border-width: 3px;
-}
-
-/* ==========================================================================
-   ATUALIZAÇÕES PARA RANK.CSS - NAVEGAÇÃO E MELHORIAS
-   ========================================================================== */
-
-/* ==========================================================================
-   NAVIGATION CONTAINER
-   ========================================================================== */
-
-.navigation-container {
-  position: fixed;
-  top: 2rem;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 2rem;
-}
-
-.history-button-container {
-  position: relative;
-}
-
-.nav-btn {
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 0.8rem;
-  background: rgba(0, 0, 0, 0.8);
-  border: 2px solid var(--secondary-green);
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
-}
-
-.nav-btn:hover {
-  border-color: var(--neon-blue);
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
-  transform: translateY(-2px);
-}
-
-.nav-tooltip {
-  position: absolute;
-  top: -3rem;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--background-black);
-  color: var(--primary-green);
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  border: 1px solid var(--primary-green);
-  white-space: nowrap;
-}
-
-.nav-btn:hover .nav-tooltip {
-  opacity: 1;
-}
-
-/* ==========================================================================
-   ENHANCED TITLE SECTION
-   ========================================================================== */
-
-.title-subtitle {
-  color: var(--secondary-green);
-  font-size: 0.9rem;
-  text-align: center;
-  margin-top: 1rem;
-  opacity: 0.8;
-  letter-spacing: 0.05em;
 }
 
 /* ==========================================================================
@@ -1079,6 +361,19 @@ body {
 }
 
 /* ==========================================================================
+   SECTION TITLES
+   ========================================================================== */
+
+.section-title {
+  font-size: 1.5rem;
+  color: var(--secondary-green);
+  text-align: center;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 10px var(--secondary-green);
+  letter-spacing: 0.1em;
+}
+
+/* ==========================================================================
    TABLE HEADER IMPROVEMENTS
    ========================================================================== */
 
@@ -1098,6 +393,90 @@ body {
 }
 
 /* ==========================================================================
+   RANKING TABLE
+   ========================================================================== */
+
+.table-container {
+  margin-bottom: 4rem;
+}
+
+.table-wrapper {
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--primary-green);
+  border-radius: 12px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+}
+
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Press Start 2P', monospace;
+}
+
+.ranking-table thead {
+  background: linear-gradient(90deg, var(--dark-green), var(--secondary-green));
+}
+
+.ranking-table th {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  border-bottom: 2px solid var(--primary-green);
+  color: var(--background-black);
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.header-icon {
+  font-size: 1rem;
+}
+
+.ranking-table tbody tr {
+  background: rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid var(--dark-green);
+  transition: all 0.3s ease;
+}
+
+.ranking-table tbody tr:hover {
+  background: rgba(0, 255, 65, 0.1);
+  box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.2);
+}
+
+.ranking-table tbody tr:nth-child(1) {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), rgba(0, 0, 0, 0.6));
+}
+
+.ranking-table tbody tr:nth-child(2) {
+  background: linear-gradient(90deg, rgba(192, 192, 192, 0.1), rgba(0, 0, 0, 0.6));
+}
+
+.ranking-table tbody tr:nth-child(3) {
+  background: linear-gradient(90deg, rgba(205, 127, 50, 0.1), rgba(0, 0, 0, 0.6));
+}
+
+.ranking-table td {
+  padding: 1.2rem 1rem;
+  text-align: center;
+  color: var(--primary-green);
+  font-size: 0.8rem;
+  border-right: 1px solid var(--dark-green);
+}
+
+.ranking-table td:last-child {
+  border-right: none;
+}
+
+/* ==========================================================================
    ENHANCED RANKING ROWS
    ========================================================================== */
 
@@ -1111,6 +490,52 @@ body {
 .position-number {
   font-weight: bold;
   text-shadow: 0 0 10px currentColor;
+}
+
+/* Rank styling */
+.ranking-table tbody tr:nth-child(1) td:first-child {
+  color: var(--gold);
+  font-weight: bold;
+  text-shadow: 0 0 10px var(--gold);
+}
+
+.ranking-table tbody tr:nth-child(2) td:first-child {
+  color: var(--silver);
+  font-weight: bold;
+  text-shadow: 0 0 10px var(--silver);
+}
+
+.ranking-table tbody tr:nth-child(3) td:first-child {
+  color: var(--bronze);
+  font-weight: bold;
+  text-shadow: 0 0 10px var(--bronze);
+}
+
+/* Position styling */
+.position-1, .position-2, .position-3 {
+  font-weight: bold;
+  text-shadow: 0 0 10px currentColor;
+}
+
+.position-1 { color: var(--gold); }
+.position-2 { color: var(--silver); }
+.position-3 { color: var(--bronze); }
+.position-other { color: var(--primary-green); }
+
+/* Top Players Row Styling */
+.ranking-table tbody tr.top-1 {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.15), rgba(0, 0, 0, 0.6));
+  border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.ranking-table tbody tr.top-2 {
+  background: linear-gradient(90deg, rgba(192, 192, 192, 0.15), rgba(0, 0, 0, 0.6));
+  border: 2px solid rgba(192, 192, 192, 0.3);
+}
+
+.ranking-table tbody tr.top-3 {
+  background: linear-gradient(90deg, rgba(205, 127, 50, 0.15), rgba(0, 0, 0, 0.6));
+  border: 2px solid rgba(205, 127, 50, 0.3);
 }
 
 .current-user {
@@ -1138,6 +563,164 @@ body {
   text-transform: uppercase;
   margin-left: 0.5rem;
   box-shadow: 0 0 10px var(--neon-blue);
+}
+
+/* Player Info Styling */
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.player-name {
+  font-weight: bold;
+  color: var(--primary-green);
+}
+
+.medal {
+  font-size: 1.2rem;
+  animation: medalGlow 2s ease-in-out infinite alternate;
+}
+
+.medal-1 { filter: hue-rotate(45deg); }
+.medal-2 { filter: hue-rotate(200deg); }
+.medal-3 { filter: hue-rotate(25deg); }
+
+@keyframes medalGlow {
+  0% { transform: scale(1); text-shadow: 0 0 5px currentColor; }
+  100% { transform: scale(1.1); text-shadow: 0 0 15px currentColor; }
+}
+
+/* Score Info Styling */
+.score-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.best-score {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--neon-blue);
+  text-shadow: 0 0 10px var(--neon-blue);
+}
+
+.average-score {
+  font-size: 0.6rem;
+  color: var(--secondary-green);
+  opacity: 0.8;
+}
+
+/* Games Info Styling */
+.games-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.total-games {
+  font-size: 1rem;
+  color: var(--primary-green);
+}
+
+.total-points {
+  font-size: 0.6rem;
+  color: var(--secondary-green);
+  opacity: 0.8;
+}
+
+/* Loading row */
+.loading-row td {
+  padding: 3rem;
+}
+
+.loading-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--secondary-green);
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--dark-green);
+  border-top: 2px solid var(--primary-green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Enhanced Loading Spinner */
+.loading-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--dark-green);
+  border-top: 3px solid var(--primary-green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* ==========================================================================
+   EMPTY STATE
+   ========================================================================== */
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid var(--secondary-green);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+  opacity: 0.7;
+}
+
+.empty-state h3 {
+  color: var(--primary-green);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px var(--primary-green);
+}
+
+.empty-state p {
+  color: var(--secondary-green);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.play-btn {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: transparent;
+  border: 2px solid var(--primary-green);
+  color: var(--primary-green);
+  text-decoration: none;
+  border-radius: 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.play-btn:hover {
+  background: var(--primary-green);
+  color: var(--background-black);
+  box-shadow: 0 0 20px var(--primary-green);
+  transform: translateY(-2px);
 }
 
 /* ==========================================================================
@@ -1205,6 +788,51 @@ body {
 }
 
 /* ==========================================================================
+   REFRESH BUTTON
+   ========================================================================== */
+
+.refresh-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 2rem;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--secondary-green);
+  color: var(--secondary-green);
+  border-radius: 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.refresh-btn:hover {
+  border-color: var(--neon-blue);
+  color: var(--neon-blue);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.refresh-btn:active {
+  transform: translateY(0);
+}
+
+.refresh-icon {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.refresh-btn:hover .refresh-icon {
+  transform: rotate(180deg);
+}
+
+/* ==========================================================================
    ERROR STATE IMPROVEMENTS
    ========================================================================== */
 
@@ -1228,6 +856,29 @@ body {
   box-shadow: 0 0 15px var(--primary-green);
 }
 
+/* Error and Loading States */
+.error-row {
+  background: rgba(255, 0, 64, 0.1);
+  border: 2px solid var(--glitch-red);
+}
+
+.error-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--glitch-red);
+  padding: 2rem;
+}
+
+.error-icon {
+  font-size: 2rem;
+}
+
+.error-message {
+  font-size: 0.8rem;
+}
+
 /* ==========================================================================
    FADE IN ANIMATION
    ========================================================================== */
@@ -1248,18 +899,56 @@ body {
 }
 
 /* ==========================================================================
-   RESPONSIVE UPDATES
+   RESPONSIVE DESIGN - MELHORADO
    ========================================================================== */
 
+/* Tablets */
 @media screen and (max-width: 768px) {
   .navigation-container {
     padding: 0 1rem;
+    top: 2rem;
+  }
+  
+  .ranking-container {
+    padding: 6rem 1rem 2rem;
+  }
+
+  .ranking-title {
+    font-size: 1.8rem;
+  }
+  
+  .stats-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .stat-card {
+    padding: 1.5rem 1rem;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
   }
   
   .table-header {
     flex-direction: column;
     align-items: center;
     text-align: center;
+  }
+  
+  .ranking-table th,
+  .ranking-table td {
+    padding: 1rem 0.5rem;
+    font-size: 0.6rem;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .header-icon {
+    font-size: 0.8rem;
   }
   
   .quick-actions {
@@ -1288,7 +977,56 @@ body {
   }
 }
 
+/* Mobile */
 @media screen and (max-width: 480px) {
+  .navigation-container {
+    top: 1rem; /* 🔧 AJUSTADO: Mais próximo do topo em mobile */
+  }
+  
+  .ranking-container {
+    padding: 4rem 0.5rem 2rem; /* 🔧 AJUSTADO: Reduzido para mobile */
+  }
+  
+  .ranking-title {
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+  }
+  
+  .section-title {
+    font-size: 1rem;
+  }
+  
+  .ranking-table th,
+  .ranking-table td {
+    padding: 0.8rem 0.3rem;
+    font-size: 0.5rem;
+  }
+  
+  .stat-number {
+    font-size: 1.2rem;
+  }
+  
+  .stat-label {
+    font-size: 0.6rem;
+  }
+  
+  .empty-state {
+    padding: 2rem 1rem;
+  }
+  
+  .empty-state h3 {
+    font-size: 0.9rem;
+  }
+  
+  .empty-state p {
+    font-size: 0.6rem;
+  }
+  
+  .play-btn {
+    font-size: 0.6rem;
+    padding: 0.8rem 1.5rem;
+  }
+  
   .current-user-badge {
     font-size: 0.4rem;
     margin-left: 0.2rem;
@@ -1305,22 +1043,26 @@ body {
 }
 
 /* ==========================================================================
-   ACCESSIBILITY IMPROVEMENTS
+   ACCESSIBILITY & PERFORMANCE
    ========================================================================== */
 
-.action-btn:focus,
-.nav-btn:focus,
-.banner-action:focus {
-  outline: 2px solid var(--primary-green);
-  outline-offset: 2px;
-}
-
 @media (prefers-reduced-motion: reduce) {
+  .ranking-title,
+  .title-underline,
+  .stat-card,
+  .loading-spinner,
+  .refresh-icon,
   .user-stat-highlight,
   .current-user,
   .info-banner,
   .action-btn::before {
     animation: none;
+  }
+  
+  .stat-card,
+  .ranking-table tbody tr,
+  .refresh-btn {
+    transition: none;
   }
   
   .fade-in {
@@ -1330,9 +1072,14 @@ body {
   }
 }
 
-/* ==========================================================================
-   HIGH CONTRAST MODE
-   ========================================================================== */
+/* High contrast mode */
+.high-contrast .ranking-table {
+  border-width: 3px;
+}
+
+.high-contrast .stat-card {
+  border-width: 3px;
+}
 
 .high-contrast .info-banner,
 .high-contrast .quick-actions .action-btn,
@@ -1342,4 +1089,39 @@ body {
 
 .high-contrast .current-user-badge {
   border: 2px solid var(--background-black);
+}
+
+/* Enhanced Hover Effects */
+.ranking-table tbody tr:hover .player-name {
+  color: var(--neon-blue);
+  text-shadow: 0 0 10px var(--neon-blue);
+}
+
+.ranking-table tbody tr:hover .best-score {
+  transform: scale(1.05);
+  text-shadow: 0 0 15px var(--neon-blue);
+}
+
+/* Number Animation */
+.stat-number {
+  transition: all 0.3s ease;
+}
+
+.stat-number.updating {
+  color: var(--neon-blue);
+  text-shadow: 0 0 15px var(--neon-blue);
+  transform: scale(1.1);
+}
+
+/* Accessibility Improvements */
+.action-btn:focus,
+.nav-btn:focus,
+.banner-action:focus {
+  outline: 2px solid var(--primary-green);
+  outline-offset: 2px;
+}
+
+.ranking-table tbody tr:focus-within {
+  outline: 2px solid var(--primary-green);
+  outline-offset: 2px;
 }

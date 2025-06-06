@@ -1,5 +1,5 @@
 /* ==========================================================================
-   MAIN STYLES - T.I QUIZZMASTER
+   MAIN STYLES - T.I QUIZZMASTER - BOTÃO LOGIN/LOGOUT CORRIGIDO
    ========================================================================== */
 
 :root {
@@ -170,37 +170,43 @@ html, body {
 }
 
 /* ==========================================================================
-   AUTH BUTTON
+   AUTH BUTTON - CORRIGIDO
    ========================================================================== */
 
 .auth-container {
   position: fixed;
-  top: 2rem;
+  top: 3rem; /* 🔧 CORRIGIDO: Aumentado de 2rem para 3rem */
   left: 2rem;
   z-index: 100;
 }
 
 .auth-btn {
   position: relative;
-  display: block;
-  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
   border: 2px solid var(--primary-green);
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.9);
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+  text-decoration: none;
+  font-size: 0.7rem;
+  color: var(--primary-green);
 }
 
 .auth-btn:hover {
   border-color: var(--neon-blue);
+  color: var(--neon-blue);
   box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
-  transform: scale(1.1);
+  transform: translateY(-2px);
 }
 
 .auth-btn img {
-  width: 40px;
-  height: 40px;
+  width: 24px;
+  height: 24px;
   display: block;
   filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(92deg) brightness(101%) contrast(107%);
   transition: filter 0.3s ease;
@@ -212,19 +218,31 @@ html, body {
 
 .auth-tooltip {
   position: absolute;
-  top: -2.5rem;
+  bottom: -3rem; /* 🔧 CORRIGIDO: Mudado de top para bottom */
   left: 50%;
   transform: translateX(-50%);
   background: var(--background-black);
   color: var(--primary-green);
   padding: 0.5rem 1rem;
   border-radius: 4px;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   font-family: 'Press Start 2P', monospace;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
   border: 1px solid var(--primary-green);
+  white-space: nowrap;
+  z-index: 10;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3); /* 🔧 ADICIONADO: Melhor visibilidade */
+}
+
+/* 🔧 CORRIGIDO: Tooltip alternativo para telas pequenas */
+@media screen and (max-height: 600px) {
+  .auth-tooltip {
+    bottom: auto;
+    top: 100%;
+    margin-top: 0.5rem;
+  }
 }
 
 .auth-btn:hover .auth-tooltip {
@@ -256,13 +274,18 @@ html, body {
   }
   
   .auth-container {
-    top: 1rem;
+    top: 1rem; /* 🔧 AJUSTADO: Mais próximo do topo em mobile */
     left: 1rem;
   }
   
+  .auth-btn {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.6rem;
+  }
+  
   .auth-btn img {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
   }
 }
 
@@ -274,6 +297,11 @@ html, body {
   
   .btn {
     font-size: 0.8rem;
+  }
+  
+  .auth-container {
+    top: 2rem; /* 🔧 AJUSTADO: Espaço médio para tablets */
+    left: 1.5rem;
   }
 }
 
@@ -313,5 +341,135 @@ html, body {
   
   .container {
     gap: 6rem;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & PERFORMANCE
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  #titulo,
+  .btn,
+  .auth-btn {
+    animation: none;
+  }
+  
+  .btn,
+  .auth-btn {
+    transition: none;
+  }
+}
+
+/* High contrast mode */
+.high-contrast .btn,
+.high-contrast .auth-btn {
+  border-width: 3px;
+}
+
+/* ==========================================================================
+   FOCUS STATES PARA ACESSIBILIDADE
+   ========================================================================== */
+
+.btn:focus,
+.auth-btn:focus {
+  outline: 2px solid var(--primary-green);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   ENHANCED AUTH BUTTON STATES
+   ========================================================================== */
+
+.auth-btn.logged-in {
+  border-color: var(--neon-blue);
+  color: var(--neon-blue);
+}
+
+.auth-btn.logged-in:hover {
+  border-color: var(--glitch-red);
+  color: var(--glitch-red);
+  box-shadow: 0 0 30px rgba(255, 0, 64, 0.5);
+}
+
+/* ==========================================================================
+   LOADING STATE PARA AUTH BUTTON
+   ========================================================================== */
+
+.auth-btn.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.auth-btn.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  width: 12px;
+  height: 12px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   NOTIFICAÇÕES DE FEEDBACK
+   ========================================================================== */
+
+.auth-notification {
+  position: fixed;
+  top: 3rem;
+  right: 2rem;
+  padding: 1rem 2rem;
+  border-radius: 6px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.6rem;
+  z-index: 10000;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  max-width: 300px;
+  word-wrap: break-word;
+  box-shadow: 0 0 20px currentColor;
+}
+
+.auth-notification.success {
+  background: var(--primary-green);
+  color: var(--background-black);
+}
+
+.auth-notification.error {
+  background: var(--glitch-red);
+  color: var(--text-white);
+}
+
+.auth-notification.info {
+  background: var(--neon-blue);
+  color: var(--background-black);
+}
+
+.auth-notification.show {
+  transform: translateX(0);
+}
+
+/* Mobile adjustments for notifications */
+@media screen and (max-width: 480px) {
+  .auth-notification {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+    transform: translateY(-100%);
+    max-width: none;
+    font-size: 0.5rem;
+  }
+  
+  .auth-notification.show {
+    transform: translateY(0);
   }
 }

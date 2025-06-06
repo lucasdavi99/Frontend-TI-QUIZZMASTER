@@ -29,12 +29,12 @@ body {
 }
 
 /* ==========================================================================
-   BACK BUTTON
+   BACK BUTTON - CORRIGIDO
    ========================================================================== */
 
 .back-home-container {
   position: fixed;
-  top: 2rem;
+  top: 3rem; /* 🔧 CORRIGIDO: Aumentado de 2rem para 3rem para dar mais espaço */
   left: 2rem;
   z-index: 1000;
 }
@@ -43,25 +43,29 @@ body {
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0.8rem;
-  background: rgba(0, 0, 0, 0.8);
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  background: rgba(0, 0, 0, 0.9);
   border: 2px solid var(--primary-green);
   border-radius: 8px;
   text-decoration: none;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+  font-size: 0.7rem;
+  color: var(--primary-green);
 }
 
 .back-btn:hover {
   border-color: var(--neon-blue);
+  color: var(--neon-blue);
   box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
-  transform: translateX(-5px);
+  transform: translateY(-2px);
 }
 
 .back-btn img {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(92deg) brightness(101%) contrast(107%);
   transition: filter 0.3s ease;
 }
@@ -72,19 +76,30 @@ body {
 
 .back-tooltip {
   position: absolute;
-  top: -3rem;
+  bottom: -3rem; /* 🔧 CORRIGIDO: Mudado de top para bottom */
   left: 50%;
   transform: translateX(-50%);
   background: var(--background-black);
   color: var(--primary-green);
   padding: 0.5rem 1rem;
   border-radius: 4px;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
   border: 1px solid var(--primary-green);
   white-space: nowrap;
+  z-index: 10;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+/* 🔧 CORRIGIDO: Tooltip alternativo para telas pequenas */
+@media screen and (max-height: 600px) {
+  .back-tooltip {
+    bottom: auto;
+    top: 100%;
+    margin-top: 0.5rem;
+  }
 }
 
 .back-btn:hover .back-tooltip {
@@ -92,12 +107,12 @@ body {
 }
 
 /* ==========================================================================
-   SCORE DISPLAY
+   SCORE DISPLAY - AJUSTADO PARA NÃO CONFLITAR
    ========================================================================== */
 
 .score-display {
   position: fixed;
-  top: 2rem;
+  top: 3rem; /* 🔧 AJUSTADO: Alinhado com o botão de voltar */
   right: 2rem;
   z-index: 1000;
   display: flex;
@@ -106,25 +121,27 @@ body {
 }
 
 .score-item {
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.9);
   border: 2px solid var(--primary-green);
   border-radius: 8px;
   padding: 0.8rem 1.2rem;
   backdrop-filter: blur(10px);
   box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
   text-align: center;
+  min-width: 120px;
 }
 
 .score-label {
   color: var(--secondary-green);
-  font-size: 0.6rem;
+  font-size: 0.5rem;
   display: block;
   margin-bottom: 0.3rem;
+  letter-spacing: 0.05em;
 }
 
 .score-value {
   color: var(--primary-green);
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: bold;
   text-shadow: 0 0 10px var(--primary-green);
 }
@@ -138,17 +155,17 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 8rem auto 0;
+  margin: 9rem auto 0; /* 🔧 AJUSTADO: Aumentado de 8rem para 9rem para dar espaço aos botões */
   padding: 0 2rem;
   z-index: 10;
   width: 100%;
-  max-width: 1200px; /* Limite máximo para telas muito grandes */
+  max-width: 1200px;
 }
 
 .terminal {
   width: 100%;
   max-width: 900px;
-  margin: 0 auto; /* Centralização adicional */
+  margin: 0 auto;
   background: var(--background-black);
   border: 3px solid var(--primary-green);
   border-radius: 12px;
@@ -200,14 +217,14 @@ body {
   color: var(--background-black);
   font-size: 0.7rem;
   font-weight: bold;
-  text-align: center; /* Centraliza o título */
-  flex: 1; /* Ocupa espaço disponível para centralizar */
+  text-align: center;
+  flex: 1;
 }
 
 .terminal-content {
   padding: 2rem;
   min-height: 200px;
-  text-align: center; /* Centraliza todo o conteúdo */
+  text-align: center;
 }
 
 .command-line {
@@ -215,7 +232,7 @@ body {
   font-size: 0.7rem;
   margin-bottom: 1.5rem;
   opacity: 0.8;
-  text-align: left; /* Manter alinhamento de terminal */
+  text-align: left;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
@@ -232,13 +249,13 @@ body {
 
 .pergunta {
   color: var(--primary-green);
-  font-size: clamp(0.8rem, 2.5vw, 1.2rem); /* Responsivo */
+  font-size: clamp(0.8rem, 2.5vw, 1.2rem);
   line-height: 1.8;
   text-align: center;
   text-shadow: 0 0 10px var(--primary-green);
   animation: questionPulse 2s ease-in-out infinite alternate;
   margin: 0 auto;
-  max-width: 800px; /* Limite para leitura confortável */
+  max-width: 800px;
   padding: 0 1rem;
 }
 
@@ -260,7 +277,7 @@ body {
   z-index: 10;
   position: relative;
   width: 100%;
-  max-width: 1200px; /* Limite máximo */
+  max-width: 1200px;
 }
 
 .answers-grid {
@@ -269,8 +286,8 @@ body {
   gap: 2rem;
   max-width: 900px;
   width: 100%;
-  margin: 0 auto; /* Centralização adicional */
-  justify-items: center; /* Centraliza os itens do grid */
+  margin: 0 auto;
+  justify-items: center;
 }
 
 .answer-box {
@@ -282,12 +299,12 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   min-height: 120px;
-  width: 100%; /* Garante largura total */
-  max-width: 400px; /* Limite máximo para não ficar muito largo */
+  width: 100%;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Centraliza conteúdo verticalmente */
-  align-items: center; /* Centraliza conteúdo horizontalmente */
+  justify-content: center;
+  align-items: center;
   box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
   overflow: hidden;
   text-align: center;
@@ -337,7 +354,7 @@ body {
   position: relative;
   z-index: 2;
   color: var(--primary-green);
-  font-size: clamp(0.6rem, 2vw, 0.8rem); /* Responsivo */
+  font-size: clamp(0.6rem, 2vw, 0.8rem);
   line-height: 1.6;
   flex: 1;
   display: flex;
@@ -699,7 +716,7 @@ body {
 /* Tablets */
 @media screen and (max-width: 768px) {
   .terminal-container {
-    margin-top: 6rem;
+    margin-top: 7rem; /* 🔧 AJUSTADO: Reduzido para tablets */
     padding: 0 1rem;
   }
   
@@ -715,13 +732,13 @@ body {
   .answers-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
-    max-width: 500px; /* Ajuste para mobile */
+    max-width: 500px;
   }
   
   .answer-box {
     padding: 1.2rem;
     min-height: 100px;
-    max-width: none; /* Remove limitação em mobile */
+    max-width: none;
   }
   
   .score-display {
@@ -733,7 +750,7 @@ body {
   }
   
   .back-home-container {
-    top: 1rem;
+    top: 2rem; /* 🔧 AJUSTADO: Menos espaço em tablets */
     left: 1rem;
   }
   
@@ -759,7 +776,7 @@ body {
 /* Small Mobile */
 @media screen and (max-width: 480px) {
   .terminal-container {
-    margin-top: 4rem;
+    margin-top: 5rem; /* 🔧 AJUSTADO: Menos espaço em mobile */
     padding: 0 0.5rem;
   }
   
@@ -778,10 +795,11 @@ body {
   
   .score-item {
     padding: 0.6rem;
+    min-width: 100px;
   }
   
   .back-home-container {
-    top: 0.5rem;
+    top: 1rem; /* 🔧 AJUSTADO: Mais próximo do topo em mobile */
     left: 0.5rem;
   }
   
