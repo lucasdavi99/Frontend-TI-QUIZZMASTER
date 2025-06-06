@@ -1,73 +1,191 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" type="text/css" href="css/login.css">
-    <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/code_rain.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/glitch-effects.css">
+    
+    <!-- External Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
+    
+    <title>T.I QUIZZMASTER - Login</title>
 </head>
 
 <body>
-
-    <div class="container">
-
-        <canvas id="canvas"></canvas>
-    </div>
-
-
-    <div class="wrapper">
-        <div class="form-wrapper sign-in">
-            <form action="" id="loginForm">
-                <h2>Login</h2>
-                <div class="input-group">
-                    <input type="text" id="loginUsername" required autocomplete="username">
-                    <label for="loginUsername">Username</label>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="loginPassword" required autocomplete="current-password">
-                    <label for="loginPassword">Senha</label>
-                </div>
-                <!--<div class="remember">
-                    <label><input type="checkbox"> Remember me</label>
-                </div>-->
-                <button type="submit">Login</button>
-                <div class="signUp-link">
-                    <p>Não possui uma conta? <a href="#" class="signUpBtn-link">Inscreva-se</a></p>
-                </div>
-            </form>
-        </div>
+    <!-- Matrix Rain Background -->
+    <canvas id="canvas"></canvas>
     
-        <div class="form-wrapper sign-up">
-            <form action="" id="registerForm">
-                <h2>Inscrição</h2>
-                <div class="input-group">
-                    <input type="text" id="registerUsername" required autocomplete="username">
-                    <label for="registerUsername">Username</label>
-                </div>
-                <div class="input-group">
-                    <input type="email" id="registerEmail" required>
-                    <label for="registerEmail">Email</label>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="registerPassword" required autocomplete="new-password">
-                    <label for="registerPassword">Senha</label>
-                </div>
-                <div class="remember">
-                    <label><input type="checkbox"> I agree to the terms & conditions</label>
-                </div>
-                <button type="submit">Finalizar Cadastro</button>
-                <div class="signUp-link">
-                    <p>Já possui uma conta? <a href="#" class="signInBtn-link">Entrar</a></p>
-                </div>
-            </form>
+    <!-- Back Button -->
+    <div class="back-container">
+        <a href="index.html" class="back-btn">
+            <img src="img/duas-setas-para-a-esquerda.png" alt="Voltar">
+            <span class="back-tooltip">Voltar ao Menu</span>
+        </a>
+    </div>
+    
+    <!-- Main Container -->
+    <div class="login-container">
+        <!-- Title Section -->
+        <div class="title-section">
+            <h1 class="login-title glitch-title" data-text="SISTEMA DE ACESSO">
+                SISTEMA DE ACESSO
+                <span class="glitch-layer">SISTEMA DE ACESSO</span>
+                <span class="glitch-layer">SISTEMA DE ACESSO</span>
+                <span class="glitch-layer">SISTEMA DE ACESSO</span>
+            </h1>
+            <div class="title-underline"></div>
+            <p class="login-subtitle">Autenticação necessária para continuar</p>
         </div>
-    </div>    
-
-    <script src="js/login.js"></script>
+        
+        <!-- Login/Register Wrapper -->
+        <div class="auth-wrapper" id="auth-wrapper">
+            <!-- Login Form -->
+            <div class="form-container sign-in-container active" id="sign-in-container">
+                <div class="terminal-form">
+                    <div class="terminal-header">
+                        <div class="terminal-controls">
+                            <div class="control close"></div>
+                            <div class="control minimize"></div>
+                            <div class="control maximize"></div>
+                        </div>
+                        <div class="terminal-title">LOGIN.EXE</div>
+                        <div></div>
+                    </div>
+                    
+                    <div class="terminal-body">
+                        <div class="command-line">
+                            <span class="prompt">system@auth:~$</span>
+                            <span class="command">execute login_sequence.sh</span>
+                        </div>
+                        
+                        <form id="loginForm" class="auth-form">
+                            <h2 class="form-title">FAZER LOGIN</h2>
+                            
+                            <div class="input-group">
+                                <input type="text" id="loginUsername" required autocomplete="username">
+                                <label for="loginUsername">Username</label>
+                                <div class="input-line"></div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <input type="password" id="loginPassword" required autocomplete="current-password">
+                                <label for="loginPassword">Senha</label>
+                                <div class="input-line"></div>
+                            </div>
+                            
+                            <button type="submit" class="submit-btn" id="login-submit">
+                                <span class="btn-text">ACESSAR SISTEMA</span>
+                                <span class="btn-bg"></span>
+                                <div class="loading-spinner" style="display: none;"></div>
+                            </button>
+                            
+                            <div class="form-footer">
+                                <p>Não possui uma conta? 
+                                    <a href="#" class="switch-btn" id="show-register">
+                                        Criar Conta
+                                    </a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Register Form -->
+            <div class="form-container sign-up-container" id="sign-up-container">
+                <div class="terminal-form">
+                    <div class="terminal-header">
+                        <div class="terminal-controls">
+                            <div class="control close"></div>
+                            <div class="control minimize"></div>
+                            <div class="control maximize"></div>
+                        </div>
+                        <div class="terminal-title">REGISTER.EXE</div>
+                        <div></div>
+                    </div>
+                    
+                    <div class="terminal-body">
+                        <div class="command-line">
+                            <span class="prompt">system@auth:~$</span>
+                            <span class="command">execute user_registration.sh</span>
+                        </div>
+                        
+                        <form id="registerForm" class="auth-form">
+                            <h2 class="form-title">CRIAR CONTA</h2>
+                            
+                            <div class="input-group">
+                                <input type="text" id="registerUsername" required autocomplete="username">
+                                <label for="registerUsername">Username</label>
+                                <div class="input-line"></div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <input type="email" id="registerEmail" required autocomplete="email">
+                                <label for="registerEmail">Email</label>
+                                <div class="input-line"></div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <input type="password" id="registerPassword" required autocomplete="new-password">
+                                <label for="registerPassword">Senha</label>
+                                <div class="input-line"></div>
+                            </div>
+                            
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="terms-checkbox" required>
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-text">Aceito os termos e condições</span>
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="submit-btn" id="register-submit">
+                                <span class="btn-text">CRIAR CONTA</span>
+                                <span class="btn-bg"></span>
+                                <div class="loading-spinner" style="display: none;"></div>
+                            </button>
+                            
+                            <div class="form-footer">
+                                <p>Já possui uma conta? 
+                                    <a href="#" class="switch-btn" id="show-login">
+                                        Fazer Login
+                                    </a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Status Messages -->
+        <div class="status-container" id="status-container">
+            <!-- Messages will be inserted here -->
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner-large"></div>
+            <p id="loading-text">Processando autenticação...</p>
+        </div>
+    </div>
+    
+    <!-- JavaScript Files -->
     <script src="js/rain_code.js"></script>
+    <script src="js/glitch-effects.js"></script>
+    <script src="js/login.js"></script>
 </body>
-
 </html>
