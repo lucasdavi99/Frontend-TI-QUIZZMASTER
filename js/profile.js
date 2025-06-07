@@ -1,11 +1,20 @@
 /**
  * PROFILE PAGE CONTROLLER - T.I QUIZZMASTER
  * Sistema de gerenciamento de perfil do usuário
+ * 
+ * COMPORTAMENTOS CORRETOS:
+ * 🔄 Username: Redireciona para login (token JWT precisa ser regenerado)
+ * 🔐 Senha: Redireciona para login (segurança)
+ * 🗑️ Exclusão: Redireciona para home (conta deletada)
+ * 🚪 Logout: Redireciona para home
+ * 
+ * PROBLEMA CORRIGIDO:
+ * Token JWT contém username antigo → findByUsername(old) → null → NullPointerException
  */
 
 const API_BASE_URL = 'http://localhost:8080';
 
-console.log('👤 Profile.js carregado - versão inicial v1.0');
+console.log('👤 Profile.js carregado - versão integrada v2.0');
 
 // Estado global da página
 let currentUserData = null;
@@ -179,28 +188,41 @@ class ProfileController {
 
     // Validation functions
     validateUsername(username) {
-        const isValid = username.length >= 3 && username.length <= 20 && /^[a-zA-Z0-9_-]+$/.test(username);
+        if (!username || username.trim() === '') {
+            formValidation.username = false;
+            this.updateSubmitButtonState('edit-profile-form');
+            return false;
+        }
+        
+        const trimmedUsername = username.trim();
+        const isValid = trimmedUsername.length >= 3 && 
+                       trimmedUsername.length <= 20 && 
+                       /^[a-zA-Z0-9_-]+$/.test(trimmedUsername);
+        
         formValidation.username = isValid;
         this.updateSubmitButtonState('edit-profile-form');
         return isValid;
     }
 
     validateCurrentPassword(password) {
-        const isValid = password.length >= 1;
+        const isValid = password && password.length >= 1;
         formValidation.currentPassword = isValid;
         this.updateSubmitButtonState('change-password-form');
         return isValid;
     }
 
     validateNewPassword(password) {
-        const isValid = password.length >= 6;
+        const isValid = password && password.length >= 6;
         formValidation.newPassword = isValid;
         this.updateSubmitButtonState('change-password-form');
         return isValid;
     }
 
     validateConfirmPassword(confirmPassword, newPassword) {
-        const isValid = confirmPassword === newPassword && confirmPassword.length >= 6;
+        const isValid = confirmPassword && 
+                       newPassword && 
+                       confirmPassword === newPassword && 
+                       confirmPassword.length >= 6;
         formValidation.confirmPassword = isValid;
         this.updateSubmitButtonState('change-password-form');
         return isValid;
@@ -264,55 +286,113 @@ class ProfileController {
             if (profileData.status === 'fulfilled' && profileData.value) {
                 currentUserData = profileData.value;
                 this.displayUserInfo(profileData.value);
+            } else if (profileData.status === 'rejected') {
+                console.error('❌ Erro ao carregar perfil:', profileData.reason);
+                if (profileData.reason.message.includes('expirada') || profileData.reason.message.includes('Token')) {
+                    this.handleSessionExpired();
+                    return;
+                }
+                throw profileData.reason;
             }
             
             if (statsData.status === 'fulfilled' && statsData.value) {
                 currentUserStats = statsData.value;
                 this.displayUserStats(statsData.value);
+            } else if (statsData.status === 'rejected') {
+                console.warn('⚠️ Erro ao carregar estatísticas:', statsData.reason);
+                // Não interrompe o carregamento se apenas as estatísticas falharam
             }
             
         } catch (error) {
             console.error('❌ Erro ao carregar dados:', error);
-            this.showStatusMessage('Erro ao carregar dados do perfil', 'error');
+            if (error.message.includes('expirada') || error.message.includes('Token')) {
+                this.handleSessionExpired();
+            } else {
+                this.showStatusMessage('Erro ao carregar dados do perfil', 'error');
+            }
         } finally {
             this.setLoadingState(false);
         }
     }
 
     async loadUserProfile() {
-        // TODO: Implementar chamada real da API
-        console.log('📡 Carregando perfil do usuário (placeholder)...');
+        console.log('📡 Carregando perfil do usuário...');
         
-        // Simulação de dados
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve({
-                    id: 1,
-                    username: 'TestUser',
-                    email: 'test@example.com',
-                    createdAt: new Date().toISOString(),
-                    status: 'active'
-                });
-            }, 1000);
-        });
+        try {
+            const token = this.getAuthToken();
+            if (!token) {
+                throw new Error('Token não encontrado');
+            }
+            
+            const response = await fetch(`${API_BASE_URL}/api/profile/me`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('Sessão expirada - faça login novamente');
+                }
+                throw new Error(`Erro ao carregar perfil: ${response.status}`);
+            }
+            
+            let profileData;
+            try {
+                profileData = await response.json();
+            } catch (jsonError) {
+                throw new Error('Resposta inválida do servidor');
+            }
+            
+            console.log('✅ Perfil carregado com sucesso:', profileData);
+            return profileData;
+            
+        } catch (error) {
+            console.error('❌ Erro ao carregar perfil:', error);
+            throw error;
+        }
     }
 
     async loadUserStats() {
-        // TODO: Implementar chamada real da API
-        console.log('📡 Carregando estatísticas do usuário (placeholder)...');
+        console.log('📡 Carregando estatísticas do usuário...');
         
-        // Simulação de dados
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve({
-                    totalGames: 25,
-                    bestScore: 90,
-                    rankingPosition: 5,
-                    averageScore: 72.5,
-                    totalPoints: 1812
-                });
-            }, 800);
-        });
+        try {
+            const token = this.getAuthToken();
+            if (!token) {
+                throw new Error('Token não encontrado');
+            }
+            
+            const response = await fetch(`${API_BASE_URL}/api/profile/stats`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('Sessão expirada - faça login novamente');
+                }
+                throw new Error(`Erro ao carregar estatísticas: ${response.status}`);
+            }
+            
+            let statsData;
+            try {
+                statsData = await response.json();
+            } catch (jsonError) {
+                throw new Error('Resposta inválida do servidor');
+            }
+            
+            console.log('✅ Estatísticas carregadas com sucesso:', statsData);
+            return statsData;
+            
+        } catch (error) {
+            console.error('❌ Erro ao carregar estatísticas:', error);
+            throw error;
+        }
     }
 
     displayUserInfo(userData) {
@@ -383,30 +463,42 @@ class ProfileController {
             return;
         }
         
-        console.log('💾 Alterando username para:', newUsername);
-        
         try {
             this.setLoadingState(true, 'Alterando username...');
             
-            // TODO: Implementar chamada real da API
-            await this.updateUsername(newUsername);
+            const result = await this.updateUsername(newUsername);
             
-            this.showStatusMessage('Username alterado com sucesso!', 'success');
+            this.showStatusMessage('✅ Username alterado com sucesso!', 'success');
             
-            // Update current data
+            // Update current data temporarily for display
             if (currentUserData) {
                 currentUserData.username = newUsername;
             }
             
-            // Update display
+            // Update display briefly
             const currentUsernameElement = document.getElementById('current-username');
             if (currentUsernameElement) {
                 currentUsernameElement.textContent = newUsername;
             }
             
+            // Update welcome message briefly
+            const welcomeElement = document.getElementById('user-welcome');
+            if (welcomeElement) {
+                welcomeElement.textContent = `Bem-vindo, ${newUsername}! Gerencie sua conta e configurações`;
+            }
+            
+            // 🔄 FORÇA LOGOUT: Token JWT ainda tem username antigo, precisa regenerar
+            setTimeout(() => {
+                this.forceReauthentication('Username alterado - faça login com seu novo nome');
+            }, 2500);
+            
         } catch (error) {
             console.error('❌ Erro ao alterar username:', error);
-            this.showStatusMessage(error.message || 'Erro ao alterar username', 'error');
+            if (error.message.includes('expirada') || error.message.includes('Token')) {
+                this.handleSessionExpired();
+            } else {
+                this.showStatusMessage(error.message || 'Erro ao alterar username', 'error');
+            }
         } finally {
             this.setLoadingState(false);
         }
@@ -428,15 +520,12 @@ class ProfileController {
             return;
         }
         
-        console.log('🔐 Alterando senha...');
-        
         try {
             this.setLoadingState(true, 'Alterando senha...');
             
-            // TODO: Implementar chamada real da API
-            await this.updatePassword(currentPassword, newPassword);
+            const result = await this.updatePassword(currentPassword, newPassword);
             
-            this.showStatusMessage('Senha alterada com sucesso!', 'success');
+            this.showStatusMessage('🔐 Senha alterada com sucesso!', 'success');
             
             // Clear form
             this.changePasswordForm.reset();
@@ -445,52 +534,164 @@ class ProfileController {
             formValidation.confirmPassword = false;
             this.updateSubmitButtonState('change-password-form');
             
+            // 🔐 SEGURANÇA: Força nova autenticação após mudança de senha
+            setTimeout(() => {
+                this.forceReauthentication('Senha alterada com sucesso');
+            }, 2000);
+            
         } catch (error) {
             console.error('❌ Erro ao alterar senha:', error);
-            this.showStatusMessage(error.message || 'Erro ao alterar senha', 'error');
+            if (error.message.includes('expirada') || error.message.includes('Token')) {
+                this.handleSessionExpired();
+            } else {
+                this.showStatusMessage(error.message || 'Erro ao alterar senha', 'error');
+            }
         } finally {
             this.setLoadingState(false);
         }
     }
 
-    // API placeholder functions
+    // API functions
     async updateUsername(newUsername) {
-        // TODO: Implementar chamada real da API
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if (Math.random() > 0.1) { // 90% success rate for demo
-                    resolve({ success: true });
-                } else {
-                    reject(new Error('Username já está em uso'));
+        console.log('💾 Alterando username para:', newUsername);
+        
+        try {
+            const token = this.getAuthToken();
+            if (!token) {
+                throw new Error('Token não encontrado');
+            }
+            
+            const response = await fetch(`${API_BASE_URL}/api/profile/username`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    newUsername: newUsername
+                })
+            });
+            
+            let responseData;
+            try {
+                responseData = await response.json();
+            } catch (jsonError) {
+                throw new Error('Resposta inválida do servidor');
+            }
+            
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('Sessão expirada - faça login novamente');
                 }
-            }, 1500);
-        });
+                if (response.status === 409) {
+                    throw new Error(responseData.message || 'Username já está em uso');
+                }
+                if (response.status === 400) {
+                    throw new Error(responseData.message || 'Username inválido');
+                }
+                throw new Error(responseData.message || 'Erro ao alterar username');
+            }
+            
+            console.log('✅ Username alterado com sucesso:', responseData);
+            return responseData;
+            
+        } catch (error) {
+            console.error('❌ Erro ao alterar username:', error);
+            throw error;
+        }
     }
 
     async updatePassword(currentPassword, newPassword) {
-        // TODO: Implementar chamada real da API
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if (Math.random() > 0.2) { // 80% success rate for demo
-                    resolve({ success: true });
-                } else {
-                    reject(new Error('Senha atual incorreta'));
+        console.log('🔐 Alterando senha...');
+        
+        try {
+            const token = this.getAuthToken();
+            if (!token) {
+                throw new Error('Token não encontrado');
+            }
+            
+            const response = await fetch(`${API_BASE_URL}/api/profile/password`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    currentPassword: currentPassword,
+                    newPassword: newPassword
+                })
+            });
+            
+            let responseData;
+            try {
+                responseData = await response.json();
+            } catch (jsonError) {
+                throw new Error('Resposta inválida do servidor');
+            }
+            
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('Sessão expirada - faça login novamente');
                 }
-            }, 2000);
-        });
+                if (response.status === 400) {
+                    throw new Error(responseData.message || 'Dados inválidos');
+                }
+                throw new Error(responseData.message || 'Erro ao alterar senha');
+            }
+            
+            console.log('✅ Senha alterada com sucesso:', responseData);
+            return responseData;
+            
+        } catch (error) {
+            console.error('❌ Erro ao alterar senha:', error);
+            throw error;
+        }
     }
 
-    async deleteUserAccount() {
-        // TODO: Implementar chamada real da API
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if (Math.random() > 0.1) { // 90% success rate for demo
-                    resolve({ success: true });
-                } else {
-                    reject(new Error('Erro interno do servidor'));
+    async deleteUserAccount(currentPassword) {
+        console.log('🗑️ Excluindo conta do usuário...');
+        
+        try {
+            const token = this.getAuthToken();
+            if (!token) {
+                throw new Error('Token não encontrado');
+            }
+            
+            const response = await fetch(`${API_BASE_URL}/api/profile/account`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    currentPassword: currentPassword
+                })
+            });
+            
+            let responseData;
+            try {
+                responseData = await response.json();
+            } catch (jsonError) {
+                throw new Error('Resposta inválida do servidor');
+            }
+            
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('Sessão expirada - faça login novamente');
                 }
-            }, 2500);
-        });
+                if (response.status === 400) {
+                    throw new Error(responseData.message || 'Senha incorreta');
+                }
+                throw new Error(responseData.message || 'Erro ao excluir conta');
+            }
+            
+            console.log('✅ Conta excluída com sucesso:', responseData);
+            return responseData;
+            
+        } catch (error) {
+            console.error('❌ Erro ao excluir conta:', error);
+            throw error;
+        }
     }
 
     // Account deletion
@@ -507,12 +708,18 @@ class ProfileController {
     }
 
     async handleAccountDeletion() {
-        console.log('🗑️ Excluindo conta do usuário...');
+        // Solicita a senha atual para confirmação
+        const currentPassword = prompt('Digite sua senha atual para confirmar a exclusão da conta:');
+        
+        if (!currentPassword || currentPassword.trim() === '') {
+            this.showStatusMessage('Senha é obrigatória para excluir a conta', 'error');
+            return;
+        }
         
         try {
             this.setLoadingState(true, 'Excluindo conta...');
             
-            await this.deleteUserAccount();
+            const result = await this.deleteUserAccount(currentPassword.trim());
             
             this.showStatusMessage('Conta excluída com sucesso', 'success');
             
@@ -524,7 +731,11 @@ class ProfileController {
             
         } catch (error) {
             console.error('❌ Erro ao excluir conta:', error);
-            this.showStatusMessage(error.message || 'Erro ao excluir conta', 'error');
+            if (error.message.includes('expirada') || error.message.includes('Token')) {
+                this.handleSessionExpired();
+            } else {
+                this.showStatusMessage(error.message || 'Erro ao excluir conta', 'error');
+            }
         } finally {
             this.setLoadingState(false);
         }
@@ -636,7 +847,27 @@ class ProfileController {
         }
     }
 
-    // Utility functions
+    // Security functions
+    forceReauthentication(reason = 'Operação de segurança realizada') {
+        console.log('🔐 Forçando nova autenticação:', reason);
+        
+        this.showStatusMessage(`${reason}. Redirecionando para login...`, 'info', 4000);
+        
+        setTimeout(() => {
+            this.clearAuthData();
+            
+            // Adiciona parâmetro para mostrar mensagem específica na tela de login
+            const loginUrl = new URL('login.html', window.location.origin);
+            
+            if (reason.includes('Username')) {
+                loginUrl.searchParams.set('reason', 'username_changed');
+            } else if (reason.includes('Senha')) {
+                loginUrl.searchParams.set('reason', 'password_changed');
+            }
+            
+            window.location.href = loginUrl.toString();
+        }, 4000);
+    }
     checkAuthentication() {
         const token = this.getAuthToken();
         const isLoggedIn = this.getLoginStatus();
@@ -684,17 +915,36 @@ class ProfileController {
         window.location.href = 'login.html';
     }
 
+    handleSessionExpired() {
+        console.log('⏰ Sessão expirada - limpando dados e redirecionando...');
+        this.clearAuthData();
+        this.showStatusMessage('Sessão expirada. Faça login novamente.', 'error');
+        
+        setTimeout(() => {
+            this.redirectToLogin();
+        }, 2000);
+    }
+
     formatDate(dateString) {
         if (!dateString) return 'N/A';
         
         try {
             const date = new Date(dateString);
+            
+            // Verifica se é uma data válida
+            if (isNaN(date.getTime())) {
+                return 'Data inválida';
+            }
+            
             return date.toLocaleDateString('pt-BR', {
                 day: '2-digit',
                 month: '2-digit',
-                year: 'numeric'
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
             });
         } catch (error) {
+            console.warn('⚠️ Erro ao formatar data:', error);
             return 'Data inválida';
         }
     }
