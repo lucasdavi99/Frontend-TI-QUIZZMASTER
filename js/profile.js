@@ -1,15 +1,6 @@
 /**
  * PROFILE PAGE CONTROLLER - T.I QUIZZMASTER
  * Sistema de gerenciamento de perfil do usuário
- * 
- * COMPORTAMENTOS CORRETOS:
- * 🔄 Username: Redireciona para login (token JWT precisa ser regenerado)
- * 🔐 Senha: Redireciona para login (segurança)
- * 🗑️ Exclusão: Redireciona para home (conta deletada)
- * 🚪 Logout: Redireciona para home
- * 
- * PROBLEMA CORRIGIDO:
- * Token JWT contém username antigo → findByUsername(old) → null → NullPointerException
  */
 
 const API_BASE_URL = 'http://localhost:8080';
