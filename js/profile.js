@@ -3,9 +3,7 @@
  * Sistema de gerenciamento de perfil do usuário
  */
 
-const API_BASE_URL = 'http://localhost:8080';
-
-console.log('👤 Profile.js carregado - versão integrada v2.0');
+CONFIG.log('👤 Profile.js carregado - versão com config centralizado v2.0', 'info');
 
 // Estado global da página
 let currentUserData = null;
@@ -38,7 +36,7 @@ class ProfileController {
         this.setupGlitchEffects();
         
         this.isInitialized = true;
-        console.log('👤 Profile Controller initialized');
+        CONFIG.log('Profile Controller initialized', 'info');
     }
 
     setupElements() {
@@ -52,7 +50,7 @@ class ProfileController {
         this.deleteAccountBtn = document.getElementById('delete-account-btn');
         this.logoutBtn = document.getElementById('logout-btn');
         
-        console.log('✅ Elementos configurados');
+        CONFIG.log('Elementos configurados', 'debug');
     }
 
     setupEventListeners() {
@@ -77,7 +75,7 @@ class ProfileController {
         // Modal events
         this.setupModalEvents();
         
-        console.log('✅ Event listeners configurados');
+        CONFIG.log('Event listeners configurados', 'debug');
     }
 
     setupModalEvents() {
@@ -258,7 +256,7 @@ class ProfileController {
 
     // Data loading functions
     async loadUserData() {
-        console.log('👤 Carregando dados do usuário...');
+        CONFIG.log('Carregando dados do usuário...', 'info');
         
         if (!this.checkAuthentication()) {
             this.redirectToLogin();
@@ -278,7 +276,7 @@ class ProfileController {
                 currentUserData = profileData.value;
                 this.displayUserInfo(profileData.value);
             } else if (profileData.status === 'rejected') {
-                console.error('❌ Erro ao carregar perfil:', profileData.reason);
+                CONFIG.log('Erro ao carregar perfil', 'error', profileData.reason);
                 if (profileData.reason.message.includes('expirada') || profileData.reason.message.includes('Token')) {
                     this.handleSessionExpired();
                     return;
@@ -290,12 +288,12 @@ class ProfileController {
                 currentUserStats = statsData.value;
                 this.displayUserStats(statsData.value);
             } else if (statsData.status === 'rejected') {
-                console.warn('⚠️ Erro ao carregar estatísticas:', statsData.reason);
+                CONFIG.log('Erro ao carregar estatísticas', 'warn', statsData.reason);
                 // Não interrompe o carregamento se apenas as estatísticas falharam
             }
             
         } catch (error) {
-            console.error('❌ Erro ao carregar dados:', error);
+            CONFIG.log('Erro ao carregar dados', 'error', error);
             if (error.message.includes('expirada') || error.message.includes('Token')) {
                 this.handleSessionExpired();
             } else {
@@ -307,7 +305,7 @@ class ProfileController {
     }
 
     async loadUserProfile() {
-        console.log('📡 Carregando perfil do usuário...');
+        CONFIG.log('Carregando perfil do usuário...', 'debug');
         
         try {
             const token = this.getAuthToken();
@@ -315,13 +313,19 @@ class ProfileController {
                 throw new Error('Token não encontrado');
             }
             
-            const response = await fetch(`${API_BASE_URL}/api/profile/me`, {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+            
+            const response = await fetch(CONFIG.getEndpointURL('PROFILE_INFO'), {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
             
             if (!response.ok) {
                 if (response.status === 401) {
@@ -337,17 +341,20 @@ class ProfileController {
                 throw new Error('Resposta inválida do servidor');
             }
             
-            console.log('✅ Perfil carregado com sucesso:', profileData);
+            CONFIG.log('Perfil carregado com sucesso', 'info', profileData);
             return profileData;
             
         } catch (error) {
-            console.error('❌ Erro ao carregar perfil:', error);
+            if (error.name === 'AbortError') {
+                throw new Error('Timeout ao carregar perfil');
+            }
+            CONFIG.log('Erro ao carregar perfil', 'error', error);
             throw error;
         }
     }
 
     async loadUserStats() {
-        console.log('📡 Carregando estatísticas do usuário...');
+        CONFIG.log('Carregando estatísticas do usuário...', 'debug');
         
         try {
             const token = this.getAuthToken();
@@ -355,13 +362,19 @@ class ProfileController {
                 throw new Error('Token não encontrado');
             }
             
-            const response = await fetch(`${API_BASE_URL}/api/profile/stats`, {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+            
+            const response = await fetch(CONFIG.getEndpointURL('PROFILE_STATS'), {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
             
             if (!response.ok) {
                 if (response.status === 401) {
@@ -377,17 +390,20 @@ class ProfileController {
                 throw new Error('Resposta inválida do servidor');
             }
             
-            console.log('✅ Estatísticas carregadas com sucesso:', statsData);
+            CONFIG.log('Estatísticas carregadas com sucesso', 'info', statsData);
             return statsData;
             
         } catch (error) {
-            console.error('❌ Erro ao carregar estatísticas:', error);
+            if (error.name === 'AbortError') {
+                throw new Error('Timeout ao carregar estatísticas');
+            }
+            CONFIG.log('Erro ao carregar estatísticas', 'error', error);
             throw error;
         }
     }
 
     displayUserInfo(userData) {
-        console.log('🎨 Exibindo informações do usuário:', userData);
+        CONFIG.log('Exibindo informações do usuário', 'debug', userData);
         
         // Update welcome message
         const welcomeElement = document.getElementById('user-welcome');
@@ -420,7 +436,7 @@ class ProfileController {
     }
 
     displayUserStats(statsData) {
-        console.log('📊 Exibindo estatísticas do usuário:', statsData);
+        CONFIG.log('Exibindo estatísticas do usuário', 'debug', statsData);
         
         const statsElements = {
             'total-games-preview': statsData.totalGames || 0,
@@ -484,7 +500,7 @@ class ProfileController {
             }, 2500);
             
         } catch (error) {
-            console.error('❌ Erro ao alterar username:', error);
+            CONFIG.log('Erro ao alterar username', 'error', error);
             if (error.message.includes('expirada') || error.message.includes('Token')) {
                 this.handleSessionExpired();
             } else {
@@ -531,7 +547,7 @@ class ProfileController {
             }, 2000);
             
         } catch (error) {
-            console.error('❌ Erro ao alterar senha:', error);
+            CONFIG.log('Erro ao alterar senha', 'error', error);
             if (error.message.includes('expirada') || error.message.includes('Token')) {
                 this.handleSessionExpired();
             } else {
@@ -544,7 +560,7 @@ class ProfileController {
 
     // API functions
     async updateUsername(newUsername) {
-        console.log('💾 Alterando username para:', newUsername);
+        CONFIG.log('Alterando username', 'info', `para: ${newUsername}`);
         
         try {
             const token = this.getAuthToken();
@@ -552,7 +568,10 @@ class ProfileController {
                 throw new Error('Token não encontrado');
             }
             
-            const response = await fetch(`${API_BASE_URL}/api/profile/username`, {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+            
+            const response = await fetch(CONFIG.getEndpointURL('UPDATE_USERNAME'), {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -560,8 +579,11 @@ class ProfileController {
                 },
                 body: JSON.stringify({
                     newUsername: newUsername
-                })
+                }),
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
             
             let responseData;
             try {
@@ -583,17 +605,20 @@ class ProfileController {
                 throw new Error(responseData.message || 'Erro ao alterar username');
             }
             
-            console.log('✅ Username alterado com sucesso:', responseData);
+            CONFIG.log('Username alterado com sucesso', 'info', responseData);
             return responseData;
             
         } catch (error) {
-            console.error('❌ Erro ao alterar username:', error);
+            if (error.name === 'AbortError') {
+                throw new Error('Timeout ao alterar username');
+            }
+            CONFIG.log('Erro ao alterar username', 'error', error);
             throw error;
         }
     }
 
     async updatePassword(currentPassword, newPassword) {
-        console.log('🔐 Alterando senha...');
+        CONFIG.log('Alterando senha...', 'info');
         
         try {
             const token = this.getAuthToken();
@@ -601,7 +626,10 @@ class ProfileController {
                 throw new Error('Token não encontrado');
             }
             
-            const response = await fetch(`${API_BASE_URL}/api/profile/password`, {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+            
+            const response = await fetch(CONFIG.getEndpointURL('UPDATE_PASSWORD'), {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -610,8 +638,11 @@ class ProfileController {
                 body: JSON.stringify({
                     currentPassword: currentPassword,
                     newPassword: newPassword
-                })
+                }),
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
             
             let responseData;
             try {
@@ -630,17 +661,20 @@ class ProfileController {
                 throw new Error(responseData.message || 'Erro ao alterar senha');
             }
             
-            console.log('✅ Senha alterada com sucesso:', responseData);
+            CONFIG.log('Senha alterada com sucesso', 'info', responseData);
             return responseData;
             
         } catch (error) {
-            console.error('❌ Erro ao alterar senha:', error);
+            if (error.name === 'AbortError') {
+                throw new Error('Timeout ao alterar senha');
+            }
+            CONFIG.log('Erro ao alterar senha', 'error', error);
             throw error;
         }
     }
 
     async deleteUserAccount(currentPassword) {
-        console.log('🗑️ Excluindo conta do usuário...');
+        CONFIG.log('Excluindo conta do usuário...', 'warn');
         
         try {
             const token = this.getAuthToken();
@@ -648,7 +682,10 @@ class ProfileController {
                 throw new Error('Token não encontrado');
             }
             
-            const response = await fetch(`${API_BASE_URL}/api/profile/account`, {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+            
+            const response = await fetch(CONFIG.getEndpointURL('DELETE_ACCOUNT'), {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -656,8 +693,11 @@ class ProfileController {
                 },
                 body: JSON.stringify({
                     currentPassword: currentPassword
-                })
+                }),
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
             
             let responseData;
             try {
@@ -676,11 +716,14 @@ class ProfileController {
                 throw new Error(responseData.message || 'Erro ao excluir conta');
             }
             
-            console.log('✅ Conta excluída com sucesso:', responseData);
+            CONFIG.log('Conta excluída com sucesso', 'info', responseData);
             return responseData;
             
         } catch (error) {
-            console.error('❌ Erro ao excluir conta:', error);
+            if (error.name === 'AbortError') {
+                throw new Error('Timeout ao excluir conta');
+            }
+            CONFIG.log('Erro ao excluir conta', 'error', error);
             throw error;
         }
     }
@@ -721,7 +764,7 @@ class ProfileController {
             }, 2000);
             
         } catch (error) {
-            console.error('❌ Erro ao excluir conta:', error);
+            CONFIG.log('Erro ao excluir conta', 'error', error);
             if (error.message.includes('expirada') || error.message.includes('Token')) {
                 this.handleSessionExpired();
             } else {
@@ -745,7 +788,7 @@ class ProfileController {
     }
 
     performLogout() {
-        console.log('👋 Fazendo logout...');
+        CONFIG.log('Fazendo logout...', 'info');
         
         this.clearAuthData();
         
@@ -840,7 +883,7 @@ class ProfileController {
 
     // Security functions
     forceReauthentication(reason = 'Operação de segurança realizada') {
-        console.log('🔐 Forçando nova autenticação:', reason);
+        CONFIG.log('Forçando nova autenticação', 'warn', reason);
         
         this.showStatusMessage(`${reason}. Redirecionando para login...`, 'info', 4000);
         
@@ -859,6 +902,7 @@ class ProfileController {
             window.location.href = loginUrl.toString();
         }, 4000);
     }
+
     checkAuthentication() {
         const token = this.getAuthToken();
         const isLoggedIn = this.getLoginStatus();
@@ -867,33 +911,47 @@ class ProfileController {
     }
 
     getAuthToken() {
-        return localStorage.getItem('token') || 
-               (window.authData && window.authData.token) ||
-               sessionStorage.getItem('token');
+        // Tenta localStorage primeiro
+        try {
+            if (typeof Storage !== "undefined") {
+                const token = localStorage.getItem(CONFIG.TOKEN_STORAGE_KEY);
+                if (token) return token;
+            }
+        } catch (e) {
+            CONFIG.log('Erro ao acessar localStorage', 'warn', e);
+        }
+        
+        // Fallback para memory storage
+        return window.authData ? window.authData.token : null;
     }
 
     getLoginStatus() {
-        const localStorageStatus = localStorage.getItem('loggedIn') === 'true';
-        const windowDataStatus = window.authData && window.authData.loggedIn;
-        const sessionStorageStatus = sessionStorage.getItem('loggedIn') === 'true';
+        try {
+            if (typeof Storage !== "undefined") {
+                const status = localStorage.getItem(CONFIG.LOGIN_STATUS_KEY);
+                if (status) return status === 'true';
+            }
+        } catch (e) {
+            CONFIG.log('Erro ao acessar localStorage', 'warn', e);
+        }
         
-        return localStorageStatus || windowDataStatus || sessionStorageStatus;
+        return window.authData ? window.authData.loggedIn : false;
     }
 
     clearAuthData() {
         try {
-            localStorage.removeItem('token');
-            localStorage.removeItem('loggedIn');
-            localStorage.removeItem('userData');
+            localStorage.removeItem(CONFIG.TOKEN_STORAGE_KEY);
+            localStorage.removeItem(CONFIG.LOGIN_STATUS_KEY);
+            localStorage.removeItem(CONFIG.USER_DATA_KEY);
         } catch (e) {
-            console.warn('⚠️ Erro ao limpar localStorage');
+            CONFIG.log('Erro ao limpar localStorage', 'warn', e);
         }
         
         try {
-            sessionStorage.removeItem('token');
-            sessionStorage.removeItem('loggedIn');
+            sessionStorage.removeItem(CONFIG.TOKEN_STORAGE_KEY);
+            sessionStorage.removeItem(CONFIG.LOGIN_STATUS_KEY);
         } catch (e) {
-            console.warn('⚠️ Erro ao limpar sessionStorage');
+            CONFIG.log('Erro ao limpar sessionStorage', 'warn', e);
         }
         
         if (window.authData) {
@@ -902,12 +960,12 @@ class ProfileController {
     }
 
     redirectToLogin() {
-        console.log('🔄 Redirecionando para login...');
+        CONFIG.log('Redirecionando para login...', 'info');
         window.location.href = 'login.html';
     }
 
     handleSessionExpired() {
-        console.log('⏰ Sessão expirada - limpando dados e redirecionando...');
+        CONFIG.log('Sessão expirada - limpando dados e redirecionando...', 'warn');
         this.clearAuthData();
         this.showStatusMessage('Sessão expirada. Faça login novamente.', 'error');
         
@@ -935,7 +993,7 @@ class ProfileController {
                 minute: '2-digit'
             });
         } catch (error) {
-            console.warn('⚠️ Erro ao formatar data:', error);
+            CONFIG.log('Erro ao formatar data', 'warn', error);
             return 'Data inválida';
         }
     }
@@ -988,16 +1046,24 @@ class ProfileController {
     showLoadingOverlay() {
         if (this.loadingOverlay) {
             this.loadingOverlay.style.display = 'flex';
+            
+            setTimeout(() => {
+                this.loadingOverlay.style.opacity = '1';
+            }, 10);
         }
     }
 
     hideLoadingOverlay() {
         if (this.loadingOverlay) {
-            this.loadingOverlay.style.display = 'none';
+            this.loadingOverlay.style.opacity = '0';
+            
+            setTimeout(() => {
+                this.loadingOverlay.style.display = 'none';
+            }, CONFIG.ANIMATION_DURATION);
         }
     }
 
-    showStatusMessage(message, type = 'info', duration = 5000) {
+    showStatusMessage(message, type = 'info', duration = CONFIG.NOTIFICATION_DURATION) {
         if (!this.statusContainer) return;
         
         const statusMessage = document.createElement('div');
@@ -1022,58 +1088,84 @@ class ProfileController {
             }, 500);
         }, duration);
         
-        console.log(`📢 Status message (${type}): ${message}`);
+        CONFIG.log(`Status message (${type})`, 'info', message);
     }
 }
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('👤 === PÁGINA DE PERFIL CARREGADA ===');
-    console.log('🏠 DOM ready - iniciando configuração');
+    CONFIG.log('=== PÁGINA DE PERFIL CARREGADA ===', 'info');
+    CONFIG.log('DOM ready - iniciando configuração', 'debug');
+    
+    // Verifica se estamos na página correta
+    if (!window.location.pathname.includes('profile')) {
+        CONFIG.log('Não parece ser a página de perfil', 'warn');
+    }
     
     // Initialize profile controller
     setTimeout(() => {
         window.profileController = new ProfileController();
     }, 500);
     
-    console.log('👤 === CONFIGURAÇÃO INICIAL COMPLETA ===');
+    CONFIG.log('=== CONFIGURAÇÃO INICIAL COMPLETA ===', 'info');
 });
 
-// Global debug functions
-window.profileDebug = {
-    showTestModal: () => {
-        if (window.profileController) {
-            window.profileController.showModal({
-                title: 'TESTE',
-                icon: '🧪',
-                message: 'Este é um modal de teste',
-                onConfirm: () => console.log('Modal confirmado!')
-            });
+// Global debug functions (only in debug mode)
+if (CONFIG.DEBUG) {
+    window.profileDebug = {
+        showTestModal: () => {
+            if (window.profileController) {
+                window.profileController.showModal({
+                    title: 'TESTE',
+                    icon: '🧪',
+                    message: 'Este é um modal de teste',
+                    onConfirm: () => CONFIG.log('Modal confirmado!', 'info')
+                });
+            }
+        },
+        simulateUserData: () => {
+            if (window.profileController) {
+                const testData = {
+                    username: 'TestUser123',
+                    email: 'test@example.com',
+                    createdAt: '2024-01-15T10:30:00Z',
+                    status: 'active'
+                };
+                window.profileController.displayUserInfo(testData);
+            }
+        },
+        simulateStats: () => {
+            if (window.profileController) {
+                const testStats = {
+                    totalGames: 42,
+                    bestScore: 95,
+                    rankingPosition: 3
+                };
+                window.profileController.displayUserStats(testStats);
+            }
+        },
+        testTimeout: () => {
+            CONFIG.log('Testando timeout...', 'debug');
+            // Simula uma requisição com timeout curto
+            CONFIG.override({ API_TIMEOUT: 1 });
+            if (window.profileController) {
+                window.profileController.loadUserData();
+            }
+        },
+        resetConfig: () => {
+            CONFIG.log('Resetando configurações para padrão...', 'debug');
+            window.location.reload();
         }
-    },
-    simulateUserData: () => {
-        if (window.profileController) {
-            const testData = {
-                username: 'TestUser123',
-                email: 'test@example.com',
-                createdAt: '2024-01-15T10:30:00Z',
-                status: 'active'
-            };
-            window.profileController.displayUserInfo(testData);
-        }
-    },
-    simulateStats: () => {
-        if (window.profileController) {
-            const testStats = {
-                totalGames: 42,
-                bestScore: 95,
-                rankingPosition: 3
-            };
-            window.profileController.displayUserStats(testStats);
-        }
-    }
-};
+    };
+    
+    CONFIG.log('Debug functions available: profileDebug.*', 'info');
+}
 
-console.log('👤 Profile.js carregado completamente');
-console.log('🌐 API Base URL:', API_BASE_URL);
-console.log('💡 Debug functions available: profileDebug.*');
+// Log de inicialização
+CONFIG.log('Profile.js carregado completamente', 'info');
+CONFIG.log('API Base URL', 'info', CONFIG.API_BASE_URL);
+CONFIG.log('Configurações de perfil', 'debug', {
+    timeout: CONFIG.API_TIMEOUT,
+    notificationDuration: CONFIG.NOTIFICATION_DURATION,
+    animationDuration: CONFIG.ANIMATION_DURATION
+});

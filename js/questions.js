@@ -3,14 +3,13 @@
  * Sistema aprimorado com respostas embaralhadas a cada pergunta
  */
 
-const API_BASE_URL = 'http://localhost:8080';
+CONFIG.log('📋 Questions.js carregado - versão com embaralhamento v5.0', 'info');
+
 let currentSessionId = null;
 let currentSessionState = null;
 let answerMapping = {};
 let countdownInterval = null;
 let redirectTimeout = null;
-
-console.log('📋 Questions.js carregado - versão com embaralhamento v5.0');
 
 // Estados da aplicação
 const AppStates = {
@@ -37,19 +36,19 @@ function shuffleArray(array) {
 
 // 🔧 NOVA FUNÇÃO: Embaralhar respostas mantendo os IDs corretos
 function shuffleAnswers(answers) {
-    console.log('🔀 Embaralhando respostas...');
-    console.log('📝 Respostas originais:', answers.map(a => ({ id: a.id, content: a.content.substring(0, 50) + '...' })));
+    CONFIG.log('🔀 Embaralhando respostas...', 'debug');
+    CONFIG.log('📝 Respostas originais', 'debug', answers.map(a => ({ id: a.id, content: a.content.substring(0, 50) + '...' })));
     
     const shuffledAnswers = shuffleArray(answers);
     
-    console.log('🔀 Respostas embaralhadas:', shuffledAnswers.map(a => ({ id: a.id, content: a.content.substring(0, 50) + '...' })));
+    CONFIG.log('🔀 Respostas embaralhadas', 'debug', shuffledAnswers.map(a => ({ id: a.id, content: a.content.substring(0, 50) + '...' })));
     
     return shuffledAnswers;
 }
 
 // Função principal de inicialização
 function initializeApp() {
-    console.log('🚀 Inicializando aplicação...');
+    CONFIG.log('🚀 Inicializando aplicação...', 'info');
     
     // Limpar timeouts e intervals anteriores
     clearTimers();
@@ -67,7 +66,7 @@ function initializeApp() {
 
 // Gerenciamento de estados da aplicação
 function setState(state) {
-    console.log(`🔄 Mudando estado: ${currentState} → ${state}`);
+    CONFIG.log(`🔄 Mudando estado: ${currentState} → ${state}`, 'debug');
     currentState = state;
     
     // Esconder todos os overlays primeiro
@@ -100,52 +99,64 @@ function setState(state) {
 
 // Verificação de autenticação melhorada
 function checkAuthentication() {
-    console.log('🔐 Verificando autenticação...');
+    CONFIG.log('🔐 Verificando autenticação...', 'debug');
     
     const token = getAuthToken();
     const isLoggedIn = getLoginStatus();
     
-    console.log('🔐 Status de autenticação:', {
+    CONFIG.log('🔐 Status de autenticação', 'debug', {
         hasToken: !!token,
         isLoggedIn: isLoggedIn,
         tokenLength: token ? token.length : 0
     });
     
     if (!token || !isLoggedIn) {
-        console.warn('❌ Usuário não autenticado');
+        CONFIG.log('❌ Usuário não autenticado', 'warn');
         return false;
     }
     
-    console.log('✅ Usuário autenticado');
+    CONFIG.log('✅ Usuário autenticado', 'info');
     return true;
 }
 
 // Função para obter token de autenticação
 function getAuthToken() {
-    return localStorage.getItem('token') || 
-           (window.authData && window.authData.token) ||
-           sessionStorage.getItem('token');
+    try {
+        if (typeof Storage !== "undefined") {
+            const token = localStorage.getItem(CONFIG.TOKEN_STORAGE_KEY);
+            if (token) return token;
+        }
+    } catch (e) {
+        CONFIG.log('Erro ao acessar localStorage', 'warn', e);
+    }
+    
+    return window.authData ? window.authData.token : null;
 }
 
 // Função para obter status de login
 function getLoginStatus() {
-    const localStorageStatus = localStorage.getItem('loggedIn') === 'true';
-    const windowDataStatus = window.authData && window.authData.loggedIn;
-    const sessionStorageStatus = sessionStorage.getItem('loggedIn') === 'true';
+    try {
+        if (typeof Storage !== "undefined") {
+            const status = localStorage.getItem(CONFIG.LOGIN_STATUS_KEY);
+            if (status) return status === 'true';
+        }
+    } catch (e) {
+        CONFIG.log('Erro ao acessar localStorage', 'warn', e);
+    }
     
-    return localStorageStatus || windowDataStatus || sessionStorageStatus;
+    return window.authData ? window.authData.loggedIn : false;
 }
 
 // Mostrar overlay de autenticação requerida
 function showAuthRequiredOverlay() {
-    console.log('🔐 Mostrando overlay de autenticação requerida');
+    CONFIG.log('🔐 Mostrando overlay de autenticação requerida', 'info');
     
     const overlay = document.getElementById('auth-required-overlay');
     if (overlay) {
         overlay.style.display = 'flex';
         startCountdown();
     } else {
-        console.error('❌ Elemento auth-required-overlay não encontrado');
+        CONFIG.log('❌ Elemento auth-required-overlay não encontrado', 'error');
         // 🔧 CORREÇÃO: Usa o modal melhorado em vez de alert
         if (typeof showModal === 'function') {
             showModal('Você precisa fazer login para jogar!', true, 3000);
@@ -158,7 +169,7 @@ function showAuthRequiredOverlay() {
 
 // 🔧 CORREÇÃO: Função melhorada para mostrar overlay de erro
 function showErrorOverlay(message) {
-    console.log('❌ Mostrando overlay de erro:', message);
+    CONFIG.log('❌ Mostrando overlay de erro', 'error', message);
     
     const overlay = document.getElementById('error-overlay');
     const messageElement = document.getElementById('error-message');
@@ -168,7 +179,7 @@ function showErrorOverlay(message) {
         overlay.style.display = 'flex';
         setState(AppStates.ERROR);
     } else {
-        console.error('❌ Elementos de erro não encontrados');
+        CONFIG.log('❌ Elementos de erro não encontrados', 'error');
         // 🔧 CORREÇÃO: Usa o modal melhorado
         if (typeof showErrorModal === 'function') {
             showErrorModal(message);
@@ -184,7 +195,7 @@ function startCountdown() {
     const countdownElement = document.getElementById('countdown');
     
     if (!countdownElement) {
-        console.warn('⚠️ Elemento countdown não encontrado');
+        CONFIG.log('⚠️ Elemento countdown não encontrado', 'warn');
         setTimeout(redirectToLogin, 5000);
         return;
     }
@@ -204,7 +215,7 @@ function startCountdown() {
 
 // Redirecionar para login
 function redirectToLogin() {
-    console.log('🔄 Redirecionando para login...');
+    CONFIG.log('🔄 Redirecionando para login...', 'info');
     clearTimers();
     
     // Adicionar efeito de transição
@@ -314,7 +325,7 @@ function hideGameElements() {
 async function authenticatedFetch(url, options = {}) {
     const token = getAuthToken();
     
-    console.log('🌐 Fazendo requisição para:', url);
+    CONFIG.log('🌐 Fazendo requisição para', 'debug', url);
     
     if (!token) {
         throw new Error('Token de autenticação não encontrado');
@@ -336,12 +347,20 @@ async function authenticatedFetch(url, options = {}) {
         }
     };
     
+    // Adicionar timeout usando AbortController
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+    
+    mergedOptions.signal = controller.signal;
+    
     try {
         const response = await fetch(url, mergedOptions);
-        console.log('📥 Status da resposta:', response.status);
+        clearTimeout(timeoutId);
+        
+        CONFIG.log('📥 Status da resposta', 'debug', response.status);
         
         if (response.status === 403 || response.status === 401) {
-            console.error('❌ Erro de autenticação - token inválido');
+            CONFIG.log('❌ Erro de autenticação - token inválido', 'error');
             clearAuthData();
             setState(AppStates.AUTH_REQUIRED);
             throw new Error('Sessão expirada. Faça login novamente.');
@@ -349,13 +368,20 @@ async function authenticatedFetch(url, options = {}) {
         
         if (!response.ok) {
             const errorText = await response.text();
-            console.error('❌ Erro na resposta:', response.status, errorText);
+            CONFIG.log('❌ Erro na resposta', 'error', { status: response.status, error: errorText });
             throw new Error(`Erro ${response.status}: ${errorText || 'Erro desconhecido'}`);
         }
         
         return response;
     } catch (error) {
-        console.error('❌ Erro na requisição:', error);
+        clearTimeout(timeoutId);
+        
+        if (error.name === 'AbortError') {
+            CONFIG.log('❌ Timeout na requisição', 'error', url);
+            throw new Error('Timeout na requisição. Tente novamente.');
+        }
+        
+        CONFIG.log('❌ Erro na requisição', 'error', error);
         
         if (error.message.includes('Failed to fetch')) {
             throw new Error('Erro de conexão. Verifique sua internet.');
@@ -368,18 +394,18 @@ async function authenticatedFetch(url, options = {}) {
 // Limpar dados de autenticação
 function clearAuthData() {
     try {
-        localStorage.removeItem('token');
-        localStorage.removeItem('loggedIn');
-        localStorage.removeItem('userData');
+        localStorage.removeItem(CONFIG.TOKEN_STORAGE_KEY);
+        localStorage.removeItem(CONFIG.LOGIN_STATUS_KEY);
+        localStorage.removeItem(CONFIG.USER_DATA_KEY);
     } catch (e) {
-        console.warn('⚠️ Erro ao limpar localStorage');
+        CONFIG.log('⚠️ Erro ao limpar localStorage', 'warn', e);
     }
     
     try {
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('loggedIn');
+        sessionStorage.removeItem(CONFIG.TOKEN_STORAGE_KEY);
+        sessionStorage.removeItem(CONFIG.LOGIN_STATUS_KEY);
     } catch (e) {
-        console.warn('⚠️ Erro ao limpar sessionStorage');
+        CONFIG.log('⚠️ Erro ao limpar sessionStorage', 'warn', e);
     }
     
     if (window.authData) {
@@ -389,18 +415,18 @@ function clearAuthData() {
 
 // Iniciar sessão de quiz
 async function startQuizSession() {
-    console.log('🎮 Iniciando nova sessão de quiz...');
+    CONFIG.log('🎮 Iniciando nova sessão de quiz...', 'info');
     
     try {
-        const response = await authenticatedFetch(`${API_BASE_URL}/api/quiz-session/start`, {
+        const response = await authenticatedFetch(CONFIG.getEndpointURL('START_SESSION'), {
             method: 'POST',
             body: JSON.stringify({
-                numberOfQuestions: 1
+                numberOfQuestions: CONFIG.QUESTIONS_PER_SESSION
             })
         });
         
         const sessionData = await response.json();
-        console.log('✅ Sessão criada com sucesso:', sessionData);
+        CONFIG.log('✅ Sessão criada com sucesso', 'info', sessionData);
         
         currentSessionId = sessionData.sessionId;
         currentSessionState = sessionData;
@@ -412,42 +438,42 @@ async function startQuizSession() {
         setState(AppStates.PLAYING);
         
     } catch (error) {
-        console.error('❌ Erro ao iniciar quiz:', error);
+        CONFIG.log('❌ Erro ao iniciar quiz', 'error', error);
         showErrorOverlay(`Erro ao iniciar o quiz: ${error.message}`);
     }
 }
 
 // 🔧 FUNÇÃO MODIFICADA: Exibir pergunta atual com respostas embaralhadas
 function displayQuestion(sessionState) {
-    console.log('📝 Exibindo pergunta:', sessionState);
+    CONFIG.log('📝 Exibindo pergunta', 'debug', sessionState);
     
     if (!sessionState || !sessionState.currentQuestion) {
-        console.error('❌ Pergunta não encontrada no estado da sessão');
+        CONFIG.log('❌ Pergunta não encontrada no estado da sessão', 'error');
         showErrorOverlay('Erro ao carregar pergunta');
         return;
     }
     
     const question = sessionState.currentQuestion;
-    console.log('📋 Pergunta atual:', question);
+    CONFIG.log('📋 Pergunta atual', 'debug', question);
     
     // 🆕 VERIFICAR SE É A PRIMEIRA PERGUNTA
     const isFirstQuestion = sessionState.currentQuestionIndex === 0;
-    console.log('🎯 É a primeira pergunta?', isFirstQuestion);
+    CONFIG.log('🎯 É a primeira pergunta?', 'debug', isFirstQuestion);
     
     // Atualizar o texto da pergunta
     const questionElement = document.getElementById('Questao');
     if (questionElement) {
         questionElement.textContent = question.content;
-        console.log('✅ Pergunta atualizada na tela');
+        CONFIG.log('✅ Pergunta atualizada na tela', 'debug');
     } else {
-        console.error('❌ Elemento #Questao não encontrado');
+        CONFIG.log('❌ Elemento #Questao não encontrado', 'error');
     }
     
     // 🔀 EMBARALHAR AS RESPOSTAS antes de exibir
     const originalAnswers = question.answers;
     const shuffledAnswers = shuffleAnswers(originalAnswers);
     
-    console.log('📝 Respostas embaralhadas:', shuffledAnswers);
+    CONFIG.log('📝 Respostas embaralhadas', 'debug', shuffledAnswers);
     
     // Limpar mapeamento anterior
     answerMapping = {};
@@ -466,7 +492,7 @@ function displayQuestion(sessionState) {
     // 🆕 MOSTRAR MENSAGEM APENAS NA PRIMEIRA PERGUNTA
     if (answersContainer && isFirstQuestion) {
         answersContainer.classList.add('shuffled');
-        console.log('💬 Mostrando mensagem de embaralhamento (primeira pergunta)');
+        CONFIG.log('💬 Mostrando mensagem de embaralhamento (primeira pergunta)', 'debug');
         
         // Remover classe após a animação do indicador
         setTimeout(() => {
@@ -475,7 +501,7 @@ function displayQuestion(sessionState) {
     } else if (answersContainer && !isFirstQuestion) {
         // 🔄 INDICADOR SUTIL PARA PERGUNTAS SUBSEQUENTES
         answersContainer.classList.add('subtle-shuffle');
-        console.log('🔄 Embaralhando com indicador sutil (pergunta subsequente)');
+        CONFIG.log('🔄 Embaralhando com indicador sutil (pergunta subsequente)', 'debug');
         
         // Remover classe após a animação sutil
         setTimeout(() => {
@@ -513,7 +539,7 @@ function displayQuestion(sessionState) {
                         }
                     }, 600 + (index * 100)); // Escalonar a remoção
                     
-                    console.log(`✅ Resposta ${answerLabels[index]} configurada: ${answer.content.substring(0, 50)}... (ID: ${answer.id})`);
+                    CONFIG.log(`✅ Resposta ${answerLabels[index]} configurada: ${answer.content.substring(0, 50)}... (ID: ${answer.id})`, 'debug');
                 }
             }
         }
@@ -526,12 +552,12 @@ function displayQuestion(sessionState) {
         }
     }, 1000);
     
-    console.log('🗺️ Mapeamento de respostas embaralhadas:', answerMapping);
+    CONFIG.log('🗺️ Mapeamento de respostas embaralhadas', 'debug', answerMapping);
     
     // 🎯 LOG PARA DEBUGGING: Mostrar qual resposta está em qual posição
     shuffledAnswers.forEach((answer, index) => {
         if (index < answerLabels.length) {
-            console.log(`🎯 Posição ${answerLabels[index]}: "${answer.content.substring(0, 30)}..." (ID: ${answer.id})`);
+            CONFIG.log(`🎯 Posição ${answerLabels[index]}: "${answer.content.substring(0, 30)}..." (ID: ${answer.id})`, 'debug');
         }
     });
     
@@ -540,9 +566,9 @@ function displayQuestion(sessionState) {
     updateProgressDisplay(sessionState);
     
     if (isFirstQuestion) {
-        console.log('✅ Primeira pergunta exibida com mensagem de embaralhamento!');
+        CONFIG.log('✅ Primeira pergunta exibida com mensagem de embaralhamento!', 'info');
     } else {
-        console.log('✅ Pergunta subsequente exibida com embaralhamento silencioso!');
+        CONFIG.log('✅ Pergunta subsequente exibida com embaralhamento silencioso!', 'info');
     }
 }
 
@@ -579,19 +605,19 @@ function updateProgressDisplay(sessionState) {
 // Enviar resposta
 async function submitAnswer(answerId) {
     if (!currentSessionId) {
-        console.error('❌ Sessão inválida');
+        CONFIG.log('❌ Sessão inválida', 'error');
         showErrorOverlay('Sessão inválida. Reinicie o quiz.');
         return;
     }
     
-    console.log('📤 Enviando resposta com ID:', answerId);
+    CONFIG.log('📤 Enviando resposta com ID', 'info', answerId);
     
     // Desabilitar botões para evitar cliques múltiplos
     disableAnswerButtons();
     
     try {
         const response = await authenticatedFetch(
-            `${API_BASE_URL}/api/quiz-session/${currentSessionId}/answer`,
+            CONFIG.getEndpointURL('SUBMIT_ANSWER', { sessionId: currentSessionId }),
             {
                 method: 'POST',
                 body: JSON.stringify({
@@ -601,7 +627,7 @@ async function submitAnswer(answerId) {
         );
         
         const result = await response.json();
-        console.log('✅ Resposta do servidor:', result);
+        CONFIG.log('✅ Resposta do servidor', 'info', result);
         
         // Se retornou um resultado final (fim do jogo)
         if (result.finalScore !== undefined) {
@@ -613,7 +639,7 @@ async function submitAnswer(answerId) {
         }
         
     } catch (error) {
-        console.error('❌ Erro ao enviar resposta:', error);
+        CONFIG.log('❌ Erro ao enviar resposta', 'error', error);
         showErrorOverlay(`Erro ao processar resposta: ${error.message}`);
     } finally {
         // Reabilitar botões
@@ -640,7 +666,7 @@ function enableAnswerButtons() {
 
 // 🔧 CORREÇÃO: Lidar com o fim do quiz usando o modal melhorado
 function handleQuizEnd(result) {
-    console.log('🏁 Quiz finalizado:', result);
+    CONFIG.log('🏁 Quiz finalizado', 'info', result);
     
     let message = result.message || 'Quiz finalizado!';
     const score = result.finalScore || 0;
@@ -669,7 +695,7 @@ function handleQuizEnd(result) {
     currentSessionState = null;
     answerMapping = {};
     
-    console.log('🏁 Estado do jogo resetado');
+    CONFIG.log('🏁 Estado do jogo resetado', 'info');
 }
 
 // Lidar com clique nas respostas
@@ -678,16 +704,16 @@ function handleAnswerClick(event) {
     const answerId = box.dataset.answerId;
     
     if (!answerId) {
-        console.error('❌ ID da resposta não encontrado');
+        CONFIG.log('❌ ID da resposta não encontrado', 'error');
         return;
     }
     
     if (currentState !== AppStates.PLAYING) {
-        console.warn('⚠️ Clique ignorado - jogo não está ativo');
+        CONFIG.log('⚠️ Clique ignorado - jogo não está ativo', 'warn');
         return;
     }
     
-    console.log('👆 Clique na resposta - ID:', answerId);
+    CONFIG.log('👆 Clique na resposta - ID', 'debug', answerId);
     
     // Feedback visual imediato
     box.classList.add('clicked');
@@ -700,20 +726,20 @@ function handleAnswerClick(event) {
 
 // Configurar event listeners
 function setupEventListeners() {
-    console.log('🔧 Configurando event listeners...');
+    CONFIG.log('🔧 Configurando event listeners...', 'debug');
     
     // Event listeners para respostas
     const answerElements = document.querySelectorAll('.box');
     answerElements.forEach((element, index) => {
         element.addEventListener('click', handleAnswerClick);
-        console.log(`✅ Event listener configurado para box ${index + 1}`);
+        CONFIG.log(`✅ Event listener configurado para box ${index + 1}`, 'debug');
     });
     
     // Event listener para botão de retry
     const retryBtn = document.getElementById('retry-btn');
     if (retryBtn) {
         retryBtn.addEventListener('click', () => {
-            console.log('🔄 Tentando novamente...');
+            CONFIG.log('🔄 Tentando novamente...', 'info');
             initializeApp();
         });
     }
@@ -726,13 +752,13 @@ function setupEventListeners() {
         }
     });
     
-    console.log('✅ Event listeners configurados');
+    CONFIG.log('✅ Event listeners configurados', 'debug');
 }
 
 // Inicialização quando DOM estiver pronto
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 === PÁGINA DE QUESTÕES CARREGADA ===');
-    console.log('🏠 DOM ready - iniciando configuração');
+    CONFIG.log('🚀 === PÁGINA DE QUESTÕES CARREGADA ===', 'info');
+    CONFIG.log('🏠 DOM ready - iniciando configuração', 'debug');
     
     // Configurar event listeners primeiro
     setupEventListeners();
@@ -740,19 +766,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // 🔧 ADICIONADO: Aguarda o modal.js carregar completamente
     const waitForModal = () => {
         if (typeof showModal === 'function') {
-            console.log('✅ Modal.js carregado, iniciando aplicação');
+            CONFIG.log('✅ Modal.js carregado, iniciando aplicação', 'info');
             setTimeout(() => {
                 initializeApp();
             }, 500);
         } else {
-            console.log('⏳ Aguardando modal.js carregar...');
+            CONFIG.log('⏳ Aguardando modal.js carregar...', 'debug');
             setTimeout(waitForModal, 100);
         }
     };
     
     waitForModal();
     
-    console.log('📋 === CONFIGURAÇÃO INICIAL COMPLETA ===');
+    CONFIG.log('📋 === CONFIGURAÇÃO INICIAL COMPLETA ===', 'info');
 });
 
 // Limpar recursos quando a página for descarregada
@@ -761,17 +787,23 @@ window.addEventListener('beforeunload', () => {
 });
 
 // Log de inicialização
-console.log('📋 Questions.js carregado completamente');
-console.log('🌐 API Base URL:', API_BASE_URL);
+CONFIG.log('📋 Questions.js carregado completamente', 'info');
+CONFIG.log('🌐 API Base URL', 'info', CONFIG.API_BASE_URL);
+CONFIG.log('🎮 Configurações do quiz', 'debug', {
+    questionsPerSession: CONFIG.QUESTIONS_PER_SESSION,
+    maxRetries: CONFIG.MAX_RETRIES,
+    retryDelay: CONFIG.RETRY_DELAY,
+    apiTimeout: CONFIG.API_TIMEOUT
+});
 
-// Export para debugging (apenas no console)
-if (typeof window !== 'undefined') {
+// Export para debugging (apenas em modo debug)
+if (CONFIG.DEBUG) {
     window.questionsDebug = {
         getCurrentState: () => currentState,
         forceState: (state) => setState(state),
         simulateAuth: () => {
-            localStorage.setItem('token', 'debug-token');
-            localStorage.setItem('loggedIn', 'true');
+            localStorage.setItem(CONFIG.TOKEN_STORAGE_KEY, 'debug-token');
+            localStorage.setItem(CONFIG.LOGIN_STATUS_KEY, 'true');
             initializeApp();
         },
         clearAuth: () => {
@@ -792,11 +824,22 @@ if (typeof window !== 'undefined') {
                 { id: 4, content: 'Quarta resposta' }
             ];
             
-            console.log('🧪 Teste de embaralhamento:');
-            console.log('Original:', testAnswers);
-            console.log('Embaralhado 1:', shuffleAnswers(testAnswers));
-            console.log('Embaralhado 2:', shuffleAnswers(testAnswers));
-            console.log('Embaralhado 3:', shuffleAnswers(testAnswers));
+            CONFIG.log('🧪 Teste de embaralhamento', 'debug');
+            CONFIG.log('Original', 'debug', testAnswers);
+            CONFIG.log('Embaralhado 1', 'debug', shuffleAnswers(testAnswers));
+            CONFIG.log('Embaralhado 2', 'debug', shuffleAnswers(testAnswers));
+            CONFIG.log('Embaralhado 3', 'debug', shuffleAnswers(testAnswers));
+        },
+        getConfig: () => {
+            CONFIG.log('Configurações atuais', 'info', {
+                environment: CONFIG.ENVIRONMENT,
+                apiBaseUrl: CONFIG.API_BASE_URL,
+                questionsPerSession: CONFIG.QUESTIONS_PER_SESSION,
+                apiTimeout: CONFIG.API_TIMEOUT,
+                debug: CONFIG.DEBUG
+            });
         }
     };
+    
+    CONFIG.log('Debug functions available: questionsDebug.*', 'info');
 }

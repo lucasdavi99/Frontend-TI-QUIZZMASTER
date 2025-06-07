@@ -1,14 +1,12 @@
 /**
  * LOGIN CONTROLLER - T.I QUIZZMASTER
- * Sistema aprimorado de autenticação com correções de validação
+ * Sistema aprimorado de autenticação com configurações centralizadas
  */
 
-const API_BASE_URL = 'http://localhost:8080';
-
-console.log('🔐 Login.js carregado - versão com correções v3.1');
+CONFIG.log('🔐 Login.js carregado - versão com config centralizado v4.0', 'info');
 
 // Estado global da página
-let currentForm = 'login'; // 'login' ou 'register'
+let currentForm = 'login';
 let isLoading = false;
 let formValidation = {
     login: { username: false, password: false },
@@ -21,6 +19,7 @@ class EnhancedLoginController {
         this.registerForm = null;
         this.authWrapper = null;
         this.statusContainer = null;
+        this.loadingOverlay = null;
         this.isInitialized = false;
         
         this.init();
@@ -36,7 +35,7 @@ class EnhancedLoginController {
         this.checkExistingAuth();
         
         this.isInitialized = true;
-        console.log('🔐 Enhanced Login Controller initialized');
+        CONFIG.log('Enhanced Login Controller initialized', 'info');
     }
 
     setupElements() {
@@ -54,7 +53,7 @@ class EnhancedLoginController {
         this.showRegisterBtn = document.getElementById('show-register');
         this.showLoginBtn = document.getElementById('show-login');
         
-        console.log('✅ Elementos configurados');
+        CONFIG.log('Elementos configurados', 'debug');
     }
 
     setupEventListeners() {
@@ -92,7 +91,7 @@ class EnhancedLoginController {
             }
         });
         
-        console.log('✅ Event listeners configurados');
+        CONFIG.log('Event listeners configurados', 'debug');
     }
 
     setupInputValidation() {
@@ -101,7 +100,6 @@ class EnhancedLoginController {
         const loginPassword = document.getElementById('loginPassword');
         
         if (loginUsername) {
-            // 🔧 CORREÇÃO: Múltiplos event listeners para capturar mudanças
             loginUsername.addEventListener('input', () => {
                 this.validateField('login', 'username', loginUsername.value);
                 this.updateLabelState(loginUsername);
@@ -145,7 +143,6 @@ class EnhancedLoginController {
         }
         
         if (registerEmail) {
-            // 🔧 CORREÇÃO: Event listeners específicos para email
             registerEmail.addEventListener('input', () => {
                 this.validateField('register', 'email', registerEmail.value);
                 this.updateLabelState(registerEmail);
@@ -172,32 +169,27 @@ class EnhancedLoginController {
         }
         
         if (termsCheckbox) {
-            // 🔧 CORREÇÃO: Múltiplos event listeners para o checkbox
             termsCheckbox.addEventListener('change', (e) => {
-                console.log('🔧 Checkbox changed:', e.target.checked);
+                CONFIG.log('Checkbox changed', 'debug', e.target.checked);
                 this.validateField('register', 'terms', e.target.checked);
                 this.updateCheckboxState(termsCheckbox);
             });
             
             termsCheckbox.addEventListener('click', (e) => {
-                console.log('🔧 Checkbox clicked:', e.target.checked);
-                // Delay para garantir que o estado seja atualizado
+                CONFIG.log('Checkbox clicked', 'debug', e.target.checked);
                 setTimeout(() => {
                     this.validateField('register', 'terms', e.target.checked);
                     this.updateCheckboxState(termsCheckbox);
                 }, 50);
             });
             
-            // 🔧 NOVA: Event listener para o label também
             const checkboxLabel = termsCheckbox.closest('.checkbox-label');
             if (checkboxLabel) {
                 checkboxLabel.addEventListener('click', (e) => {
-                    // Previne propagação dupla se clicou no checkbox
                     if (e.target === termsCheckbox) return;
                     
-                    // Força mudança do checkbox
                     termsCheckbox.checked = !termsCheckbox.checked;
-                    console.log('🔧 Label clicked, checkbox now:', termsCheckbox.checked);
+                    CONFIG.log('Label clicked, checkbox now', 'debug', termsCheckbox.checked);
                     
                     this.validateField('register', 'terms', termsCheckbox.checked);
                     this.updateCheckboxState(termsCheckbox);
@@ -206,7 +198,6 @@ class EnhancedLoginController {
         }
     }
 
-    // 🔧 NOVA: Função para atualizar estado visual do label
     updateLabelState(input) {
         const label = input.nextElementSibling;
         if (label && label.tagName === 'LABEL') {
@@ -224,16 +215,15 @@ class EnhancedLoginController {
         }
     }
 
-    // 🔧 NOVA: Função para atualizar estado visual do checkbox
     updateCheckboxState(checkbox) {
         const label = checkbox.closest('.checkbox-label');
         if (label) {
             if (checkbox.checked) {
                 label.classList.add('active');
-                console.log('🔧 Checkbox label ativado');
+                CONFIG.log('Checkbox label ativado', 'debug');
             } else {
                 label.classList.remove('active');
-                console.log('🔧 Checkbox label desativado');
+                CONFIG.log('Checkbox label desativado', 'debug');
             }
         }
     }
@@ -241,26 +231,24 @@ class EnhancedLoginController {
     validateField(formType, fieldName, value) {
         let isValid = false;
         
-        console.log(`🔧 Validando ${formType}.${fieldName}:`, value);
+        CONFIG.log(`Validando ${formType}.${fieldName}`, 'debug', value);
         
         switch (fieldName) {
             case 'username':
                 isValid = value.length >= 3 && value.length <= 20 && /^[a-zA-Z0-9_-]+$/.test(value);
                 break;
             case 'email':
-                // 🔧 CORREÇÃO: Validação mais robusta para email
                 isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && value.length > 0;
                 break;
             case 'password':
                 isValid = value.length >= 6;
                 break;
             case 'terms':
-                // 🔧 CORREÇÃO: Validação explícita para boolean
                 isValid = value === true;
                 break;
         }
         
-        console.log(`🔧 Resultado da validação ${formType}.${fieldName}:`, isValid);
+        CONFIG.log(`Resultado da validação ${formType}.${fieldName}`, 'debug', isValid);
         
         formValidation[formType][fieldName] = isValid;
         this.updateSubmitButtonState(formType);
@@ -272,8 +260,8 @@ class EnhancedLoginController {
         const validationState = formValidation[formType];
         const isFormValid = Object.values(validationState).every(valid => valid);
         
-        console.log(`🔧 Estado da validação ${formType}:`, validationState);
-        console.log(`🔧 Form ${formType} válido:`, isFormValid);
+        CONFIG.log(`Estado da validação ${formType}`, 'debug', validationState);
+        CONFIG.log(`Form ${formType} válido`, 'debug', isFormValid);
         
         const submitBtn = formType === 'login' ? 
             document.getElementById('login-submit') : 
@@ -285,11 +273,11 @@ class EnhancedLoginController {
             if (isFormValid && !isLoading) {
                 submitBtn.classList.add('valid');
                 submitBtn.classList.remove('disabled');
-                console.log(`🔧 Botão ${formType} habilitado`);
+                CONFIG.log(`Botão ${formType} habilitado`, 'debug');
             } else {
                 submitBtn.classList.remove('valid');
                 submitBtn.classList.add('disabled');
-                console.log(`🔧 Botão ${formType} desabilitado`);
+                CONFIG.log(`Botão ${formType} desabilitado`, 'debug');
             }
         }
     }
@@ -305,7 +293,6 @@ class EnhancedLoginController {
             titleGlitch.start();
             titleGlitch.reveal(2000);
             
-            // Efeito nos títulos dos forms
             const formTitles = baffle('.form-title');
             formTitles.set({
                 characters: '▓█▒░▓▒▓>▓░▓▒>/█>▓▒▓░▓▒░▓█▒░▓',
@@ -315,7 +302,6 @@ class EnhancedLoginController {
             formTitles.reveal(3000);
         }
         
-        // Efeitos de glitch em hover nos botões
         document.querySelectorAll('.submit-btn').forEach(btn => {
             btn.addEventListener('mouseenter', () => {
                 this.triggerButtonGlitch(btn);
@@ -356,12 +342,11 @@ class EnhancedLoginController {
     }
 
     checkExistingAuth() {
-        // Verifica se usuário já está logado
         const token = this.getAuthToken();
         const isLoggedIn = this.getLoginStatus();
         
         if (token && isLoggedIn) {
-            console.log('✅ Usuário já está logado, redirecionando...');
+            CONFIG.log('Usuário já está logado, redirecionando', 'info');
             this.showStatusMessage('Você já está logado!', 'info');
             
             setTimeout(() => {
@@ -375,7 +360,7 @@ class EnhancedLoginController {
     switchToRegister() {
         if (currentForm === 'register' || isLoading) return;
         
-        console.log('🔄 Mudando para formulário de registro');
+        CONFIG.log('Mudando para formulário de registro', 'info');
         
         this.signInContainer.classList.add('switching-out');
         
@@ -391,7 +376,6 @@ class EnhancedLoginController {
         currentForm = 'register';
         this.clearStatusMessages();
         
-        // 🔧 CORREÇÃO: Re-valida o form de registro após switch
         setTimeout(() => {
             this.revalidateCurrentForm();
         }, 500);
@@ -400,7 +384,7 @@ class EnhancedLoginController {
     switchToLogin() {
         if (currentForm === 'login' || isLoading) return;
         
-        console.log('🔄 Mudando para formulário de login');
+        CONFIG.log('Mudando para formulário de login', 'info');
         
         this.signUpContainer.classList.add('switching-out');
         
@@ -416,15 +400,13 @@ class EnhancedLoginController {
         currentForm = 'login';
         this.clearStatusMessages();
         
-        // 🔧 CORREÇÃO: Re-valida o form de login após switch
         setTimeout(() => {
             this.revalidateCurrentForm();
         }, 500);
     }
 
-    // 🔧 NOVA: Função para re-validar form atual
     revalidateCurrentForm() {
-        console.log('🔧 Re-validando form atual:', currentForm);
+        CONFIG.log('Re-validando form atual', 'debug', currentForm);
         
         if (currentForm === 'login') {
             const username = document.getElementById('loginUsername');
@@ -463,12 +445,12 @@ class EnhancedLoginController {
             return;
         }
         
-        console.log('🔐 Tentando fazer login para:', username);
+        CONFIG.log('Tentando fazer login', 'info', { username });
         
         this.setLoadingState(true, 'Verificando credenciais...');
         
         try {
-            const response = await fetch(`${API_BASE_URL}/auth/login`, {
+            const response = await fetch(CONFIG.getEndpointURL('LOGIN'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -492,9 +474,9 @@ class EnhancedLoginController {
             }
             
             const data = await response.json();
-            console.log('✅ Login realizado com sucesso:', data);
+            CONFIG.log('Login realizado com sucesso', 'info', data);
             
-            // Armazena dados de autenticação
+            // Armazena dados de autenticação usando as chaves do config
             this.storeAuthData(data.token, { username: username });
             
             // Integra com auth handler se disponível
@@ -503,17 +485,14 @@ class EnhancedLoginController {
             }
             
             this.showStatusMessage('Login realizado com sucesso!', 'success');
-            
-            // Efeito de sucesso
             this.triggerSuccessEffect();
             
-            // Redireciona após delay
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 1500);
             
         } catch (error) {
-            console.error('❌ Erro no login:', error);
+            CONFIG.log('Erro no login', 'error', error);
             this.showStatusMessage(error.message, 'error');
             this.triggerErrorEffect();
         } finally {
@@ -531,7 +510,7 @@ class EnhancedLoginController {
         const password = document.getElementById('registerPassword').value;
         const termsAccepted = document.getElementById('terms-checkbox').checked;
         
-        console.log('🔧 Dados do registro:', {
+        CONFIG.log('Dados do registro', 'debug', {
             username,
             email: email ? 'preenchido' : 'vazio',
             password: password ? 'preenchido' : 'vazio',
@@ -548,12 +527,12 @@ class EnhancedLoginController {
             return;
         }
         
-        console.log('📝 Tentando registrar usuário:', username);
+        CONFIG.log('Tentando registrar usuário', 'info', { username });
         
         this.setLoadingState(true, 'Criando conta...');
         
         try {
-            const response = await fetch(`${API_BASE_URL}/auth/register`, {
+            const response = await fetch(CONFIG.getEndpointURL('REGISTER'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -577,43 +556,36 @@ class EnhancedLoginController {
                 }
             }
             
-            // 🔧 CORREÇÃO: Tratamento robusto da resposta do servidor
             let data = null;
             const contentType = response.headers.get('content-type');
             
             try {
-                // Tenta ler a resposta como texto primeiro
                 const responseText = await response.text();
-                console.log('📄 Resposta bruta do servidor:', responseText);
+                CONFIG.log('Resposta bruta do servidor', 'debug', responseText);
                 
-                // Se há conteúdo e parece ser JSON, tenta fazer parse
                 if (responseText.trim() !== '') {
                     if (contentType && contentType.includes('application/json')) {
                         data = JSON.parse(responseText);
-                        console.log('✅ JSON da resposta parseado:', data);
+                        CONFIG.log('JSON da resposta parseado', 'debug', data);
                     } else {
-                        console.log('📄 Resposta em texto simples:', responseText);
+                        CONFIG.log('Resposta em texto simples', 'debug', responseText);
                     }
                 } else {
-                    console.log('📄 Resposta vazia do servidor (OK - usuário criado)');
+                    CONFIG.log('Resposta vazia do servidor (OK - usuário criado)', 'debug');
                 }
             } catch (parseError) {
-                console.warn('⚠️ Não foi possível fazer parse da resposta como JSON, mas o registro foi bem-sucedido:', parseError.message);
-                // Não é um erro crítico se o status da requisição foi 200
+                CONFIG.log('Não foi possível fazer parse da resposta como JSON, mas o registro foi bem-sucedido', 'warn', parseError.message);
             }
             
-            console.log('✅ Registro realizado com sucesso');
+            CONFIG.log('Registro realizado com sucesso', 'info');
             
-            // 🔧 CORREÇÃO: Mensagem de sucesso independente do formato da resposta
             this.showStatusMessage('Conta criada com sucesso! Redirecionando para login...', 'success');
-            
-            // Efeito de sucesso
             this.triggerSuccessEffect();
             
             // Limpa formulário
             this.registerForm.reset();
             
-            // 🔧 CORREÇÃO: Reset do estado de validação
+            // Reset do estado de validação
             formValidation.register = { username: false, email: false, password: false, terms: false };
             this.updateSubmitButtonState('register');
             
@@ -631,7 +603,7 @@ class EnhancedLoginController {
             }, 2000);
             
         } catch (error) {
-            console.error('❌ Erro no registro:', error);
+            CONFIG.log('Erro no registro', 'error', error);
             this.showStatusMessage(error.message, 'error');
             this.triggerErrorEffect();
         } finally {
@@ -657,7 +629,6 @@ class EnhancedLoginController {
             this.enableAllButtons();
         }
         
-        // Atualiza estado dos botões de submit
         this.updateSubmitButtonState('login');
         this.updateSubmitButtonState('register');
     }
@@ -666,7 +637,6 @@ class EnhancedLoginController {
         if (this.loadingOverlay) {
             this.loadingOverlay.style.display = 'flex';
             
-            // Adiciona animação de entrada
             setTimeout(() => {
                 this.loadingOverlay.style.opacity = '1';
             }, 10);
@@ -679,7 +649,7 @@ class EnhancedLoginController {
             
             setTimeout(() => {
                 this.loadingOverlay.style.display = 'none';
-            }, 300);
+            }, CONFIG.ANIMATION_DURATION);
         }
     }
 
@@ -698,14 +668,13 @@ class EnhancedLoginController {
             btn.style.opacity = '1';
         });
         
-        // Re-aplica estado de validação após reabilitar
         this.updateSubmitButtonState('login');
         this.updateSubmitButtonState('register');
     }
 
     // === STATUS MESSAGES === //
     
-    showStatusMessage(message, type = 'info', duration = 5000) {
+    showStatusMessage(message, type = 'info', duration = CONFIG.NOTIFICATION_DURATION) {
         if (!this.statusContainer) return;
         
         const statusMessage = document.createElement('div');
@@ -714,12 +683,10 @@ class EnhancedLoginController {
         
         this.statusContainer.appendChild(statusMessage);
         
-        // Anima entrada
         setTimeout(() => {
             statusMessage.classList.add('show');
         }, 100);
         
-        // Remove após duração
         setTimeout(() => {
             statusMessage.classList.remove('show');
             
@@ -730,7 +697,7 @@ class EnhancedLoginController {
             }, 500);
         }, duration);
         
-        console.log(`📢 Status message (${type}): ${message}`);
+        CONFIG.log(`Status message (${type})`, 'info', message);
     }
 
     clearStatusMessages() {
@@ -742,7 +709,6 @@ class EnhancedLoginController {
     // === VISUAL EFFECTS === //
     
     triggerSuccessEffect() {
-        // Efeito de flash verde
         const flash = document.createElement('div');
         flash.style.cssText = `
             position: fixed;
@@ -763,7 +729,6 @@ class EnhancedLoginController {
             flash.remove();
         }, 600);
         
-        // Adiciona animação CSS
         const style = document.createElement('style');
         style.textContent = `
             @keyframes successFlash {
@@ -776,7 +741,6 @@ class EnhancedLoginController {
     }
 
     triggerErrorEffect() {
-        // Efeito de shake no wrapper
         if (this.authWrapper) {
             this.authWrapper.style.animation = 'errorShake 0.5s ease-in-out';
             
@@ -785,7 +749,6 @@ class EnhancedLoginController {
             }, 500);
         }
         
-        // Adiciona animação CSS
         const style = document.createElement('style');
         style.textContent = `
             @keyframes errorShake {
@@ -802,13 +765,15 @@ class EnhancedLoginController {
     storeAuthData(token, userData) {
         try {
             if (typeof Storage !== "undefined") {
-                localStorage.setItem('token', token);
-                localStorage.setItem('loggedIn', 'true');
-                localStorage.setItem('userData', JSON.stringify(userData));
+                localStorage.setItem(CONFIG.TOKEN_STORAGE_KEY, token);
+                localStorage.setItem(CONFIG.LOGIN_STATUS_KEY, 'true');
+                localStorage.setItem(CONFIG.USER_DATA_KEY, JSON.stringify(userData));
+                
+                CONFIG.log('Dados de autenticação armazenados no localStorage', 'debug');
                 return;
             }
         } catch (e) {
-            console.warn('localStorage not available, using memory storage');
+            CONFIG.log('localStorage não disponível, usando memory storage', 'warn', e);
         }
         
         // Fallback to memory storage
@@ -818,16 +783,18 @@ class EnhancedLoginController {
             userData: userData,
             timestamp: Date.now()
         };
+        
+        CONFIG.log('Dados de autenticação armazenados na memória', 'debug');
     }
 
     getAuthToken() {
         try {
             if (typeof Storage !== "undefined") {
-                const token = localStorage.getItem('token');
+                const token = localStorage.getItem(CONFIG.TOKEN_STORAGE_KEY);
                 if (token) return token;
             }
         } catch (e) {
-            console.warn('localStorage not available');
+            CONFIG.log('Erro ao acessar localStorage', 'warn', e);
         }
         
         return window.authData ? window.authData.token : null;
@@ -836,11 +803,11 @@ class EnhancedLoginController {
     getLoginStatus() {
         try {
             if (typeof Storage !== "undefined") {
-                const status = localStorage.getItem('loggedIn');
+                const status = localStorage.getItem(CONFIG.LOGIN_STATUS_KEY);
                 if (status) return status === 'true';
             }
         } catch (e) {
-            console.warn('localStorage not available');
+            CONFIG.log('Erro ao acessar localStorage', 'warn', e);
         }
         
         return window.authData ? window.authData.loggedIn : false;
@@ -850,18 +817,17 @@ class EnhancedLoginController {
 // === INITIALIZATION === //
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🔐 === PÁGINA DE LOGIN CARREGADA ===');
-    console.log('🏠 DOM ready - iniciando configuração avançada');
+    CONFIG.log('Página de login carregada', 'info');
     
     // Aguarda outros scripts carregarem
     setTimeout(() => {
         window.enhancedLoginController = new EnhancedLoginController();
         
-        // 🔧 CORREÇÃO: Debug inicial do estado do checkbox
+        // Debug inicial do estado do checkbox
         const termsCheckbox = document.getElementById('terms-checkbox');
         if (termsCheckbox) {
-            console.log('🔧 Estado inicial do checkbox:', termsCheckbox.checked);
-            console.log('🔧 Validação inicial dos termos:', formValidation.register.terms);
+            CONFIG.log('Estado inicial do checkbox', 'debug', termsCheckbox.checked);
+            CONFIG.log('Validação inicial dos termos', 'debug', formValidation.register.terms);
         }
     }, 500);
     
@@ -881,10 +847,9 @@ document.addEventListener('DOMContentLoaded', () => {
         konamiCode = konamiCode.slice(-konamiSequence.length);
         
         if (konamiCode.join('') === konamiSequence.join('')) {
-            console.log('🎮 Konami Code ativado!');
+            CONFIG.log('Konami Code ativado!', 'info');
             document.body.classList.add('konami-mode');
             
-            // Adiciona efeitos especiais
             const style = document.createElement('style');
             style.textContent = `
                 .konami-mode .terminal-form {
@@ -900,7 +865,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    console.log('🔐 === CONFIGURAÇÃO INICIAL COMPLETA ===');
+    CONFIG.log('Configuração inicial completa', 'info');
 });
 
 // === GLOBAL FUNCTIONS === //
@@ -912,7 +877,7 @@ window.forceLoginRedirect = function(message = 'Login necessário') {
     }
 };
 
-// 🔧 NOVA: Função de debug
+// Função de debug
 window.loginDebug = {
     switchForm: (formType) => {
         if (window.enhancedLoginController) {
@@ -935,16 +900,14 @@ window.loginDebug = {
             window.enhancedLoginController.triggerSuccessEffect();
         }
     },
-    // 🔧 NOVA: Debug do checkbox
     checkboxStatus: () => {
         const checkbox = document.getElementById('terms-checkbox');
-        console.log('🔧 Checkbox Debug:', {
+        CONFIG.log('Checkbox Debug', 'info', {
             checked: checkbox?.checked,
             validation: formValidation.register.terms,
             formValid: Object.values(formValidation.register).every(v => v)
         });
     },
-    // 🔧 NOVA: Força validação do checkbox
     forceCheckboxValidation: () => {
         const checkbox = document.getElementById('terms-checkbox');
         if (checkbox && window.enhancedLoginController) {
@@ -954,6 +917,6 @@ window.loginDebug = {
     }
 };
 
-console.log('🔐 Enhanced Login.js carregado completamente - VERSÃO CORRIGIDA');
-console.log('🌐 API Base URL:', API_BASE_URL);
-console.log('💡 Debug functions available: loginDebug.*');
+CONFIG.log('Enhanced Login.js carregado completamente', 'info');
+CONFIG.log('API Base URL', 'info', CONFIG.API_BASE_URL);
+CONFIG.log('Debug functions available: loginDebug.*', 'info');
