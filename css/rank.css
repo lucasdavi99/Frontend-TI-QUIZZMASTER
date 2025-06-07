@@ -787,6 +787,35 @@ body {
   box-shadow: 0 0 15px var(--neon-blue);
 }
 
+.info-banner .banner-text {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: var(--primary-green) !important;
+  background-clip: initial !important;
+  color: var(--primary-green) !important;
+  font-size: 1rem;
+  font-family: 'Press Start 2P', monospace;
+  opacity: 1 !important;
+  visibility: visible !important;
+  text-shadow: 0 0 10px var(--primary-green);
+  margin-left: 1rem;
+}
+
+.info-banner .banner-action {
+  background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+  color: #fff !important;
+  border: 2px solid var(--neon-blue);
+  text-shadow: 0 0 8px var(--neon-blue);
+  font-weight: bold;
+}
+
+.info-banner .banner-action:hover {
+  background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
+  color: #fff !important;
+  border-color: var(--neon-purple);
+  box-shadow: 0 0 20px var(--neon-purple);
+}
+
 /* ==========================================================================
    REFRESH BUTTON
    ========================================================================== */
@@ -1521,4 +1550,11 @@ body {
 .ranking-table tbody tr:focus-within {
   outline: 2px solid var(--primary-green);
   outline-offset: 2px;
+}
+
+#history-btn {
+  font-size: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
