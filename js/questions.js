@@ -1,6 +1,6 @@
 /**
- * QUESTIONS PAGE CONTROLLER - VERSÃO COM MODAL CORRIGIDO
- * Sistema aprimorado com correção do z-index do modal
+ * QUESTIONS PAGE CONTROLLER
+ * Sistema aprimorado com respostas embaralhadas a cada pergunta
  */
 
 const API_BASE_URL = 'http://localhost:8080';
@@ -10,7 +10,7 @@ let answerMapping = {};
 let countdownInterval = null;
 let redirectTimeout = null;
 
-console.log('📋 Questions.js carregado - versão com modal corrigido v4.0');
+console.log('📋 Questions.js carregado - versão com embaralhamento v5.0');
 
 // Estados da aplicação
 const AppStates = {
@@ -22,6 +22,30 @@ const AppStates = {
 };
 
 let currentState = AppStates.INITIALIZING;
+
+// 🔧 NOVA FUNÇÃO: Embaralhar array (Fisher-Yates shuffle)
+function shuffleArray(array) {
+    const shuffled = [...array]; // Criar cópia para não modificar o original
+    
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    
+    return shuffled;
+}
+
+// 🔧 NOVA FUNÇÃO: Embaralhar respostas mantendo os IDs corretos
+function shuffleAnswers(answers) {
+    console.log('🔀 Embaralhando respostas...');
+    console.log('📝 Respostas originais:', answers.map(a => ({ id: a.id, content: a.content.substring(0, 50) + '...' })));
+    
+    const shuffledAnswers = shuffleArray(answers);
+    
+    console.log('🔀 Respostas embaralhadas:', shuffledAnswers.map(a => ({ id: a.id, content: a.content.substring(0, 50) + '...' })));
+    
+    return shuffledAnswers;
+}
 
 // Função principal de inicialização
 function initializeApp() {
@@ -393,7 +417,7 @@ async function startQuizSession() {
     }
 }
 
-// Exibir pergunta atual
+// 🔧 FUNÇÃO MODIFICADA: Exibir pergunta atual com respostas embaralhadas
 function displayQuestion(sessionState) {
     console.log('📝 Exibindo pergunta:', sessionState);
     
@@ -406,6 +430,10 @@ function displayQuestion(sessionState) {
     const question = sessionState.currentQuestion;
     console.log('📋 Pergunta atual:', question);
     
+    // 🆕 VERIFICAR SE É A PRIMEIRA PERGUNTA
+    const isFirstQuestion = sessionState.currentQuestionIndex === 0;
+    console.log('🎯 É a primeira pergunta?', isFirstQuestion);
+    
     // Atualizar o texto da pergunta
     const questionElement = document.getElementById('Questao');
     if (questionElement) {
@@ -415,41 +443,107 @@ function displayQuestion(sessionState) {
         console.error('❌ Elemento #Questao não encontrado');
     }
     
-    // Atualizar as respostas
-    const answers = question.answers;
-    console.log('📝 Respostas:', answers);
+    // 🔀 EMBARALHAR AS RESPOSTAS antes de exibir
+    const originalAnswers = question.answers;
+    const shuffledAnswers = shuffleAnswers(originalAnswers);
+    
+    console.log('📝 Respostas embaralhadas:', shuffledAnswers);
     
     // Limpar mapeamento anterior
     answerMapping = {};
     
     const answerElements = ['answer_a', 'answer_b', 'answer_c', 'answer_d'];
+    const answerLabels = ['A', 'B', 'C', 'D'];
     const boxElements = document.querySelectorAll('.box');
+    const answersContainer = document.getElementById('answers-container');
+    const answersGrid = document.querySelector('.answers-grid');
     
-    answers.forEach((answer, index) => {
+    // 🎬 INICIAR ANIMAÇÃO DE EMBARALHAMENTO
+    if (answersGrid) {
+        answersGrid.classList.add('shuffling');
+    }
+    
+    // 🆕 MOSTRAR MENSAGEM APENAS NA PRIMEIRA PERGUNTA
+    if (answersContainer && isFirstQuestion) {
+        answersContainer.classList.add('shuffled');
+        console.log('💬 Mostrando mensagem de embaralhamento (primeira pergunta)');
+        
+        // Remover classe após a animação do indicador
+        setTimeout(() => {
+            answersContainer.classList.remove('shuffled');
+        }, 3000);
+    } else if (answersContainer && !isFirstQuestion) {
+        // 🔄 INDICADOR SUTIL PARA PERGUNTAS SUBSEQUENTES
+        answersContainer.classList.add('subtle-shuffle');
+        console.log('🔄 Embaralhando com indicador sutil (pergunta subsequente)');
+        
+        // Remover classe após a animação sutil
+        setTimeout(() => {
+            answersContainer.classList.remove('subtle-shuffle');
+        }, 1000);
+    }
+    
+    // 🔀 USAR AS RESPOSTAS EMBARALHADAS
+    shuffledAnswers.forEach((answer, index) => {
         if (index < answerElements.length) {
             const textElement = document.getElementById(answerElements[index]);
+            const labelElement = boxElements[index]?.querySelector('.answer-label');
+            
             if (textElement) {
                 textElement.textContent = answer.content;
                 answerMapping[index] = answer.id;
+                
+                // Atualizar o label da resposta
+                if (labelElement) {
+                    labelElement.textContent = `${answerLabels[index]})`;
+                }
                 
                 // Configurar o elemento box correspondente
                 if (boxElements[index]) {
                     boxElements[index].dataset.answerId = answer.id;
                     boxElements[index].dataset.answerIndex = index;
                     
-                    console.log(`✅ Resposta ${index + 1} configurada: ${answer.content}`);
+                    // 🔀 ADICIONAR CLASSE DE EMBARALHAMENTO PARA ANIMAÇÃO CSS
+                    boxElements[index].classList.add('shuffling');
+                    
+                    // Remover classe após completar a animação
+                    setTimeout(() => {
+                        if (boxElements[index]) {
+                            boxElements[index].classList.remove('shuffling');
+                        }
+                    }, 600 + (index * 100)); // Escalonar a remoção
+                    
+                    console.log(`✅ Resposta ${answerLabels[index]} configurada: ${answer.content.substring(0, 50)}... (ID: ${answer.id})`);
                 }
             }
         }
     });
     
-    console.log('🗺️ Mapeamento de respostas:', answerMapping);
+    // 🎬 REMOVER CLASSE DE EMBARALHAMENTO DO GRID
+    setTimeout(() => {
+        if (answersGrid) {
+            answersGrid.classList.remove('shuffling');
+        }
+    }, 1000);
+    
+    console.log('🗺️ Mapeamento de respostas embaralhadas:', answerMapping);
+    
+    // 🎯 LOG PARA DEBUGGING: Mostrar qual resposta está em qual posição
+    shuffledAnswers.forEach((answer, index) => {
+        if (index < answerLabels.length) {
+            console.log(`🎯 Posição ${answerLabels[index]}: "${answer.content.substring(0, 30)}..." (ID: ${answer.id})`);
+        }
+    });
     
     // Atualizar informações na tela
     updateScoreDisplay(sessionState);
     updateProgressDisplay(sessionState);
     
-    console.log('✅ Pergunta exibida com sucesso');
+    if (isFirstQuestion) {
+        console.log('✅ Primeira pergunta exibida com mensagem de embaralhamento!');
+    } else {
+        console.log('✅ Pergunta subsequente exibida com embaralhamento silencioso!');
+    }
 }
 
 // Atualizar exibição da pontuação
@@ -513,7 +607,7 @@ async function submitAnswer(answerId) {
         if (result.finalScore !== undefined) {
             handleQuizEnd(result);
         } else {
-            // Continuar com a próxima pergunta
+            // Continuar com a próxima pergunta (que será embaralhada novamente)
             currentSessionState = result;
             displayQuestion(result);
         }
@@ -688,6 +782,21 @@ if (typeof window !== 'undefined') {
             if (typeof showGameEndModal === 'function') {
                 showGameEndModal('Teste do modal de fim de jogo', 85, true);
             }
+        },
+        // 🔀 NOVA FUNÇÃO DE DEBUG: Testar embaralhamento
+        testShuffle: () => {
+            const testAnswers = [
+                { id: 1, content: 'Primeira resposta' },
+                { id: 2, content: 'Segunda resposta' },
+                { id: 3, content: 'Terceira resposta' },
+                { id: 4, content: 'Quarta resposta' }
+            ];
+            
+            console.log('🧪 Teste de embaralhamento:');
+            console.log('Original:', testAnswers);
+            console.log('Embaralhado 1:', shuffleAnswers(testAnswers));
+            console.log('Embaralhado 2:', shuffleAnswers(testAnswers));
+            console.log('Embaralhado 3:', shuffleAnswers(testAnswers));
         }
     };
 }

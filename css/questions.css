@@ -18,6 +18,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  user-select: none;
 }
 
 body {
@@ -29,13 +30,13 @@ body {
 }
 
 /* ==========================================================================
-   BACK BUTTON - CORRIGIDO
+   BACK BUTTON
    ========================================================================== */
 
 .back-home-container {
   position: fixed;
-  top: 3rem; /* 🔧 CORRIGIDO: Aumentado de 2rem para 3rem para dar mais espaço */
-  left: 2rem;
+  top: 3rem;
+  left: 5rem;
   z-index: 1000;
 }
 
@@ -922,4 +923,201 @@ body {
 .progress-container {
   margin-left: auto !important;
   margin-right: auto !important;
+}
+
+/* ==========================================================================
+   ANIMAÇÕES DE EMBARALHAMENTO DAS RESPOSTAS
+   ========================================================================== */
+
+/* Animação principal de embaralhamento */
+@keyframes shuffleAnimation {
+  0% {
+    transform: scale(1) rotateY(0deg);
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+  }
+  25% {
+    transform: scale(0.95) rotateY(90deg);
+    opacity: 0.8;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+  }
+  50% {
+    transform: scale(0.9) rotateY(180deg);
+    opacity: 0.6;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+  }
+  75% {
+    transform: scale(0.95) rotateY(270deg);
+    opacity: 0.8;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+  }
+  100% {
+    transform: scale(1) rotateY(360deg);
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+  }
+}
+
+/* Aplicar animação aos boxes de resposta */
+.answer-box.shuffling {
+  animation: shuffleAnimation 0.6s ease-out;
+}
+
+/* Indicador visual de embaralhamento */
+.answers-container {
+  position: relative;
+}
+
+.answers-container.shuffled::before {
+  content: '🔀 Respostas Embaralhadas';
+  position: absolute;
+  top: -4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  color: var(--neon-blue);
+  background: rgba(0, 0, 0, 0.8);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: 1px solid var(--neon-blue);
+  opacity: 0;
+  animation: shuffleIndicator 2.5s ease-out;
+  z-index: 100;
+  white-space: nowrap;
+  font-family: 'Press Start 2P', monospace;
+  text-shadow: 0 0 10px var(--neon-blue);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+@keyframes shuffleIndicator {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px) scale(0.8);
+  }
+  15% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  85% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px) scale(0.8);
+  }
+}
+
+/* Animação de entrada escalonada para cada resposta */
+.answer-box:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.answer-box:nth-child(2) {
+  animation-delay: 100ms;
+}
+
+.answer-box:nth-child(3) {
+  animation-delay: 200ms;
+}
+
+.answer-box:nth-child(4) {
+  animation-delay: 300ms;
+}
+
+/* Efeito de "mistura" das letras dos labels */
+@keyframes labelShuffle {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+
+.answer-box.shuffling .answer-label {
+  animation: labelShuffle 0.6s ease-out;
+}
+
+/* Feedback visual adicional durante o embaralhamento */
+.answers-grid.shuffling {
+  perspective: 1000px;
+}
+
+.answers-grid.shuffling .answer-box {
+  transform-style: preserve-3d;
+}
+
+/* Indicador sutil de randomização */
+.answers-grid::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, var(--neon-blue) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.answers-grid.shuffling::after {
+  animation: shuffleCenter 0.6s ease-out;
+}
+
+@keyframes shuffleCenter {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+}
+
+/* Responsividade para as animações */
+@media screen and (max-width: 768px) {
+  .answers-container.shuffled::before {
+    font-size: 0.6rem;
+    padding: 0.4rem 0.8rem;
+    top: -3rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .answers-container.shuffled::before {
+    font-size: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    top: -2.5rem;
+  }
+}
+
+/* Reduzir animações para quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  .answer-box.shuffling {
+    animation: none;
+  }
+  
+  .answers-container.shuffled::before {
+    animation: none;
+    opacity: 1;
+  }
+  
+  .answer-box.shuffling .answer-label {
+    animation: none;
+  }
+  
+  .answers-grid.shuffling::after {
+    animation: none;
+  }
 }
