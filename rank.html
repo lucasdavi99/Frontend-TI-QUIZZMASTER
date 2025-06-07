@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon">
-    
+
     <!-- CSS Files -->
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/code_rain.css">
     <link rel="stylesheet" href="css/rank.css">
-    
+
     <!-- External Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    
+
     <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
-    
+
     <title>T.I QUIZZMASTER - Ranking</title>
 </head>
 
 <body>
     <!-- Matrix Rain Background -->
     <canvas id="canvas"></canvas>
-    
+
     <!-- Navigation Container -->
     <div class="navigation-container">
         <!-- Back to Home Button -->
@@ -34,15 +35,17 @@
                 <span class="back-tooltip">Voltar ao Menu</span>
             </a>
         </div>
-        
+
         <!-- 🆕 NOVO: Navigation Menu -->
         <div class="nav-menu" id="nav-menu">
             <!-- Profile Button (visible when logged in) -->
             <a href="profile.html" id="profile-nav-btn" class="nav-btn profile-nav" style="display: none;">
-                <img src="img/user-icon.png" alt="Perfil" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(180deg) brightness(101%) contrast(107%);" onerror="this.style.display='none'; this.nextElementSibling.textContent='👤';">
+                <img src="img/user-icon.png" alt="Perfil"
+                    style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(180deg) brightness(101%) contrast(107%);"
+                    onerror="this.style.display='none'; this.nextElementSibling.textContent='👤';">
                 <span class="nav-tooltip">Meu Perfil</span>
             </a>
-            
+
             <!-- History Button -->
             <a href="history.html" id="history-btn" class="nav-btn">
                 📜
@@ -50,7 +53,7 @@
             </a>
         </div>
     </div>
-    
+
     <!-- Main Content -->
     <div class="ranking-container">
         <!-- Page Title -->
@@ -59,7 +62,7 @@
             <div class="title-underline"></div>
             <p class="title-subtitle">Os melhores jogadores da plataforma</p>
         </div>
-        
+
         <!-- Statistics Cards -->
         <div class="stats-container">
             <div class="stat-card">
@@ -79,7 +82,7 @@
                 <div class="stat-label">Sua Posição</div>
             </div>
         </div>
-        
+
         <!-- Quick Actions -->
         <div class="quick-actions" id="user-actions" style="display: none;">
             <!-- 🆕 NOVO: Profile Action -->
@@ -87,7 +90,7 @@
                 <span class="action-icon">👤</span>
                 <span class="action-text">Gerenciar Perfil</span>
             </a>
-            
+
             <a href="history.html" class="action-btn history-action">
                 <span class="action-icon">📜</span>
                 <span class="action-text">Ver Meu Histórico</span>
@@ -97,7 +100,7 @@
                 <span class="action-text">Jogar Novamente</span>
             </a>
         </div>
-        
+
         <!-- Ranking Table -->
         <div class="table-container">
             <div class="table-header">
@@ -109,7 +112,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <div class="table-wrapper">
                 <table id="ranking-table" class="ranking-table">
                     <thead>
@@ -154,7 +157,7 @@
                 </table>
             </div>
         </div>
-        
+
         <!-- Empty State -->
         <div class="empty-state" id="empty-state" style="display: none;">
             <div class="empty-icon">🏆</div>
@@ -162,7 +165,7 @@
             <p>Seja o primeiro a jogar e aparecer no ranking!</p>
             <a href="questions.html" class="play-btn">Começar a Jogar</a>
         </div>
-        
+
         <!-- User Not Logged Warning -->
         <div class="info-banner" id="login-banner" style="display: none;">
             <div class="banner-content">
@@ -172,32 +175,33 @@
             </div>
         </div>
     </div>
-    
+
     <!-- JavaScript Files -->
-    <script src="js/rain_code.js"></script>
+    <script src="js/config.js"></script>
     <script src="js/rank.js"></script>
+    <script src="js/rain_code.js"></script>
     <script src="js/decoding_effect.js"></script>
-    
+
     <!-- 🆕 NOVO: Script para controle de navegação com perfil -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Função para verificar se usuário está logado
             function checkUserLogin() {
-                const token = localStorage.getItem('token') || 
-                             (window.authData && window.authData.token) ||
-                             sessionStorage.getItem('token');
+                const token = localStorage.getItem('token') ||
+                    (window.authData && window.authData.token) ||
+                    sessionStorage.getItem('token');
                 const isLoggedIn = localStorage.getItem('loggedIn') === 'true' ||
-                               (window.authData && window.authData.loggedIn) ||
-                               sessionStorage.getItem('loggedIn') === 'true';
-                
+                    (window.authData && window.authData.loggedIn) ||
+                    sessionStorage.getItem('loggedIn') === 'true';
+
                 return !!(token && isLoggedIn);
             }
-            
+
             // Função para atualizar visibilidade dos elementos de perfil
             function updateProfileElements() {
                 const profileNavBtn = document.getElementById('profile-nav-btn');
                 const profileActionBtn = document.querySelector('.profile-action');
-                
+
                 if (checkUserLogin()) {
                     if (profileNavBtn) profileNavBtn.style.display = 'flex';
                     if (profileActionBtn) profileActionBtn.style.display = 'flex';
@@ -208,25 +212,26 @@
                     console.log('👤 Elementos de perfil ocultados');
                 }
             }
-            
+
             // Verificar inicialmente
             updateProfileElements();
-            
+
             // Verificar quando o authHandler for carregado
             setTimeout(() => {
                 updateProfileElements();
             }, 1000);
-            
+
             // Listener para mudanças no localStorage
             window.addEventListener('storage', (e) => {
                 if (e.key === 'token' || e.key === 'loggedIn') {
                     updateProfileElements();
                 }
             });
-            
+
             // Verificar periodicamente (fallback)
             setInterval(updateProfileElements, 5000);
         });
     </script>
 </body>
+
 </html>

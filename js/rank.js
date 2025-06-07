@@ -3,9 +3,7 @@
  * Sistema robusto de ranking com tratamento adequado de autenticação
  */
 
-const API_BASE_URL = 'http://localhost:8080';
-
-console.log('🏆 Ranking.js carregado - versão corrigida v5.0');
+CONFIG.log('🏆 Ranking.js carregado - versão corrigida v5.0', 'info');
 
 // Estado global da página
 let currentRankingData = [];
@@ -13,7 +11,6 @@ let currentUserStats = null;
 let isLoading = false;
 let isUserLoggedIn = false;
 let retryCount = 0;
-const MAX_RETRIES = 3;
 
 /**
  * Função principal para carregar dados do ranking
@@ -21,7 +18,7 @@ const MAX_RETRIES = 3;
  */
 async function loadRankingData() {
     if (isLoading) {
-        console.log('⏳ Carregamento já em andamento...');
+        CONFIG.log('⏳ Carregamento já em andamento...', 'debug');
         return;
     }
     
@@ -29,12 +26,12 @@ async function loadRankingData() {
     showLoadingState();
     
     try {
-        console.log('🏆 === INICIANDO CARREGAMENTO DE DADOS ===');
-        console.log('🔄 Tentativa:', retryCount + 1, 'de', MAX_RETRIES);
+        CONFIG.log('🏆 === INICIANDO CARREGAMENTO DE DADOS ===', 'info');
+        CONFIG.log('🔄 Tentativa:', 'debug', `${retryCount + 1} de ${CONFIG.MAX_RETRIES}`);
         
         // Verifica se usuário está logado
         isUserLoggedIn = !!getAuthToken();
-        console.log('🔐 Status de autenticação:', isUserLoggedIn ? 'Logado' : 'Não logado');
+        CONFIG.log('🔐 Status de autenticação:', 'debug', isUserLoggedIn ? 'Logado' : 'Não logado');
         
         updateUIForUserStatus();
         
@@ -58,30 +55,30 @@ async function loadRankingData() {
         
         // Processa ranking
         if (rankingResult.status === 'fulfilled' && rankingResult.value) {
-            console.log('✅ Ranking carregado com sucesso:', rankingResult.value.length, 'jogadores');
+            CONFIG.log('✅ Ranking carregado com sucesso', 'info', `${rankingResult.value.length} jogadores`);
             currentRankingData = rankingResult.value;
         } else {
-            console.error('❌ Falha no carregamento do ranking:', rankingResult.reason?.message || 'Erro desconhecido');
+            CONFIG.log('❌ Falha no carregamento do ranking', 'error', rankingResult.reason?.message || 'Erro desconhecido');
             hasError = true;
         }
         
         // Processa estatísticas globais
         if (globalStatsResult.status === 'fulfilled' && globalStatsResult.value) {
-            console.log('✅ Estatísticas globais carregadas com sucesso');
+            CONFIG.log('✅ Estatísticas globais carregadas com sucesso', 'info');
             updateGlobalStats(globalStatsResult.value);
         } else {
-            console.error('❌ Falha no carregamento de estatísticas:', globalStatsResult.reason?.message || 'Erro desconhecido');
+            CONFIG.log('❌ Falha no carregamento de estatísticas', 'error', globalStatsResult.reason?.message || 'Erro desconhecido');
             hasError = true;
         }
         
         // Processa stats do usuário (se aplicável)
         if (isUserLoggedIn) {
             if (userStatsResult && userStatsResult.status === 'fulfilled' && userStatsResult.value) {
-                console.log('✅ Estatísticas do usuário carregadas com sucesso');
+                CONFIG.log('✅ Estatísticas do usuário carregadas com sucesso', 'info');
                 currentUserStats = userStatsResult.value;
                 showUserPosition(userStatsResult.value);
             } else {
-                console.warn('⚠️ Falha no carregamento de estatísticas do usuário:', 
+                CONFIG.log('⚠️ Falha no carregamento de estatísticas do usuário', 'warn', 
                            userStatsResult?.reason?.message || 'Erro desconhecido');
                 // Não considera como erro crítico
             }
@@ -89,12 +86,12 @@ async function loadRankingData() {
         
         // Verifica se houve falhas críticas
         if (hasError && currentRankingData.length === 0) {
-            if (retryCount < MAX_RETRIES - 1) {
+            if (retryCount < CONFIG.MAX_RETRIES - 1) {
                 retryCount++;
-                console.log('🔄 Tentando novamente em 2 segundos...');
+                CONFIG.log('🔄 Tentando novamente em 2 segundos...', 'warn');
                 setTimeout(() => {
                     loadRankingData();
-                }, 2000);
+                }, CONFIG.RETRY_DELAY);
                 return;
             } else {
                 throw new Error('Falha após múltiplas tentativas');
@@ -105,14 +102,14 @@ async function loadRankingData() {
         retryCount = 0;
         
     } catch (error) {
-        console.error('❌ Erro geral no carregamento:', error);
+        CONFIG.log('❌ Erro geral no carregamento', 'error', error);
         
-        if (retryCount < MAX_RETRIES - 1) {
+        if (retryCount < CONFIG.MAX_RETRIES - 1) {
             retryCount++;
-            console.log('🔄 Tentativa automática de recuperação em 3 segundos...');
+            CONFIG.log('🔄 Tentativa automática de recuperação em 3 segundos...', 'warn');
             setTimeout(() => {
                 loadRankingData();
-            }, 3000);
+            }, CONFIG.RETRY_DELAY + 1000);
         } else {
             showErrorState('Erro ao carregar dados do ranking. Verifique sua conexão.');
         }
@@ -121,7 +118,7 @@ async function loadRankingData() {
         hideLoadingState();
     }
     
-    console.log('🏆 === CARREGAMENTO FINALIZADO ===');
+    CONFIG.log('🏆 === CARREGAMENTO FINALIZADO ===', 'info');
 }
 
 /**
@@ -130,14 +127,14 @@ async function loadRankingData() {
  */
 async function loadRankingTable() {
     try {
-        console.log('📊 Buscando dados do ranking (endpoint público)...');
+        CONFIG.log('📊 Buscando dados do ranking (endpoint público)...', 'debug');
         
-        const response = await fetch(`${API_BASE_URL}/api/scores/ranking?limit=50`);
+        const response = await fetch(`${CONFIG.getEndpointURL('RANKING')}?limit=${CONFIG.RANKING_PAGE_SIZE}`);
         
         if (!response.ok) {
             // Log detalhado do erro
             const errorText = await response.text().catch(() => 'Erro desconhecido');
-            console.error('❌ Erro na resposta do ranking:', {
+            CONFIG.log('❌ Erro na resposta do ranking', 'error', {
                 status: response.status,
                 statusText: response.statusText,
                 error: errorText
@@ -146,7 +143,7 @@ async function loadRankingTable() {
         }
         
         const rankingData = await response.json();
-        console.log('📊 Dados do ranking recebidos:', rankingData.length, 'jogadores');
+        CONFIG.log('📊 Dados do ranking recebidos', 'debug', `${rankingData.length} jogadores`);
         
         // Valida se os dados estão no formato esperado
         if (!Array.isArray(rankingData)) {
@@ -157,15 +154,18 @@ async function loadRankingTable() {
         return rankingData;
         
     } catch (error) {
-        console.error('❌ Erro ao carregar ranking:', error);
+        CONFIG.log('❌ Erro ao carregar ranking', 'error', error);
         
         // Fallback para dados de demonstração apenas em último caso
         if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-            console.log('🌐 Problema de conectividade detectado, usando dados de demonstração...');
-            const demoData = generateDemoRankingData();
-            renderRankingTable(demoData);
-            showConnectivityWarning();
-            return demoData;
+            CONFIG.log('🌐 Problema de conectividade detectado, usando dados de demonstração...', 'warn');
+            
+            if (CONFIG.ENABLE_MOCK_DATA) {
+                const demoData = generateDemoRankingData();
+                renderRankingTable(demoData);
+                showConnectivityWarning();
+                return demoData;
+            }
         }
         
         throw error; // Re-throw para ser tratado pelo caller
@@ -178,13 +178,13 @@ async function loadRankingTable() {
  */
 async function loadGlobalStats() {
     try {
-        console.log('📈 Buscando estatísticas globais (endpoint público)...');
+        CONFIG.log('📈 Buscando estatísticas globais (endpoint público)...', 'debug');
         
-        const response = await fetch(`${API_BASE_URL}/api/scores/stats`);
+        const response = await fetch(CONFIG.getEndpointURL('GLOBAL_STATS'));
         
         if (!response.ok) {
             const errorText = await response.text().catch(() => 'Erro desconhecido');
-            console.error('❌ Erro na resposta das estatísticas:', {
+            CONFIG.log('❌ Erro na resposta das estatísticas', 'error', {
                 status: response.status,
                 statusText: response.statusText,
                 error: errorText
@@ -193,7 +193,7 @@ async function loadGlobalStats() {
         }
         
         const stats = await response.json();
-        console.log('📊 Estatísticas globais recebidas:', stats);
+        CONFIG.log('📊 Estatísticas globais recebidas', 'debug', stats);
         
         // Valida estrutura básica dos dados
         if (typeof stats !== 'object' || stats === null) {
@@ -204,11 +204,11 @@ async function loadGlobalStats() {
         return stats;
         
     } catch (error) {
-        console.error('❌ Erro ao carregar estatísticas globais:', error);
+        CONFIG.log('❌ Erro ao carregar estatísticas globais', 'error', error);
         
         // Fallback para estatísticas calculadas localmente
         if (currentRankingData.length > 0) {
-            console.log('📊 Calculando estatísticas a partir dos dados do ranking...');
+            CONFIG.log('📊 Calculando estatísticas a partir dos dados do ranking...', 'debug');
             const fallbackStats = calculateStatsFromRanking(currentRankingData);
             updateGlobalStats(fallbackStats);
             return fallbackStats;
@@ -224,15 +224,15 @@ async function loadGlobalStats() {
  */
 async function loadUserStats() {
     if (!isUserLoggedIn) {
-        console.log('⚠️ Usuário não logado - pulando carregamento de estatísticas pessoais');
+        CONFIG.log('⚠️ Usuário não logado - pulando carregamento de estatísticas pessoais', 'debug');
         return null;
     }
     
     try {
-        console.log('👤 Buscando estatísticas do usuário (endpoint privado)...');
+        CONFIG.log('👤 Buscando estatísticas do usuário (endpoint privado)...', 'debug');
         
         const token = getAuthToken();
-        const response = await fetch(`${API_BASE_URL}/api/scores/my-stats`, {
+        const response = await fetch(CONFIG.getEndpointURL('USER_STATS'), {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -240,7 +240,7 @@ async function loadUserStats() {
         
         if (!response.ok) {
             if (response.status === 401 || response.status === 403) {
-                console.warn('🔐 Token inválido ou expirado, removendo autenticação...');
+                CONFIG.log('🔐 Token inválido ou expirado, removendo autenticação...', 'warn');
                 clearAuthData();
                 isUserLoggedIn = false;
                 updateUIForUserStatus();
@@ -252,13 +252,13 @@ async function loadUserStats() {
         }
         
         const stats = await response.json();
-        console.log('👤 Estatísticas do usuário recebidas:', stats);
+        CONFIG.log('👤 Estatísticas do usuário recebidas', 'debug', stats);
         
         currentUserStats = stats;
         return stats;
         
     } catch (error) {
-        console.error('❌ Erro ao carregar estatísticas do usuário:', error);
+        CONFIG.log('❌ Erro ao carregar estatísticas do usuário', 'error', error);
         
         // Se for erro de autenticação, limpa os dados
         if (error.message.includes('401') || error.message.includes('403')) {
@@ -293,7 +293,7 @@ function calculateStatsFromRanking(rankingData) {
     const averageScore = totalPoints / Math.max(totalGames, 1);
     const topPlayer = rankingData[0]?.username || 'Nenhum';
     
-    console.log('📊 Estatísticas calculadas localmente:', {
+    CONFIG.log('📊 Estatísticas calculadas localmente', 'debug', {
         totalPlayers, totalGames, highestScore, averageScore: Math.round(averageScore * 100) / 100
     });
     
@@ -317,8 +317,8 @@ function showConnectivityWarning() {
         position: fixed;
         top: 1rem;
         right: 1rem;
-        background: #ff6b35;
-        color: white;
+        background: ${CONFIG.THEME.WARNING_COLOR};
+        color: #000;
         padding: 1rem;
         border-radius: 8px;
         font-family: 'Press Start 2P', monospace;
@@ -326,6 +326,7 @@ function showConnectivityWarning() {
         z-index: 10000;
         max-width: 300px;
         animation: slideInRight 0.5s ease;
+        border: 2px solid ${CONFIG.THEME.ERROR_COLOR};
     `;
     warning.innerHTML = `
         ⚠️ MODO OFFLINE<br>
@@ -339,20 +340,18 @@ function showConnectivityWarning() {
         if (warning.parentNode) {
             warning.remove();
         }
-    }, 10000);
+    }, CONFIG.NOTIFICATION_DURATION * 2);
 }
-
-// [RESTO DO CÓDIGO PERMANECE IGUAL - renderRankingTable, createRankingRow, etc.]
 
 /**
  * Renderiza a tabela de ranking
  */
 function renderRankingTable(rankingData) {
-    console.log('🎨 Renderizando tabela de ranking...');
+    CONFIG.log('🎨 Renderizando tabela de ranking...', 'debug');
     
     const tbody = document.getElementById('ranking-tbody');
     if (!tbody) {
-        console.error('❌ Elemento ranking-tbody não encontrado');
+        CONFIG.log('❌ Elemento ranking-tbody não encontrado', 'error');
         return;
     }
     
@@ -372,7 +371,7 @@ function renderRankingTable(rankingData) {
         tbody.appendChild(row);
     });
     
-    console.log('✅ Tabela de ranking renderizada com', rankingData.length, 'jogadores');
+    CONFIG.log('✅ Tabela de ranking renderizada', 'info', `${rankingData.length} jogadores`);
 }
 
 /**
@@ -439,7 +438,7 @@ function createRankingRow(player, position) {
  * Atualiza estatísticas globais na interface
  */
 function updateGlobalStats(stats) {
-    console.log('📊 Atualizando estatísticas globais...');
+    CONFIG.log('📊 Atualizando estatísticas globais...', 'debug');
     
     const elements = {
         'total-players': stats.totalPlayers || 0,
@@ -454,7 +453,7 @@ function updateGlobalStats(stats) {
         }
     });
     
-    console.log('✅ Estatísticas globais atualizadas');
+    CONFIG.log('✅ Estatísticas globais atualizadas', 'info');
 }
 
 /**
@@ -473,7 +472,7 @@ function showUserPosition(userStats) {
             positionCard.classList.add('user-stat-highlight');
         }, 500);
         
-        console.log('👤 Posição do usuário exibida:', userStats.rankingPosition);
+        CONFIG.log('👤 Posição do usuário exibida', 'info', userStats.rankingPosition);
     }
 }
 
@@ -487,11 +486,11 @@ function updateUIForUserStatus() {
     if (isUserLoggedIn) {
         if (userActions) userActions.style.display = 'flex';
         if (loginBanner) loginBanner.style.display = 'none';
-        console.log('👤 UI configurada para usuário logado');
+        CONFIG.log('👤 UI configurada para usuário logado', 'debug');
     } else {
         if (userActions) userActions.style.display = 'none';
         if (loginBanner) loginBanner.style.display = 'block';
-        console.log('👤 UI configurada para usuário não logado');
+        CONFIG.log('👤 UI configurada para usuário não logado', 'debug');
     }
 }
 
@@ -500,7 +499,7 @@ function updateUIForUserStatus() {
  */
 function animateNumber(element, targetValue) {
     const startValue = parseInt(element.textContent) || 0;
-    const duration = 1000;
+    const duration = CONFIG.ANIMATION_DURATION * 3;
     const startTime = Date.now();
     
     function updateNumber() {
@@ -582,7 +581,7 @@ function showErrorState(message) {
  * Gera dados de demonstração para fallback
  */
 function generateDemoRankingData() {
-    console.log('🎭 Gerando dados de demonstração...');
+    CONFIG.log('🎭 Gerando dados de demonstração...', 'debug');
     
     const demoPlayers = [
         { username: 'TechMaster', bestScore: 100, totalGames: 15, averageScore: 85.3, totalPoints: 1280 },
@@ -608,18 +607,18 @@ function generateDemoRankingData() {
  */
 function clearAuthData() {
     try {
-        localStorage.removeItem('token');
-        localStorage.removeItem('loggedIn');
-        localStorage.removeItem('userData');
+        localStorage.removeItem(CONFIG.TOKEN_STORAGE_KEY);
+        localStorage.removeItem(CONFIG.LOGIN_STATUS_KEY);
+        localStorage.removeItem(CONFIG.USER_DATA_KEY);
     } catch (e) {
-        console.warn('⚠️ Erro ao limpar localStorage');
+        CONFIG.log('⚠️ Erro ao limpar localStorage', 'warn', e);
     }
     
     try {
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('loggedIn');
+        sessionStorage.removeItem(CONFIG.TOKEN_STORAGE_KEY);
+        sessionStorage.removeItem(CONFIG.LOGIN_STATUS_KEY);
     } catch (e) {
-        console.warn('⚠️ Erro ao limpar sessionStorage');
+        CONFIG.log('⚠️ Erro ao limpar sessionStorage', 'warn', e);
     }
     
     if (window.authData) {
@@ -631,9 +630,9 @@ function clearAuthData() {
  * Utilitários
  */
 function getAuthToken() {
-    return localStorage.getItem('token') || 
+    return localStorage.getItem(CONFIG.TOKEN_STORAGE_KEY) || 
            (window.authData && window.authData.token) ||
-           sessionStorage.getItem('token');
+           sessionStorage.getItem(CONFIG.TOKEN_STORAGE_KEY);
 }
 
 function escapeHtml(text) {
@@ -646,8 +645,8 @@ function escapeHtml(text) {
  * Event Listeners
  */
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🏆 === PÁGINA DE RANKING CARREGADA ===');
-    console.log('🏠 DOM ready - iniciando configuração');
+    CONFIG.log('🏆 === PÁGINA DE RANKING CARREGADA ===', 'info');
+    CONFIG.log('🏠 DOM ready - iniciando configuração', 'debug');
     
     // Carrega dados iniciais
     loadRankingData();
@@ -656,25 +655,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const refreshBtn = document.getElementById('refresh-btn');
     if (refreshBtn) {
         refreshBtn.addEventListener('click', () => {
-            console.log('🔄 Refresh manual solicitado pelo usuário');
+            CONFIG.log('🔄 Refresh manual solicitado pelo usuário', 'info');
             retryCount = 0; // Reset contador
             loadRankingData();
         });
     }
     
-    // Auto-refresh a cada 5 minutos (aumentado para não sobrecarregar)
+    // Auto-refresh usando configuração centralizada
     setInterval(() => {
         if (!isLoading) {
-            console.log('🔄 Auto-refresh do ranking');
+            CONFIG.log('🔄 Auto-refresh do ranking', 'debug');
             retryCount = 0; // Reset contador para auto-refresh
             loadRankingData();
         }
-    }, 300000); // 5 minutos
+    }, CONFIG.AUTO_REFRESH_INTERVAL);
     
     // Listener para mudanças de autenticação
     window.addEventListener('storage', (e) => {
-        if (e.key === 'token' || e.key === 'loggedIn') {
-            console.log('🔐 Status de autenticação alterado, recarregando...');
+        if (e.key === CONFIG.TOKEN_STORAGE_KEY || e.key === CONFIG.LOGIN_STATUS_KEY) {
+            CONFIG.log('🔐 Status de autenticação alterado, recarregando...', 'info');
             setTimeout(() => {
                 retryCount = 0;
                 loadRankingData();
@@ -684,5 +683,53 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Log de inicialização
-console.log('🏆 Ranking.js carregado completamente');
-console.log('🌐 API Base URL:', API_BASE_URL);
+CONFIG.log('🏆 Ranking.js carregado completamente', 'info');
+CONFIG.log('🌐 API Base URL', 'info', CONFIG.API_BASE_URL);
+CONFIG.log('🎯 Configurações do ranking', 'debug', {
+    pageSize: CONFIG.RANKING_PAGE_SIZE,
+    maxRetries: CONFIG.MAX_RETRIES,
+    retryDelay: CONFIG.RETRY_DELAY,
+    autoRefreshInterval: CONFIG.AUTO_REFRESH_INTERVAL,
+    enableMockData: CONFIG.ENABLE_MOCK_DATA
+});
+
+// Export para debugging (apenas em modo debug)
+if (CONFIG.DEBUG) {
+    window.rankingDebug = {
+        getCurrentData: () => currentRankingData,
+        getUserStats: () => currentUserStats,
+        getLoadingState: () => isLoading,
+        forceRefresh: () => {
+            retryCount = 0;
+            loadRankingData();
+        },
+        simulateError: () => {
+            showErrorState('Erro simulado para teste');
+        },
+        simulateOffline: () => {
+            showConnectivityWarning();
+        },
+        clearUserAuth: () => {
+            clearAuthData();
+            isUserLoggedIn = false;
+            updateUIForUserStatus();
+        },
+        testMockData: () => {
+            const mockData = generateDemoRankingData();
+            renderRankingTable(mockData);
+            CONFIG.log('Mock data rendered', 'debug', mockData);
+        },
+        getConfig: () => {
+            CONFIG.log('Configurações de ranking', 'info', {
+                environment: CONFIG.ENVIRONMENT,
+                apiBaseUrl: CONFIG.API_BASE_URL,
+                pageSize: CONFIG.RANKING_PAGE_SIZE,
+                maxRetries: CONFIG.MAX_RETRIES,
+                autoRefresh: CONFIG.AUTO_REFRESH_INTERVAL,
+                debug: CONFIG.DEBUG
+            });
+        }
+    };
+    
+    CONFIG.log('Debug functions available: rankingDebug.*', 'info');
+}
