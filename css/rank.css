@@ -1043,6 +1043,403 @@ body {
 }
 
 /* ==========================================================================
+   ADIÇÕES AO RANK.CSS - ELEMENTOS DE PERFIL
+   Adicione essas regras ao final do arquivo rank.css
+   ========================================================================== */
+
+/* ==========================================================================
+   NAVIGATION MENU MELHORADO
+   ========================================================================== */
+
+.nav-menu {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.profile-nav {
+  border-color: var(--neon-blue) !important;
+  color: var(--neon-blue) !important;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3) !important;
+  background: rgba(0, 255, 255, 0.1) !important;
+  animation: profileNavGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes profileNavGlow {
+  0% {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  }
+  100% {
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 30px rgba(128, 0, 255, 0.4);
+  }
+}
+
+.profile-nav:hover {
+  border-color: var(--neon-purple) !important;
+  color: var(--neon-purple) !important;
+  box-shadow: 0 0 35px rgba(128, 0, 255, 0.6) !important;
+  background: rgba(128, 0, 255, 0.15) !important;
+}
+
+.profile-nav img {
+  filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(180deg) brightness(101%) contrast(107%) !important;
+}
+
+.profile-nav:hover img {
+  filter: brightness(0) saturate(100%) invert(22%) sepia(96%) saturate(6613%) hue-rotate(266deg) brightness(101%) contrast(107%) !important;
+}
+
+/* ==========================================================================
+   PROFILE ACTION BUTTON
+   ========================================================================== */
+
+.profile-action {
+  border-color: var(--neon-blue) !important;
+  color: var(--neon-blue) !important;
+  background: linear-gradient(45deg, rgba(0, 255, 255, 0.1), rgba(128, 0, 255, 0.1)) !important;
+  animation: profileActionPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes profileActionPulse {
+  0% {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    background: linear-gradient(45deg, rgba(0, 255, 255, 0.1), rgba(128, 0, 255, 0.1));
+  }
+  100% {
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 25px rgba(128, 0, 255, 0.4);
+    background: linear-gradient(45deg, rgba(128, 0, 255, 0.15), rgba(0, 255, 255, 0.1));
+  }
+}
+
+.profile-action:hover {
+  background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)) !important;
+  color: var(--background-black) !important;
+  border-color: var(--text-white) !important;
+  box-shadow: 0 0 30px var(--neon-blue) !important;
+}
+
+.profile-action .action-icon {
+  background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: bold;
+  text-shadow: none;
+}
+
+.profile-action:hover .action-icon {
+  -webkit-text-fill-color: var(--background-black);
+  background: none;
+  text-shadow: 0 0 5px var(--text-white);
+}
+
+/* ==========================================================================
+   ENHANCED QUICK ACTIONS LAYOUT
+   ========================================================================== */
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  justify-content: center;
+  margin: 2.5rem 0;
+  flex-wrap: wrap;
+}
+
+/* Reorganizar ordem dos botões */
+.profile-action {
+  order: 1;
+}
+
+.history-action {
+  order: 2;
+}
+
+.play-action {
+  order: 3;
+}
+
+/* ==========================================================================
+   ENHANCED LOGIN BANNER
+   ========================================================================== */
+
+.info-banner {
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.1), rgba(0, 0, 0, 0.8), rgba(128, 0, 255, 0.1));
+  border: 2px solid var(--neon-blue);
+  border-radius: 8px;
+  padding: 1rem 2rem;
+  margin: 2rem 0;
+  backdrop-filter: blur(10px);
+  animation: bannerProfilePulse 5s ease-in-out infinite alternate;
+}
+
+@keyframes bannerProfilePulse {
+  0% {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    background: linear-gradient(90deg, rgba(0, 255, 255, 0.1), rgba(0, 0, 0, 0.8), rgba(128, 0, 255, 0.1));
+  }
+  100% {
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 25px rgba(128, 0, 255, 0.4);
+    background: linear-gradient(90deg, rgba(128, 0, 255, 0.1), rgba(0, 0, 0, 0.8), rgba(0, 255, 255, 0.1));
+  }
+}
+
+.banner-text {
+  background: linear-gradient(45deg, var(--neon-blue), var(--text-white), var(--neon-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: bold;
+}
+
+.banner-action {
+  background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+  color: var(--background-black);
+  border: 2px solid var(--neon-blue);
+  transition: all 0.3s ease;
+}
+
+.banner-action:hover {
+  background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
+  border-color: var(--neon-purple);
+  box-shadow: 0 0 20px var(--neon-purple);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN - PROFILE ELEMENTS
+   ========================================================================== */
+
+/* Tablets */
+@media screen and (max-width: 768px) {
+  .navigation-container {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    top: 1.5rem;
+  }
+  
+  .nav-menu {
+    order: 2;
+    gap: 0.8rem;
+  }
+  
+  .back-home-container {
+    order: 1;
+  }
+  
+  .profile-nav,
+  .nav-btn {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.6rem;
+  }
+  
+  .quick-actions {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    max-width: 400px;
+    margin: 2rem auto;
+  }
+  
+  .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .banner-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .banner-action {
+    align-self: center;
+    width: fit-content;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 480px) {
+  .navigation-container {
+    padding: 0 0.5rem;
+    top: 1rem;
+  }
+  
+  .ranking-container {
+    padding: 5rem 0.5rem 2rem;
+  }
+  
+  .nav-menu {
+    gap: 0.5rem;
+  }
+  
+  .profile-nav,
+  .nav-btn {
+    padding: 0.5rem 0.6rem;
+    font-size: 0.5rem;
+  }
+  
+  .profile-nav img,
+  .nav-btn img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .quick-actions {
+    gap: 0.8rem;
+    margin: 1.5rem auto;
+  }
+  
+  .action-btn {
+    padding: 0.8rem 1rem;
+    font-size: 0.6rem;
+    min-width: auto;
+  }
+  
+  .action-icon {
+    font-size: 0.8rem;
+  }
+  
+  .banner-content {
+    padding: 0.5rem;
+  }
+  
+  .banner-text {
+    font-size: 0.6rem;
+    line-height: 1.4;
+  }
+  
+  .banner-action {
+    padding: 0.6rem 1rem;
+    font-size: 0.5rem;
+  }
+}
+
+/* ==========================================================================
+   SPECIAL EFFECTS FOR PROFILE ELEMENTS
+   ========================================================================== */
+
+/* Hover effect enhancement */
+.profile-nav:hover,
+.profile-action:hover {
+  animation: profileHoverGlow 0.3s ease-out;
+}
+
+@keyframes profileHoverGlow {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: scale(1.02);
+  }
+}
+
+/* Loading state for profile elements */
+.profile-loading {
+  opacity: 0.6;
+  pointer-events: none;
+  position: relative;
+}
+
+.profile-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  width: 12px;
+  height: 12px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  transform: translateY(-50%);
+}
+
+/* Enhanced accessibility for profile elements */
+.profile-nav:focus,
+.profile-action:focus {
+  outline: 3px solid var(--neon-blue);
+  outline-offset: 2px;
+}
+
+/* Gradient text effect for profile elements */
+.profile-gradient-text {
+  background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple), var(--primary-green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 300% 300%;
+  animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ==========================================================================
+   HIGH CONTRAST MODE - PROFILE ELEMENTS
+   ========================================================================== */
+
+.high-contrast .profile-nav,
+.high-contrast .profile-action {
+  border-width: 4px;
+  background: transparent !important;
+}
+
+.high-contrast .profile-gradient-text,
+.high-contrast .banner-text,
+.high-contrast .profile-action .action-icon {
+  -webkit-text-fill-color: currentColor;
+  background: none;
+}
+
+/* ==========================================================================
+   REDUCED MOTION - PROFILE ELEMENTS
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-nav,
+  .profile-action,
+  .info-banner,
+  .profile-gradient-text {
+    animation: none;
+  }
+  
+  .profile-nav:hover,
+  .profile-action:hover {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   PRINT STYLES - PROFILE ELEMENTS
+   ========================================================================== */
+
+@media print {
+  .navigation-container,
+  .quick-actions,
+  .info-banner {
+    display: none;
+  }
+}
+
+/* ==========================================================================
    ACCESSIBILITY & PERFORMANCE
    ========================================================================== */
 

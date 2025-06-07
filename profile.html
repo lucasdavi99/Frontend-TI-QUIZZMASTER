@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/code_rain.css">
+    <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="css/glitch-effects.css">
+    
+    <!-- External Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
+    
+    <title>T.I QUIZZMASTER - Perfil do Usuário</title>
+</head>
+
+<body>
+    <!-- Matrix Rain Background -->
+    <canvas id="canvas"></canvas>
+    
+    <!-- Navigation Container -->
+    <div class="navigation-container">
+        <!-- Back Button -->
+        <div class="back-home-container">
+            <a href="index.html" class="back-btn">
+                <img src="img/duas-setas-para-a-esquerda.png" alt="Voltar">
+                <span class="back-tooltip">Voltar ao Menu</span>
+            </a>
+        </div>
+        
+        <!-- Logout Button -->
+        <div class="logout-container">
+            <button id="logout-btn" class="logout-btn">
+                <img src="img/logout.png" alt="Logout" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(92deg) brightness(101%) contrast(107%);">
+                <span class="logout-tooltip">Fazer Logout</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="profile-container">
+        <!-- Page Title -->
+        <div class="title-section">
+            <h1 class="profile-title glitch-title" data-text="PERFIL DO USUÁRIO">
+                PERFIL DO USUÁRIO
+                <span class="glitch-layer">PERFIL DO USUÁRIO</span>
+                <span class="glitch-layer">PERFIL DO USUÁRIO</span>
+            </h1>
+            <div class="title-underline"></div>
+            <p class="title-subtitle" id="user-welcome">Gerencie sua conta e configurações</p>
+        </div>
+        
+        <!-- User Info Section -->
+        <div class="user-info-section">
+            <div class="info-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <span class="card-icon">👤</span>
+                        Informações da Conta
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Username:</span>
+                            <span class="info-value" id="current-username">Carregando...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Email:</span>
+                            <span class="info-value" id="current-email">Carregando...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Membro desde:</span>
+                            <span class="info-value" id="member-since">Carregando...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Status:</span>
+                            <span class="info-value status-active" id="account-status">Ativo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Profile Actions Grid -->
+        <div class="profile-actions-grid">
+            
+            <!-- Edit Profile Section -->
+            <div class="profile-section edit-profile-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <span class="section-icon">✏️</span>
+                        Alterar Dados
+                    </h3>
+                </div>
+                
+                <div class="terminal-form">
+                    <div class="terminal-header">
+                        <div class="terminal-controls">
+                            <div class="control close"></div>
+                            <div class="control minimize"></div>
+                            <div class="control maximize"></div>
+                        </div>
+                        <div class="terminal-title">EDIT_PROFILE.EXE</div>
+                    </div>
+                    
+                    <div class="terminal-body">
+                        <div class="command-line">
+                            <span class="prompt">user@profile:~$</span>
+                            <span class="command">update user_data.sh</span>
+                        </div>
+                        
+                        <form class="profile-form" id="edit-profile-form">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" id="new-username" required placeholder=" ">
+                                    <label for="new-username">Novo Username</label>
+                                    <div class="input-line"></div>
+                                </div>
+                                <div class="field-help">3-20 caracteres, apenas letras, números, _ e -</div>
+                            </div>
+                            
+                            <button type="submit" class="action-btn primary">
+                                <span class="btn-icon">💾</span>
+                                <span class="btn-text">Salvar Username</span>
+                                <div class="btn-bg"></div>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Change Password Section -->
+            <div class="profile-section password-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <span class="section-icon">🔒</span>
+                        Alterar Senha
+                    </h3>
+                </div>
+                
+                <div class="terminal-form">
+                    <div class="terminal-header">
+                        <div class="terminal-controls">
+                            <div class="control close"></div>
+                            <div class="control minimize"></div>
+                            <div class="control maximize"></div>
+                        </div>
+                        <div class="terminal-title">CHANGE_PASSWORD.EXE</div>
+                    </div>
+                    
+                    <div class="terminal-body">
+                        <div class="command-line">
+                            <span class="prompt">security@auth:~$</span>
+                            <span class="command">passwd --change</span>
+                        </div>
+                        
+                        <form class="profile-form" id="change-password-form">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="password" id="current-password" required placeholder=" ">
+                                    <label for="current-password">Senha Atual</label>
+                                    <div class="input-line"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="password" id="new-password" required placeholder=" " minlength="6">
+                                    <label for="new-password">Nova Senha</label>
+                                    <div class="input-line"></div>
+                                </div>
+                                <div class="field-help">Mínimo 6 caracteres</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="password" id="confirm-password" required placeholder=" ">
+                                    <label for="confirm-password">Confirmar Nova Senha</label>
+                                    <div class="input-line"></div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="action-btn primary">
+                                <span class="btn-icon">🔐</span>
+                                <span class="btn-text">Alterar Senha</span>
+                                <div class="btn-bg"></div>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- History Section -->
+            <div class="profile-section history-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <span class="section-icon">📊</span>
+                        Histórico & Estatísticas
+                    </h3>
+                </div>
+                
+                <div class="stats-preview">
+                    <div class="stat-preview-item">
+                        <div class="stat-preview-value" id="total-games-preview">0</div>
+                        <div class="stat-preview-label">Partidas</div>
+                    </div>
+                    <div class="stat-preview-item">
+                        <div class="stat-preview-value" id="best-score-preview">0</div>
+                        <div class="stat-preview-label">Melhor Score</div>
+                    </div>
+                    <div class="stat-preview-item">
+                        <div class="stat-preview-value" id="ranking-position-preview">-</div>
+                        <div class="stat-preview-label">Posição</div>
+                    </div>
+                </div>
+                
+                <div class="history-actions">
+                    <a href="history.html" class="action-btn secondary">
+                        <span class="btn-icon">📜</span>
+                        <span class="btn-text">Ver Histórico Completo</span>
+                        <div class="btn-bg"></div>
+                    </a>
+                    <a href="rank.html" class="action-btn tertiary">
+                        <span class="btn-icon">🏆</span>
+                        <span class="btn-text">Ver Ranking</span>
+                        <div class="btn-bg"></div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Danger Zone Section -->
+            <div class="profile-section danger-section">
+                <div class="section-header">
+                    <h3 class="section-title danger-title">
+                        <span class="section-icon">⚠️</span>
+                        Zona de Perigo
+                    </h3>
+                </div>
+                
+                <div class="danger-warning">
+                    <div class="warning-icon">🚨</div>
+                    <div class="warning-text">
+                        <h4>Excluir Conta</h4>
+                        <p>Esta ação é <strong>irreversível</strong>. Todos os seus dados, histórico e estatísticas serão permanentemente removidos.</p>
+                    </div>
+                </div>
+                
+                <button class="action-btn danger" id="delete-account-btn">
+                    <span class="btn-icon">🗑️</span>
+                    <span class="btn-text">Excluir Minha Conta</span>
+                    <div class="btn-bg"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Status Messages Container -->
+    <div class="status-container" id="status-container">
+        <!-- Messages will be inserted here -->
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div class="confirmation-modal" id="confirmation-modal" style="display: none;">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Confirmar Ação</h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="confirmation-icon" id="confirmation-icon">⚠️</div>
+                <p id="confirmation-message">Tem certeza que deseja realizar esta ação?</p>
+                <div class="confirmation-input" id="confirmation-input-container" style="display: none;">
+                    <div class="input-group">
+                        <input type="text" id="confirmation-input" placeholder="Digite 'CONFIRMAR' para continuar">
+                        <label for="confirmation-input">Confirmação</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel" id="modal-cancel">Cancelar</button>
+                <button class="modal-btn confirm" id="modal-confirm">Confirmar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p id="loading-text">Processando...</p>
+        </div>
+    </div>
+    
+    <!-- JavaScript Files -->
+    <script src="js/rain_code.js"></script>
+    <script src="js/glitch-effects.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

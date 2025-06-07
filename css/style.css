@@ -458,6 +458,221 @@ html, body {
   transform: translateX(0);
 }
 
+/* ==========================================================================
+   ADIÇÕES PARA O BOTÃO DE PERFIL - Adicione ao final do style.css
+   ========================================================================== */
+
+/* Botão de Perfil - Estilo especial CORRIGIDO */
+.btn-profile {
+  background: linear-gradient(45deg, rgba(0, 255, 255, 0.1), rgba(128, 0, 255, 0.1));
+  border-color: var(--neon-blue) !important;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.3),
+    inset 0 0 20px rgba(0, 255, 255, 0.1);
+  animation: profileButtonGlow 3s ease-in-out infinite alternate;
+  position: relative;
+  overflow: hidden;
+  /* 🔧 CORRIGIDO: Garante alinhamento com outros botões */
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@keyframes profileButtonGlow {
+  0% {
+    border-color: var(--neon-blue);
+    box-shadow: 
+      0 0 20px rgba(0, 255, 255, 0.3),
+      inset 0 0 20px rgba(0, 255, 255, 0.1);
+  }
+  100% {
+    border-color: var(--neon-purple);
+    box-shadow: 
+      0 0 30px rgba(128, 0, 255, 0.4),
+      inset 0 0 30px rgba(128, 0, 255, 0.15);
+  }
+}
+
+.btn-profile:hover {
+  background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+  border-color: var(--text-white) !important;
+  box-shadow: 
+    0 0 40px var(--neon-blue),
+    inset 0 0 40px rgba(255, 255, 255, 0.2);
+}
+
+/* 🔧 CORRIGIDO: Texto do botão de perfil sempre visível */
+.btn-profile .btn-text {
+  color: var(--neon-blue) !important;
+  text-shadow: 0 0 10px var(--neon-blue);
+  font-weight: bold;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+  /* Remove o gradiente problemático */
+  background: none !important;
+  -webkit-text-fill-color: var(--neon-blue) !important;
+  /* 🔧 CORRIGIDO: Garante centralização do texto */
+  width: 100%;
+  text-align: center;
+  display: block;
+}
+
+.btn-profile:hover .btn-text {
+  color: var(--background-black) !important;
+  -webkit-text-fill-color: var(--background-black) !important;
+  text-shadow: none;
+}
+
+/* 🔧 CORRIGIDO: Estado inicial visível */
+.btn-profile {
+  opacity: 1 !important;
+  transform: scale(1);
+  visibility: visible;
+}
+
+/* 🔧 CORRIGIDO: Estado escondido - remove completamente do layout */
+.btn-profile.hidden {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  /* Remove do fluxo flexbox completamente */
+  flex: none !important;
+  order: 999 !important;
+  /* Remove qualquer espaço que possa sobrar */
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+}
+
+/* 🔧 FALLBACK: Ajuste manual da navegação */
+.navigation.no-profile {
+  /* Ajustes quando não há botão de perfil */
+  justify-content: center;
+}
+
+/* 🔧 NOVO: Animação de entrada mais suave */
+.btn-profile.profile-fade-in {
+  animation: profileFadeIn 0.8s ease-out forwards, profileButtonGlow 3s ease-in-out infinite alternate 0.8s;
+}
+
+@keyframes profileFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 🔧 CORRIGIDO: Responsive adjustments para mobile */
+@media screen and (max-width: 768px) {
+  .btn-profile {
+    order: 2; /* Posiciona o botão de perfil após "Começar" em mobile */
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+  }
+}
+
+/* 🔧 CORRIGIDO: Navegação responsiva */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .navigation {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+  
+  .btn-profile {
+    min-width: 200px;
+  }
+}
+
+/* 🔧 CORRIGIDO: Desktop layout */
+@media screen and (min-width: 1025px) {
+  .navigation {
+    flex-direction: row;
+    gap: 2rem;
+  }
+  
+  .btn-profile {
+    min-width: 250px;
+  }
+}
+
+/* High contrast mode */
+.high-contrast .btn-profile {
+  border-width: 4px;
+  background: transparent !important;
+}
+
+.high-contrast .btn-profile .btn-text {
+  color: var(--text-white) !important;
+  -webkit-text-fill-color: var(--text-white) !important;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .btn-profile {
+    animation: none !important;
+  }
+  
+  .btn-profile.profile-fade-in {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 🔧 NOVO: Force layout consistency */
+.btn-profile .btn-bg {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+  transition: all 0.5s ease;
+  z-index: 1;
+}
+
+.btn-profile:hover .btn-bg {
+  left: 0;
+}
+
+/* Responsive adjustments for profile button */
+@media screen and (max-width: 768px) {
+  .btn-profile {
+    order: 2; /* Posiciona o botão de perfil após "Começar" em mobile */
+  }
+}
+
+/* High contrast mode */
+.high-contrast .btn-profile {
+  border-width: 4px;
+  background: transparent !important;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .btn-profile {
+    animation: none;
+  }
+  
+  .btn-profile {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Mobile adjustments for notifications */
 @media screen and (max-width: 480px) {
   .auth-notification {
