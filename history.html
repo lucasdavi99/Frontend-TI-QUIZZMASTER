@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon">
-    
+
     <!-- CSS Files -->
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/code_rain.css">
     <link rel="stylesheet" href="css/rank.css">
     <link rel="stylesheet" href="css/history.css">
-    
+
     <!-- External Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    
+
     <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
-    
+
     <title>T.I QUIZZMASTER - Meu Histórico</title>
 </head>
 
 <body>
     <!-- Matrix Rain Background -->
     <canvas id="canvas"></canvas>
-    
+
     <!-- Navigation Container -->
     <div class="navigation-container">
         <!-- Back to Ranking Button -->
@@ -35,16 +36,17 @@
                 <span class="back-tooltip">Voltar ao Ranking</span>
             </a>
         </div>
-        
+
         <!-- Home Button -->
         <div class="home-button-container">
             <a href="index.html" id="home-btn" class="nav-btn">
-                <img src="img/home-icon.png" alt="Home" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(92deg) brightness(101%) contrast(107%);">
+                <img src="img/home-icon.png" alt="Home"
+                    style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(59%) sepia(96%) saturate(3207%) hue-rotate(92deg) brightness(101%) contrast(107%);">
                 <span class="nav-tooltip">Menu Principal</span>
             </a>
         </div>
     </div>
-    
+
     <!-- Main Content -->
     <div class="history-container">
         <!-- Page Title -->
@@ -53,7 +55,7 @@
             <div class="title-underline"></div>
             <p class="title-subtitle" id="user-welcome">Suas conquistas e estatísticas pessoais</p>
         </div>
-        
+
         <!-- User Stats Summary -->
         <div class="user-stats-summary" id="user-stats-summary" style="display: none;">
             <div class="stats-grid">
@@ -83,7 +85,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Filter Controls -->
         <div class="filter-section" id="filter-section" style="display: none;">
             <h3 class="section-title">📊 Filtros e Ordenação</h3>
@@ -109,7 +111,7 @@
                 <button id="clear-filters" class="filter-btn secondary">Limpar</button>
             </div>
         </div>
-        
+
         <!-- History Content -->
         <div class="history-content">
             <!-- Loading State -->
@@ -117,12 +119,12 @@
                 <div class="loading-spinner"></div>
                 <p>Carregando seu histórico...</p>
             </div>
-            
+
             <!-- History Grid -->
             <div class="history-grid" id="history-grid" style="display: none;">
                 <!-- Partidas serão inseridas aqui via JavaScript -->
             </div>
-            
+
             <!-- Empty State -->
             <div class="empty-state" id="empty-state" style="display: none;">
                 <div class="empty-icon">🎮</div>
@@ -130,7 +132,7 @@
                 <p>Você ainda não jogou nenhuma partida. Que tal começar agora?</p>
                 <a href="questions.html" class="play-btn">Começar a Jogar</a>
             </div>
-            
+
             <!-- Error State -->
             <div class="error-state" id="error-state" style="display: none;">
                 <div class="error-icon">⚠️</div>
@@ -138,7 +140,7 @@
                 <p id="error-message">Ocorreu um erro ao carregar seus dados.</p>
                 <button id="retry-btn" class="retry-btn">Tentar Novamente</button>
             </div>
-            
+
             <!-- Not Logged In State -->
             <div class="not-logged-state" id="not-logged-state">
                 <div class="login-prompt">
@@ -152,7 +154,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Pagination -->
         <div class="pagination" id="pagination" style="display: none;">
             <button id="prev-page" class="page-btn" disabled>
@@ -167,7 +169,7 @@
                 <span>Próxima →</span>
             </button>
         </div>
-        
+
         <!-- Quick Actions -->
         <div class="quick-actions" id="quick-actions" style="display: none;">
             <a href="questions.html" class="action-btn primary">
@@ -184,10 +186,12 @@
             </button>
         </div>
     </div>
-    
+
     <!-- JavaScript Files -->
-    <script src="js/rain_code.js"></script>
+    <script src="js/config.js"></script>
     <script src="js/history.js"></script>
+    <script src="js/rain_code.js"></script>
     <script src="js/decoding_effect.js"></script>
 </body>
+
 </html>
