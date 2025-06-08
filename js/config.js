@@ -19,7 +19,7 @@ function detectEnvironment() {
         return 'staging';
     }
     
-    // Ambiente de produção
+    // Ambiente de produção - ajuste conforme seu domínio
     return 'production';
 }
 
@@ -32,13 +32,14 @@ const ENVIRONMENT_CONFIG = {
         ENABLE_MOCK_DATA: true
     },
     staging: {
-        API_BASE_URL: 'https://api-staging.tisuizzmaster.com', // Substitua pela URL real
+        API_BASE_URL: 'https://api-staging.yourdomain.com', // Substitua pela URL real
         DEBUG: true,
         API_TIMEOUT: 15000,
         ENABLE_MOCK_DATA: false
     },
     production: {
-        API_BASE_URL: 'https://api.tisuizzmaster.com', // Substitua pela URL real de produção
+        // Para Docker Compose, o frontend acessa a API através do Nginx
+        API_BASE_URL: window.location.origin + '/api',
         DEBUG: false,
         API_TIMEOUT: 20000,
         ENABLE_MOCK_DATA: false
