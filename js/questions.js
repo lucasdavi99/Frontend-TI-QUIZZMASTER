@@ -664,7 +664,6 @@ function enableAnswerButtons() {
     });
 }
 
-// 🔧 CORREÇÃO: Lidar com o fim do quiz usando o modal melhorado
 function handleQuizEnd(result) {
     CONFIG.log('🏁 Quiz finalizado', 'info', result);
     
@@ -672,22 +671,27 @@ function handleQuizEnd(result) {
     const score = result.finalScore || 0;
     const wasCompleted = result.wasCompleted;
     
-    // 🔧 CORREÇÃO: Usa o modal melhorado em vez do alert
+    // 🔧 ADICIONADO: Aplicar classe especial para animação de countdown
+    const modal = document.getElementById('myModal');
+    if (modal) {
+        modal.classList.add('game-end');
+    }
+    
     if (typeof showGameEndModal === 'function') {
         if (wasCompleted) {
             showGameEndModal('🎉 Parabéns! Você completou todo o quiz!', score, true);
         } else {
             showGameEndModal('❌ Quiz finalizado por resposta incorreta.', score, false);
         }
-    } else if (typeof showModal === 'function') {
-        const fullMessage = `${message} Sua pontuação final foi: ${score}`;
-        showModal(fullMessage, true, 5000);
     } else {
-        // Fallback para alert se nenhum modal estiver disponível
-        alert(`${message} Sua pontuação final foi: ${score}`);
+        // Fallback com redirecionamento manual
+        const fullMessage = `${message} Sua pontuação final foi: ${score}`;
+        alert(fullMessage);
+        
+        // 🔧 ADICIONADO: Redirecionamento manual se modal não estiver disponível
         setTimeout(() => {
             window.location.href = 'index.html';
-        }, 2000);
+        }, 7000);
     }
     
     // Resetar estado
@@ -695,7 +699,7 @@ function handleQuizEnd(result) {
     currentSessionState = null;
     answerMapping = {};
     
-    CONFIG.log('🏁 Estado do jogo resetado', 'info');
+    CONFIG.log('🏁 Estado do jogo resetado - redirecionamento automático em 7 segundos', 'info');
 }
 
 // Lidar com clique nas respostas

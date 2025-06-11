@@ -8,7 +8,7 @@ body {
 .modal {
   display: none;
   position: fixed;
-  z-index: 99999; /* 🔧 CORRIGIDO: Aumentado de 1 para 99999 para ficar acima de todos os elementos */
+  z-index: 99999;
   left: 0;
   top: 3%;
   width: 100%;
@@ -21,8 +21,8 @@ body {
 
 #modalText {
   color: #00d300;
-  padding: 95px;
-  font-size: 30px;
+  padding: 50px;
+  font-size: 20px;
   font-family: "Press Start 2P", cursive;
 }
 
@@ -35,26 +35,15 @@ body {
   border-radius: 10px;
   width: 50%;
   height: 30%;
-  position: relative; /* 🔧 ADICIONADO: Para garantir posicionamento correto */
-  z-index: 100000; /* 🔧 ADICIONADO: Z-index ainda maior para o conteúdo */
+  position: relative;
+  z-index: 100000;
 }
 
+/* 🔧 REMOVIDO: Botão close escondido */
 .close {
-  color: #fff;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  position: relative; /* 🔧 ADICIONADO: Para garantir que o botão fechar fique visível */
-  z-index: 100001; /* 🔧 ADICIONADO: Z-index maior para o botão fechar */
-}
-
-/* 🔧 ADICIONADO: Hover effect para o botão fechar */
-.close:hover,
-.close:focus {
-  color: #00d300;
-  text-decoration: none;
-  cursor: pointer;
-  text-shadow: 0 0 10px #00d300;
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 @media screen and (max-width: 768px){
@@ -107,4 +96,119 @@ body {
   text-shadow: 
     0 0 10px #00d300,
     2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* 🔧 ADICIONADO: Indicador visual de tempo restante */
+.modal-content::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #00d300, #00ff41);
+  border-radius: 0 0 8px 8px;
+  animation: countdown 7s linear;
+  z-index: 100003;
+}
+
+/* 🔧 ADICIONADO: Animação de countdown visual */
+@keyframes countdown {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* 🔧 ADICIONADO: Aplicar countdown apenas quando é fim de jogo */
+.modal.game-end .modal-content::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #00d300, #00ff41);
+  border-radius: 0 0 8px 8px;
+  animation: gameEndCountdown 7s linear;
+  z-index: 100003;
+  box-shadow: 0 0 10px #00d300;
+}
+
+/* 🔧 ADICIONADO: Animação específica para fim de jogo */
+@keyframes gameEndCountdown {
+  from {
+    width: 100%;
+    background: linear-gradient(90deg, #00d300, #00ff41);
+  }
+  50% {
+    background: linear-gradient(90deg, #ffff00, #00ff41);
+  }
+  80% {
+    background: linear-gradient(90deg, #ff8800, #ffff00);
+  }
+  100% {
+    width: 0%;
+    background: linear-gradient(90deg, #ff0000, #ff8800);
+  }
+}
+
+/* 🔧 ADICIONADO: Estilos específicos para modal de fim de jogo */
+.modal.game-end {
+    pointer-events: auto !important;
+}
+
+.modal.game-end .modal-content {
+    border-color: #00ff41;
+    box-shadow: 
+        0 0 30px #00ff41,
+        2px 2px 2px #00ff41,
+        inset 0 0 30px rgba(0, 255, 65, 0.2);
+    animation: gameEndPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes gameEndPulse {
+    0% {
+        box-shadow: 
+            0 0 30px #00ff41,
+            2px 2px 2px #00ff41,
+            inset 0 0 30px rgba(0, 255, 65, 0.2);
+    }
+    100% {
+        box-shadow: 
+            0 0 50px #00ff41,
+            2px 2px 2px #00ff41,
+            inset 0 0 50px rgba(0, 255, 65, 0.3);
+    }
+}
+
+/* 🔧 ADICIONADO: Texto do modal de fim de jogo */
+.modal.game-end #modalText {
+    white-space: pre-line;
+    line-height: 1.5;
+}
+
+/* 🔧 ADICIONADO: Responsividade melhorada */
+@media screen and (max-width: 768px) {
+    .modal.game-end #modalText {
+        font-size: 20px;
+        padding: 40px 20px;
+        line-height: 1.8;
+    }
+    
+    .modal.game-end .modal-content::after {
+        height: 6px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .modal.game-end #modalText {
+        font-size: 16px;
+        padding: 30px 15px;
+        line-height: 2;
+    }
+    
+    .modal.game-end .modal-content::after {
+        height: 8px;
+    }
 }
