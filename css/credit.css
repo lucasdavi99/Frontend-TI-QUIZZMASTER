@@ -153,7 +153,7 @@ body {
     transform: translateY(0);
   }
   to {
-    transform: translateY(-600vh);
+    transform: translateY(-1200vh); /* Aumentado para cobrir todo o conteúdo */
   }
 }
 
