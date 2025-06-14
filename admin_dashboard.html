@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/code_rain.css">
+    <link rel="stylesheet" href="css/admin_dashboard.css">
+    <link rel="stylesheet" href="css/glitch-effects.css">
+
+    <!-- External Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
+
+    <title>T.I QUIZZMASTER - Painel Admin</title>
+</head>
+
+<body>
+    <!-- Matrix Rain Background -->
+    <canvas id="canvas"></canvas>
+
+    <!-- Navigation Header -->
+    <div class="admin-header">
+        <div class="header-left">
+            <a href="index.html" class="back-btn">
+                <img src="img/duas-setas-para-a-esquerda.png" alt="Voltar">
+                <span>Menu Principal</span>
+            </a>
+        </div>
+        
+        <div class="header-center">
+            <h1 class="admin-title glitch-title" data-text="PAINEL ADMINISTRATIVO">
+                PAINEL ADMINISTRATIVO
+                <span class="glitch-layer">PAINEL ADMINISTRATIVO</span>
+            </h1>
+        </div>
+        
+        <div class="header-right">
+            <span class="admin-user" id="admin-username">Admin</span>
+            <button id="logout-btn" class="logout-btn">
+                <span>🚪 Logout</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Admin Container -->
+    <div class="admin-container">
+        <!-- Quick Stats Cards -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-info">
+                    <div class="stat-number" id="total-users">0</div>
+                    <div class="stat-label">Usuários Totais</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎮</div>
+                <div class="stat-info">
+                    <div class="stat-number" id="total-sessions">0</div>
+                    <div class="stat-label">Sessões de Quiz</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-info">
+                    <div class="stat-number" id="total-scores">0</div>
+                    <div class="stat-label">Scores Registrados</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">❓</div>
+                <div class="stat-info">
+                    <div class="stat-number" id="total-questions">0</div>
+                    <div class="stat-label">Perguntas</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Tabs -->
+        <div class="admin-tabs">
+            <button class="tab-btn active" data-tab="users">👥 Usuários</button>
+            <button class="tab-btn" data-tab="cleanup">🧹 Limpeza</button>
+            <button class="tab-btn" data-tab="questions">❓ Perguntas</button>
+            <button class="tab-btn" data-tab="reports">📊 Relatórios</button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            
+            <!-- Users Management Tab -->
+            <div class="tab-panel active" id="users-tab">
+                <div class="panel-header">
+                    <h2>🔐 Gerenciamento de Usuários</h2>
+                    <div class="panel-actions">
+                        <button id="refresh-users" class="action-btn">🔄 Atualizar</button>
+                        <button id="create-admin" class="action-btn primary">➕ Criar Admin</button>
+                    </div>
+                </div>
+
+                <!-- Users Table -->
+                <div class="table-container">
+                    <table class="admin-table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Criado em</th>
+                                <th>Jogos</th>
+                                <th>Melhor Score</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody">
+                            <tr>
+                                <td colspan="8" class="loading-row">
+                                    <div class="loading-content">
+                                        <div class="loading-spinner"></div>
+                                        <span>Carregando usuários...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Cleanup Tab -->
+            <div class="tab-panel" id="cleanup-tab">
+                <div class="panel-header">
+                    <h2>🧹 Limpeza e Manutenção</h2>
+                    <div class="panel-actions">
+                        <button id="get-cleanup-report" class="action-btn">📊 Relatório</button>
+                    </div>
+                </div>
+
+                <div class="cleanup-sections">
+                    <!-- Quiz Sessions Cleanup -->
+                    <div class="cleanup-section">
+                        <h3>🎮 Limpeza de Sessões de Quiz</h3>
+                        <div class="cleanup-actions">
+                            <button class="cleanup-btn" data-action="cleanup-abandoned">
+                                🗑️ Remover Sessões Abandonadas
+                            </button>
+                            <button class="cleanup-btn" data-action="cleanup-zero-score">
+                                0️⃣ Remover Sessões Score Zero
+                            </button>
+                            <button class="cleanup-btn" data-action="finish-active">
+                                ⏹️ Finalizar Sessões Ativas
+                            </button>
+                            <button class="cleanup-btn danger" data-action="intelligent-cleanup">
+                                🤖 Limpeza Inteligente
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Cleanup -->
+                    <div class="cleanup-section">
+                        <h3>⚡ Limpeza Avançada</h3>
+                        <div class="cleanup-advanced">
+                            <div class="input-group">
+                                <label>Remover sessões antigas (dias):</label>
+                                <input type="number" id="cleanup-days" value="7" min="1" max="365">
+                                <button class="cleanup-btn" data-action="cleanup-old-days">Executar</button>
+                            </div>
+                            <div class="input-group">
+                                <label>Remover score zero (horas):</label>
+                                <input type="number" id="cleanup-hours" value="24" min="1" max="168">
+                                <button class="cleanup-btn" data-action="cleanup-zero-hours">Executar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Danger Zone -->
+                    <div class="cleanup-section danger-zone">
+                        <h3>⚠️ Zona de Perigo</h3>
+                        <div class="cleanup-actions">
+                            <button class="cleanup-btn danger" data-action="cleanup-all-zero">
+                                💀 REMOVER TODOS SCORES ZERO
+                            </button>
+                            <button class="cleanup-btn danger" id="force-system-cleanup">
+                                🔥 LIMPEZA FORÇADA COMPLETA
+                            </button>
+                        </div>
+                        <p class="danger-warning">⚠️ Ações irreversíveis! Use com extrema cautela.</p>
+                    </div>
+                </div>
+
+                <!-- Cleanup Results -->
+                <div class="cleanup-results" id="cleanup-results" style="display: none;">
+                    <h4>Resultados da Limpeza:</h4>
+                    <div class="results-content" id="cleanup-results-content"></div>
+                </div>
+            </div>
+
+            <!-- Questions Management Tab -->
+            <div class="tab-panel" id="questions-tab">
+                <div class="panel-header">
+                    <h2>❓ Gerenciamento de Perguntas</h2>
+                    <div class="panel-actions">
+                        <button id="refresh-questions" class="action-btn">🔄 Atualizar</button>
+                        <button id="add-question" class="action-btn primary">➕ Nova Pergunta</button>
+                    </div>
+                </div>
+
+                <!-- Questions List -->
+                <div class="questions-container">
+                    <div class="questions-list" id="questions-list">
+                        <!-- Questions will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div class="tab-panel" id="reports-tab">
+                <div class="panel-header">
+                    <h2>📊 Relatórios e Estatísticas</h2>
+                    <div class="panel-actions">
+                        <button id="refresh-reports" class="action-btn">🔄 Atualizar</button>
+                        <button id="export-data" class="action-btn">📥 Exportar</button>
+                    </div>
+                </div>
+
+                <div class="reports-grid">
+                    <!-- System Health -->
+                    <div class="report-card">
+                        <h3>🏥 Saúde do Sistema</h3>
+                        <div class="report-content" id="system-health">
+                            <div class="health-item">
+                                <span class="health-label">Sessões Ativas:</span>
+                                <span class="health-value" id="active-sessions">0</span>
+                            </div>
+                            <div class="health-item">
+                                <span class="health-label">Sessões Score Zero:</span>
+                                <span class="health-value" id="zero-score-sessions">0</span>
+                            </div>
+                            <div class="health-item">
+                                <span class="health-label">Última Limpeza:</span>
+                                <span class="health-value" id="last-cleanup">N/A</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Players -->
+                    <div class="report-card">
+                        <h3>🏆 Top Jogadores</h3>
+                        <div class="report-content" id="top-players">
+                            <!-- Will be populated -->
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="report-card">
+                        <h3>📈 Atividade Recente</h3>
+                        <div class="report-content" id="recent-activity">
+                            <!-- Will be populated -->
+                        </div>
+                    </div>
+
+                    <!-- Database Stats -->
+                    <div class="report-card">
+                        <h3>💾 Estatísticas do Banco</h3>
+                        <div class="report-content" id="database-stats">
+                            <!-- Will be populated -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for User Actions -->
+    <div class="modal" id="user-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Ação do Usuário</h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Dynamic content -->
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel" id="modal-cancel">Cancelar</button>
+                <button class="modal-btn confirm" id="modal-confirm">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question Modal -->
+    <div class="modal" id="question-modal" style="display: none;">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="question-modal-title">Nova Pergunta</h3>
+                <button class="modal-close" id="question-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="question-form">
+                    <div class="form-group">
+                        <label for="question-content">Pergunta:</label>
+                        <textarea id="question-content" required placeholder="Digite a pergunta..."></textarea>
+                    </div>
+                    
+                    <div class="answers-section">
+                        <h4>Respostas:</h4>
+                        <div class="answer-inputs" id="answer-inputs">
+                            <div class="answer-group">
+                                <input type="text" placeholder="Resposta A" data-answer="0" required>
+                                <label class="radio-label">
+                                    <input type="radio" name="correct-answer" value="0" required>
+                                    <span>Correta</span>
+                                </label>
+                            </div>
+                            <div class="answer-group">
+                                <input type="text" placeholder="Resposta B" data-answer="1" required>
+                                <label class="radio-label">
+                                    <input type="radio" name="correct-answer" value="1">
+                                    <span>Correta</span>
+                                </label>
+                            </div>
+                            <div class="answer-group">
+                                <input type="text" placeholder="Resposta C" data-answer="2" required>
+                                <label class="radio-label">
+                                    <input type="radio" name="correct-answer" value="2">
+                                    <span>Correta</span>
+                                </label>
+                            </div>
+                            <div class="answer-group">
+                                <input type="text" placeholder="Resposta D" data-answer="3" required>
+                                <label class="radio-label">
+                                    <input type="radio" name="correct-answer" value="3">
+                                    <span>Correta</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel" id="question-cancel">Cancelar</button>
+                <button class="modal-btn confirm" id="question-save">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Messages -->
+    <div class="status-container" id="status-container">
+        <!-- Messages will be inserted here -->
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner-large"></div>
+            <p id="loading-text">Processando...</p>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/config.js"></script>
+    <script src="js/admin_dashboard.js"></script>
+    <script src="js/rain_code.js"></script>
+    <script src="js/glitch-effects.js"></script>
+</body>
+
+</html>

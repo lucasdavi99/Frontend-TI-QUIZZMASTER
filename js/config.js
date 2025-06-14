@@ -243,10 +243,9 @@ CONFIG.getEnvironmentInfo = function() {
     Object.freeze(CONFIG.THEME);
 })();
 
-// Compatibilidade para navegadores antigos
-if (typeof window !== 'undefined') {
-    window.CONFIG = CONFIG;
-}
+// 🆕 COMPATIBILIDADE: Exporta variáveis globais para retrocompatibilidade
+window.API_BASE_URL = CONFIG.API_BASE_URL;
+window.CONFIG = CONFIG;
 
 // Export para módulos (se necessário)
 if (typeof module !== 'undefined' && module.exports) {

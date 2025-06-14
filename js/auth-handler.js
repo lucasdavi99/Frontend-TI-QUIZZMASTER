@@ -388,16 +388,308 @@ class AuthHandler {
   }
 }
 
-// Initialize when DOM is ready
+// 🆕 FUNÇÕES ADMIN PARA O MENU PRINCIPAL - CORRIGIDO
 document.addEventListener('DOMContentLoaded', () => {
-  window.authHandler = new AuthHandler();
-  
-  // Setup page-specific integrations
-  const currentPage = window.location.pathname.split('/').pop();
-  
-  if (currentPage === 'questions.html' && window.authHandler) {
-    window.authHandler.setupQuestionsPageIntegration();
-  }
+    // Função para verificar se o usuário é administrador
+    async function checkAdminStatus() {
+        try {
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+            if (!token) {
+                console.log('❌ Token não encontrado - usuário não logado');
+                return false;
+            }
+
+            const baseUrl = window.CONFIG ? window.CONFIG.API_BASE_URL : (window.API_BASE_URL || 'http://localhost:8080');
+            
+            console.log('🔍 Verificando status de admin com URL:', baseUrl);
+            
+            // PRIMEIRO: Tenta o endpoint principal
+            let response = await fetch(`${baseUrl}/api/profile/me`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                console.log('❌ Resposta inválida da API profile/me:', response.status);
+                
+                // FALLBACK: Tenta endpoint alternativo para admin
+                try {
+                    console.log('🔄 Tentando endpoint alternativo /api/admin/me...');
+                    response = await fetch(`${baseUrl}/api/admin/me`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const adminUser = await response.json();
+                        console.log('✅ Endpoint admin funcionou:', adminUser);
+                        return true; // Se conseguiu acessar endpoint admin, é admin
+                    }
+                } catch (adminError) {
+                    console.log('❌ Endpoint admin também falhou:', adminError);
+                }
+                
+                return false;
+            }
+
+            const user = await response.json();
+            
+            console.log('✅ Dados do usuário recebidos:', {
+                username: user.username,
+                role: user.role,
+                email: user.email,
+                isAdmin: user.role === 'ADMIN'
+            });
+            
+            // VERIFICAÇÃO MELHORADA
+            if (user.role) {
+                return user.role === 'ADMIN';
+            } else {
+                console.warn('⚠️ Campo role não encontrado na resposta');
+                
+                // FALLBACK: Testa acesso a endpoint admin
+                try {
+                    console.log('🔄 Testando acesso ao endpoint admin...');
+                    const adminTestResponse = await fetch(`${baseUrl}/api/admin/users`, {
+                        method: 'HEAD', // Apenas teste de acesso
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (adminTestResponse.ok || adminTestResponse.status === 405) {
+                        // 405 Method Not Allowed significa que tem acesso mas HEAD não é permitido
+                        console.log('✅ Usuário tem acesso admin (confirmado por teste de endpoint)');
+                        return true;
+                    }
+                } catch (testError) {
+                    console.log('❌ Teste de acesso admin falhou:', testError);
+                }
+                
+                return false;
+            }
+            
+        } catch (error) {
+            console.error('❌ Erro ao verificar status de admin:', error);
+            return false;
+        }
+    }
+
+    // Função para mostrar/esconder botão de admin
+    async function updateAdminButton() {
+        console.log('🔄 Iniciando verificação do botão de admin...');
+        
+        // Verifica se o usuário está logado
+        const isLoggedIn = localStorage.getItem('loggedIn') === 'true' || 
+                          sessionStorage.getItem('loggedIn') === 'true' ||
+                          !!(localStorage.getItem('token') || sessionStorage.getItem('token'));
+
+        console.log('👤 Status de login:', isLoggedIn);
+
+        if (!isLoggedIn) {
+            console.log('❌ Usuário não está logado - não verificando admin');
+            removeAdminButton(); // Remove botão se existir
+            return;
+        }
+
+        console.log('🔍 Usuário logado - verificando se é admin...');
+        const isAdmin = await checkAdminStatus();
+        
+        console.log('🔐 Resultado da verificação de admin:', isAdmin);
+        
+        if (isAdmin) {
+            showAdminButton();
+        } else {
+            removeAdminButton();
+        }
+    }
+
+    // Função para criar e mostrar o botão de admin
+    function showAdminButton() {
+        console.log('🔧 Tentando criar botão de admin...');
+        
+        // Verifica se o botão já existe
+        if (document.getElementById('admin-btn')) {
+            console.log('✅ Botão de admin já existe');
+            return;
+        }
+
+        // Procura pelo container de navegação
+        const navigation = document.querySelector('.navigation');
+        if (!navigation) {
+            console.error('❌ Container de navegação (.navigation) não encontrado');
+            // Tenta alternativas
+            const altNavigation = document.querySelector('.nav') || 
+                                  document.querySelector('nav') || 
+                                  document.querySelector('.menu');
+            if (!altNavigation) {
+                console.error('❌ Nenhum container de navegação encontrado');
+                return;
+            }
+            console.log('✅ Container alternativo encontrado:', altNavigation.className);
+        }
+
+        const targetNavigation = navigation || document.querySelector('.nav') || document.querySelector('nav') || document.querySelector('.menu');
+
+        // Cria o botão de admin
+        const adminBtn = document.createElement('a');
+        adminBtn.id = 'admin-btn';
+        adminBtn.className = 'btn btn-admin';
+        adminBtn.href = 'admin_dashboard.html'; // Corrigido para o nome correto do arquivo
+        adminBtn.innerHTML = `
+            <span class="btn-text">🔐 Admin</span>
+            <span class="btn-bg"></span>
+        `;
+
+        // Adiciona o botão ao menu de navegação
+        try {
+            // Procura pelo botão de créditos para inserir antes dele
+            const creditBtn = targetNavigation.querySelector('a[href="credit.html"]') ||
+                             targetNavigation.querySelector('a[href*="credit"]');
+            
+            if (creditBtn) {
+                targetNavigation.insertBefore(adminBtn, creditBtn);
+                console.log('✅ Botão de admin inserido antes do botão de créditos');
+            } else {
+                targetNavigation.appendChild(adminBtn);
+                console.log('✅ Botão de admin adicionado ao final da navegação');
+            }
+
+            console.log('🔐 Botão de admin criado e adicionado com sucesso!');
+        } catch (error) {
+            console.error('❌ Erro ao adicionar botão de admin:', error);
+        }
+    }
+
+    // Função para remover o botão de admin
+    function removeAdminButton() {
+        const existingBtn = document.getElementById('admin-btn');
+        if (existingBtn) {
+            existingBtn.remove();
+            console.log('🗑️ Botão de admin removido');
+        }
+    }
+
+    // CSS para o botão de admin - melhorado
+    const adminButtonStyles = `
+    .btn-admin {
+        background: linear-gradient(135deg, #ff0040 0%, #cc0033 100%) !important;
+        border: 2px solid #ff0040 !important;
+        box-shadow: 0 0 20px rgba(255, 0, 64, 0.3) !important;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-admin:hover {
+        background: linear-gradient(135deg, #ff1155 0%, #ff0040 100%) !important;
+        border-color: #ff1155 !important;
+        box-shadow: 0 0 30px rgba(255, 0, 64, 0.5) !important;
+        transform: translateY(-3px) !important;
+    }
+
+    .btn-admin .btn-text {
+        color: white !important;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8) !important;
+        position: relative;
+        z-index: 2;
+    }
+
+    .btn-admin .btn-bg {
+        background: linear-gradient(45deg, 
+            rgba(255, 0, 64, 0.8) 0%, 
+            rgba(255, 17, 85, 0.8) 50%, 
+            rgba(255, 0, 64, 0.8) 100%) !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+
+    /* Animação adicional */
+    .btn-admin::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s;
+        z-index: 3;
+    }
+
+    .btn-admin:hover::before {
+        left: 100%;
+    }
+    `;
+
+    // Injeta os estilos se ainda não foram injetados
+    if (!document.getElementById('admin-button-styles')) {
+        const style = document.createElement('style');
+        style.id = 'admin-button-styles';
+        style.textContent = adminButtonStyles;
+        document.head.appendChild(style);
+    }
+
+    // Initialize auth handler
+    window.authHandler = new AuthHandler();
+    
+    // Setup page-specific integrations
+    const currentPage = window.location.pathname.split('/').pop();
+    
+    if (currentPage === 'questions.html' && window.authHandler) {
+        window.authHandler.setupQuestionsPageIntegration();
+    }
+
+    // 🔄 EXECUÇÃO INICIAL
+    console.log('🚀 Iniciando verificação inicial do botão de admin...');
+    
+    // Aguarda um pouco para garantir que a página está totalmente carregada
+    setTimeout(() => {
+        updateAdminButton();
+    }, 1000);
+
+    // 📡 LISTENERS PARA MUDANÇAS DE ESTADO
+    
+    // Verifica novamente quando o estado de login muda (localStorage)
+    window.addEventListener('storage', (e) => {
+        console.log('📡 Storage event detectado:', e.key, e.newValue);
+        if (e.key === 'loggedIn' || e.key === 'token') {
+            setTimeout(updateAdminButton, 500);
+        }
+    });
+
+    // Custom event para mudanças de login na mesma aba
+    window.addEventListener('authStateChanged', () => {
+        console.log('📡 Auth state changed event detectado');
+        setTimeout(updateAdminButton, 500);
+    });
+
+    // Verifica periodicamente (fallback para garantir)
+    setInterval(() => {
+        updateAdminButton();
+    }, 10000); // A cada 10 segundos
+
+    // Listener para quando o usuário faz login (custom event)
+    window.addEventListener('userLoggedIn', () => {
+        console.log('📡 User logged in event detectado');
+        setTimeout(updateAdminButton, 1000);
+    });
+
+    // 🔍 DEBUG: Mostra informações do DOM
+    console.log('🔍 Elementos de navegação encontrados:', {
+        navigation: !!document.querySelector('.navigation'),
+        nav: !!document.querySelector('.nav'),
+        navTag: !!document.querySelector('nav'),
+        menu: !!document.querySelector('.menu')
+    });
 });
 
 // Global authentication check utility
