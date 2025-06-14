@@ -102,7 +102,7 @@ body {
 }
 
 /* ==========================================================================
-   MAIN CONTAINER
+   MAIN CONTAINER - CORREÇÃO DE LAYOUT
    ========================================================================== */
 
 .login-container {
@@ -114,16 +114,22 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* 🔧 ADICIONADO */
   gap: 3rem;
+  min-height: 100vh; /* 🔧 ADICIONADO para centralizar verticalmente */
 }
 
 /* ==========================================================================
-   TITLE SECTION
+   TITLE SECTION - CORREÇÃO
    ========================================================================== */
 
 .title-section {
   text-align: center;
   margin-bottom: 2rem;
+  width: 100%; /* 🔧 ADICIONADO */
+  display: flex; /* 🔧 ADICIONADO */
+  flex-direction: column; /* 🔧 ADICIONADO */
+  align-items: center; /* 🔧 ADICIONADO */
 }
 
 .login-title {
@@ -177,7 +183,7 @@ body {
 }
 
 /* ==========================================================================
-   AUTH WRAPPER
+   AUTH WRAPPER - CORREÇÃO
    ========================================================================== */
 
 .auth-wrapper {
@@ -185,6 +191,9 @@ body {
   width: 100%;
   max-width: 500px;
   perspective: 1000px;
+  display: flex; /* 🔧 ADICIONADO */
+  justify-content: center; /* 🔧 ADICIONADO */
+  align-items: center; /* 🔧 ADICIONADO */
 }
 
 .form-container {
@@ -203,7 +212,24 @@ body {
   opacity: 1;
   visibility: visible;
   transform: rotateY(0deg) translateZ(0);
+  position: relative; /* 🔧 MANTIDO */
+}
+
+/* 🔧 CORREÇÃO ESPECÍFICA para forgot e reset password forms */
+.forgot-password-container,
+.reset-password-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.forgot-password-container.active,
+.reset-password-container.active {
   position: relative;
+  opacity: 1;
+  visibility: visible;
+  transform: rotateY(0deg) translateZ(0);
 }
 
 /* ==========================================================================
@@ -631,6 +657,109 @@ body {
 
 .switch-btn:hover::after {
   width: 100%;
+}
+
+/* ==========================================================================
+   PASSWORD RESET SPECIFIC STYLES - CORREÇÃO
+   ========================================================================== */
+
+/* Recovery form specific styling - CORRIGIDO */
+.forgot-password-container .terminal-form {
+    background: var(--terminal-bg);
+    border: 2px solid var(--neon-blue);
+    box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.4),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.reset-password-container .terminal-form {
+    background: var(--terminal-bg);
+    border: 2px solid var(--primary-green); /* 🔧 CORRIGIDO - removido warning-orange */
+    box-shadow: 
+        0 0 30px rgba(0, 255, 65, 0.4), /* 🔧 CORRIGIDO */
+        inset 0 0 20px rgba(0, 255, 65, 0.1); /* 🔧 CORRIGIDO */
+}
+
+/* Timer display for code expiration - CORRIGIDO */
+.code-timer {
+    text-align: center;
+    margin: 1rem 0;
+    padding: 0.5rem;
+    background: rgba(0, 255, 65, 0.1); /* 🔧 CORRIGIDO */
+    border: 1px solid var(--primary-green); /* 🔧 CORRIGIDO */
+    border-radius: 4px;
+    font-size: 0.6rem;
+    color: var(--primary-green); /* 🔧 CORRIGIDO */
+}
+
+.code-timer.expired {
+    background: rgba(255, 0, 64, 0.1);
+    border-color: var(--glitch-red);
+    color: var(--glitch-red);
+}
+
+/* Success message styling */
+.success-message {
+    text-align: center;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    background: rgba(0, 255, 65, 0.1);
+    border: 2px solid var(--primary-green);
+    border-radius: 8px;
+    color: var(--primary-green);
+    font-size: 0.7rem;
+    animation: successPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes successPulse {
+    0% { 
+        box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+    }
+    100% { 
+        box-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+    }
+}
+
+/* Instructions styling */
+.reset-instructions {
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid var(--neon-blue);
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem 0;
+    font-size: 0.6rem;
+    color: var(--neon-blue);
+    line-height: 1.4;
+}
+
+.reset-instructions strong {
+    color: var(--primary-green);
+}
+
+/* Enhanced form footer for multiple links */
+.form-footer p {
+    margin: 0.5rem 0;
+}
+
+.form-footer .switch-btn {
+    margin: 0 0.3rem;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 480px) {
+    .input-group input[type="text"][pattern*="[0-9]"] {
+        font-size: 1rem;
+        letter-spacing: 0.2em;
+    }
+    
+    .code-timer {
+        font-size: 0.5rem;
+    }
+    
+    .reset-instructions {
+        font-size: 0.5rem;
+        padding: 0.8rem;
+    }
 }
 
 /* ==========================================================================

@@ -106,7 +106,11 @@ const CONFIG = {
         PROFILE_STATS: '/api/profile/stats',
         UPDATE_USERNAME: '/api/profile/username',
         UPDATE_PASSWORD: '/api/profile/password',
-        DELETE_ACCOUNT: '/api/profile/account'
+        DELETE_ACCOUNT: '/api/profile/account',
+
+        // Reset de Senha
+        FORGOT_PASSWORD: '/auth/forgot-password',
+        RESET_PASSWORD: '/auth/reset-password',
     },
     
     // Configurações de aparência

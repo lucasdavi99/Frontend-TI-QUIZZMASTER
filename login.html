@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon">
-    
+
     <!-- CSS Files -->
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/code_rain.css">
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/glitch-effects.css">
-    
+
     <!-- External Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    
+
     <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
-    
+
     <title>T.I QUIZZMASTER - Login</title>
 </head>
 
 <body>
     <!-- Matrix Rain Background -->
     <canvas id="canvas"></canvas>
-    
+
     <!-- Back Button -->
     <div class="back-container">
         <a href="index.html" class="back-btn">
@@ -33,7 +34,7 @@
             <span class="back-tooltip">Voltar ao Menu</span>
         </a>
     </div>
-    
+
     <!-- Main Container -->
     <div class="login-container">
         <!-- Title Section -->
@@ -47,7 +48,7 @@
             <div class="title-underline"></div>
             <p class="login-subtitle">Autenticação necessária para continuar</p>
         </div>
-        
+
         <!-- Login/Register Wrapper -->
         <div class="auth-wrapper" id="auth-wrapper">
             <!-- Login Form -->
@@ -62,37 +63,41 @@
                         <div class="terminal-title">LOGIN.EXE</div>
                         <div></div>
                     </div>
-                    
+
                     <div class="terminal-body">
                         <div class="command-line">
                             <span class="prompt">system@auth:~$</span>
                             <span class="command">execute login_sequence.sh</span>
                         </div>
-                        
+
                         <form id="loginForm" class="auth-form">
                             <h2 class="form-title">FAZER LOGIN</h2>
-                            
-                            <!-- 🔧 CORREÇÃO: Adicionado autocomplete e placeholder vazios -->
+
                             <div class="input-group">
                                 <input type="text" id="loginUsername" required autocomplete="username" placeholder=" ">
                                 <label for="loginUsername">Username</label>
                                 <div class="input-line"></div>
                             </div>
-                            
+
                             <div class="input-group">
                                 <input type="password" id="loginPassword" required autocomplete="current-password" placeholder=" ">
                                 <label for="loginPassword">Senha</label>
                                 <div class="input-line"></div>
                             </div>
-                            
+
                             <button type="submit" class="submit-btn" id="login-submit" disabled>
                                 <span class="btn-text">ACESSAR SISTEMA</span>
                                 <span class="btn-bg"></span>
                                 <div class="loading-spinner" style="display: none;"></div>
                             </button>
-                            
+
                             <div class="form-footer">
-                                <p>Não possui uma conta? 
+                                <p>
+                                    <a href="#" class="switch-btn" id="show-forgot-password">
+                                        Esqueci minha senha
+                                    </a>
+                                </p>
+                                <p>Não possui uma conta?
                                     <a href="#" class="switch-btn" id="show-register">
                                         Criar Conta
                                     </a>
@@ -102,7 +107,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Register Form -->
             <div class="form-container sign-up-container" id="sign-up-container">
                 <div class="terminal-form">
@@ -115,37 +120,34 @@
                         <div class="terminal-title">REGISTER.EXE</div>
                         <div></div>
                     </div>
-                    
+
                     <div class="terminal-body">
                         <div class="command-line">
                             <span class="prompt">system@auth:~$</span>
                             <span class="command">execute user_registration.sh</span>
                         </div>
-                        
+
                         <form id="registerForm" class="auth-form">
                             <h2 class="form-title">CRIAR CONTA</h2>
-                            
-                            <!-- 🔧 CORREÇÃO: Adicionado placeholder vazios para todos os campos -->
+
                             <div class="input-group">
                                 <input type="text" id="registerUsername" required autocomplete="username" placeholder=" ">
                                 <label for="registerUsername">Username</label>
                                 <div class="input-line"></div>
                             </div>
-                            
-                            <!-- 🔧 CORREÇÃO: Campo de email com validação HTML5 adicional -->
+
                             <div class="input-group">
                                 <input type="email" id="registerEmail" required autocomplete="email" placeholder=" " pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                                 <label for="registerEmail">Email</label>
                                 <div class="input-line"></div>
                             </div>
-                            
+
                             <div class="input-group">
                                 <input type="password" id="registerPassword" required autocomplete="new-password" placeholder=" " minlength="6">
                                 <label for="registerPassword">Senha</label>
                                 <div class="input-line"></div>
                             </div>
-                            
-                            <!-- 🔧 CORREÇÃO: Checkbox com melhor estrutura e IDs únicos -->
+
                             <div class="checkbox-group">
                                 <label class="checkbox-label" for="terms-checkbox">
                                     <input type="checkbox" id="terms-checkbox" name="terms" required value="accepted">
@@ -153,15 +155,15 @@
                                     <span class="checkbox-text">Aceito os termos e condições</span>
                                 </label>
                             </div>
-                            
+
                             <button type="submit" class="submit-btn" id="register-submit" disabled>
                                 <span class="btn-text">CRIAR CONTA</span>
                                 <span class="btn-bg"></span>
                                 <div class="loading-spinner" style="display: none;"></div>
                             </button>
-                            
+
                             <div class="form-footer">
-                                <p>Já possui uma conta? 
+                                <p>Já possui uma conta?
                                     <a href="#" class="switch-btn" id="show-login">
                                         Fazer Login
                                     </a>
@@ -171,14 +173,122 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 🔐 Forgot Password Form -->
+            <div class="form-container forgot-password-container" id="forgot-password-container">
+                <div class="terminal-form">
+                    <div class="terminal-header">
+                        <div class="terminal-controls">
+                            <div class="control close"></div>
+                            <div class="control minimize"></div>
+                            <div class="control maximize"></div>
+                        </div>
+                        <div class="terminal-title">RESET_PASSWORD.EXE</div>
+                        <div></div>
+                    </div>
+
+                    <div class="terminal-body">
+                        <div class="command-line">
+                            <span class="prompt">recovery@auth:~$</span>
+                            <span class="command">execute password_recovery.sh</span>
+                        </div>
+
+                        <form id="forgotPasswordForm" class="auth-form">
+                            <h2 class="form-title">RECUPERAR SENHA</h2>
+
+                            <div class="input-group">
+                                <input type="email" id="forgotEmail" required placeholder=" " autocomplete="email">
+                                <label for="forgotEmail">Seu Email</label>
+                                <div class="input-line"></div>
+                            </div>
+
+                            <button type="submit" class="submit-btn" id="forgot-submit" disabled>
+                                <span class="btn-text">ENVIAR CÓDIGO</span>
+                                <span class="btn-bg"></span>
+                                <div class="loading-spinner" style="display: none;"></div>
+                            </button>
+
+                            <div class="form-footer">
+                                <p>Lembrou da senha?
+                                    <a href="#" class="switch-btn" id="show-login-from-forgot">
+                                        Fazer Login
+                                    </a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reset Password with Code Form -->
+            <div class="form-container reset-password-container" id="reset-password-container">
+                <div class="terminal-form">
+                    <div class="terminal-header">
+                        <div class="terminal-controls">
+                            <div class="control close"></div>
+                            <div class="control minimize"></div>
+                            <div class="control maximize"></div>
+                        </div>
+                        <div class="terminal-title">NEW_PASSWORD.EXE</div>
+                        <div></div>
+                    </div>
+
+                    <div class="terminal-body">
+                        <div class="command-line">
+                            <span class="prompt">security@auth:~$</span>
+                            <span class="command">validate_token && update_password</span>
+                        </div>
+
+                        <form id="resetPasswordForm" class="auth-form">
+                            <h2 class="form-title">NOVA SENHA</h2>
+
+                            <div class="input-group">
+                                <input type="text" id="resetToken" required placeholder=" " maxlength="6" pattern="[0-9]{6}" autocomplete="one-time-code">
+                                <label for="resetToken">Código (6 dígitos)</label>
+                                <div class="input-line"></div>
+                            </div>
+
+                            <div class="input-group">
+                                <input type="password" id="newPassword" required placeholder=" " minlength="6" autocomplete="new-password">
+                                <label for="newPassword">Nova Senha</label>
+                                <div class="input-line"></div>
+                            </div>
+
+                            <div class="input-group">
+                                <input type="password" id="confirmNewPassword" required placeholder=" " minlength="6" autocomplete="new-password">
+                                <label for="confirmNewPassword">Confirmar Nova Senha</label>
+                                <div class="input-line"></div>
+                            </div>
+
+                            <button type="submit" class="submit-btn" id="reset-submit" disabled>
+                                <span class="btn-text">REDEFINIR SENHA</span>
+                                <span class="btn-bg"></span>
+                                <div class="loading-spinner" style="display: none;"></div>
+                            </button>
+
+                            <div class="form-footer">
+                                <p>
+                                    <a href="#" class="switch-btn" id="resend-code">
+                                        Reenviar Código
+                                    </a>
+                                    |
+                                    <a href="#" class="switch-btn" id="show-login-from-reset">
+                                        Voltar ao Login
+                                    </a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        
+
         <!-- Status Messages -->
         <div class="status-container" id="status-container">
             <!-- Messages will be inserted here -->
         </div>
     </div>
-    
+
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loading-overlay" style="display: none;">
         <div class="loading-content">
@@ -186,23 +296,21 @@
             <p id="loading-text">Processando autenticação...</p>
         </div>
     </div>
-    
+
     <!-- JavaScript Files -->
-     <script src="js/config.js"></script>
+    <script src="js/config.js"></script>
     <script src="js/rain_code.js"></script>
     <script src="js/glitch-effects.js"></script>
     <script src="js/login.js"></script>
-    
-    <!-- 🔧 CORREÇÃO: Script adicional para garantir funcionalidade -->
+
     <script>
         // Correção adicional para labels e checkbox
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             console.log('🔧 Aplicando correções adicionais...');
-            
+
             // Correção para labels que ficam em cima dos campos
             const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]');
             inputs.forEach(input => {
-                // Força atualização do label quando há valor
                 function updateLabel() {
                     const label = input.nextElementSibling;
                     if (label && label.tagName === 'LABEL') {
@@ -219,63 +327,54 @@
                         }
                     }
                 }
-                
-                // Múltiplos event listeners para capturar todas as mudanças
+
                 input.addEventListener('input', updateLabel);
                 input.addEventListener('change', updateLabel);
                 input.addEventListener('blur', updateLabel);
                 input.addEventListener('focus', updateLabel);
-                
-                // Verifica estado inicial
+
                 updateLabel();
             });
-            
+
             // Correção específica para o checkbox de termos
             const termsCheckbox = document.getElementById('terms-checkbox');
             const checkboxLabel = document.querySelector('.checkbox-label');
-            
+
             if (termsCheckbox && checkboxLabel) {
                 console.log('🔧 Configurando correção do checkbox...');
-                
+
                 function updateCheckboxVisualState() {
                     const isChecked = termsCheckbox.checked;
                     console.log('🔧 Checkbox state updated:', isChecked);
-                    
+
                     if (isChecked) {
                         checkboxLabel.classList.add('active');
                     } else {
                         checkboxLabel.classList.remove('active');
                     }
-                    
-                    // Dispara evento personalizado para o sistema de validação
+
                     termsCheckbox.dispatchEvent(new CustomEvent('checkboxValidation', {
                         detail: { checked: isChecked }
                     }));
                 }
-                
-                // Event listeners para o checkbox
+
                 termsCheckbox.addEventListener('change', updateCheckboxVisualState);
-                termsCheckbox.addEventListener('click', function() {
-                    // Pequeno delay para garantir que o estado seja atualizado
+                termsCheckbox.addEventListener('click', function () {
                     setTimeout(updateCheckboxVisualState, 10);
                 });
-                
-                // Event listener para clique no label
-                checkboxLabel.addEventListener('click', function(e) {
-                    // Se clicou no próprio checkbox, não faz nada (evita duplo clique)
+
+                checkboxLabel.addEventListener('click', function (e) {
                     if (e.target === termsCheckbox) return;
-                    
-                    // Força mudança do checkbox
                     termsCheckbox.checked = !termsCheckbox.checked;
                     updateCheckboxVisualState();
                 });
-                
-                // Estado inicial
+
                 updateCheckboxVisualState();
             }
-            
+
             console.log('✅ Correções adicionais aplicadas');
         });
     </script>
 </body>
+
 </html>
