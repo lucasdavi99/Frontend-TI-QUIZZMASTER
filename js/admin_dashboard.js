@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ADMIN DASHBOARD JAVASCRIPT - FIXED
+   ADMIN DASHBOARD JAVASCRIPT - FIXED & ENHANCED
    ========================================================================== */
 
 class AdminDashboard {
@@ -7,6 +7,7 @@ class AdminDashboard {
         this.currentTab = 'users';
         this.currentUser = null;
         this.apiBaseUrl = this.getApiBaseUrl();
+        this.authCheckInterval = null; // 🆕 Para verificação periódica
         this.init();
     }
 
@@ -30,20 +31,25 @@ class AdminDashboard {
         console.log('🔧 Inicializando painel administrativo...');
         console.log('🌐 API Base URL:', this.apiBaseUrl);
         
-        // Verifica autenticação e privilégios de admin
+        // 🆕 CORREÇÃO: Verificação mais rigorosa de autenticação
         if (!await this.checkAdminAccess()) {
             this.redirectToLogin();
             return;
         }
+
+        // 🆕 CORREÇÃO: Inicia verificação periódica de autenticação
+        this.startAuthMonitoring();
 
         this.setupEventListeners();
         this.loadInitialData();
         this.showTab('users');
     }
 
+    // 🆕 CORREÇÃO: Verificação de autenticação mais rigorosa
     async checkAdminAccess() {
         try {
-            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+            // 1. Verifica se tem token válido
+            const token = this.getToken();
             if (!token) {
                 console.log('❌ Token não encontrado');
                 throw new Error('No token found');
@@ -51,15 +57,28 @@ class AdminDashboard {
 
             console.log('🔍 Verificando privilégios de admin...');
             
+            // 2. 🆕 CORREÇÃO: Timeout mais curto para falhar rapidamente se o token for inválido
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 segundos
+
             const response = await fetch(`${this.apiBaseUrl}/api/profile/me`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                signal: controller.signal
             });
 
+            clearTimeout(timeoutId);
+
             if (!response.ok) {
-                console.log('❌ Token inválido ou expirado');
+                console.log('❌ Token inválido ou expirado - Status:', response.status);
+                
+                // 🆕 CORREÇÃO: Limpa dados automaticamente se token inválido
+                if (response.status === 401 || response.status === 403) {
+                    this.clearAllAuthData();
+                }
+                
                 throw new Error('Invalid token');
             }
 
@@ -68,11 +87,34 @@ class AdminDashboard {
             
             console.log('👤 Usuário atual:', user.username, 'Role:', user.role);
             
-            // 🔐 VERIFICAÇÃO REAL DE ROLE ADMIN
+            // 🆕 CORREÇÃO: Verificação dupla de role admin
             if (user.role !== 'ADMIN') {
-                console.log('🚫 Acesso negado - usuário não é admin');
-                throw new Error('User is not admin');
+                console.log('🚫 Acesso negado - usuário não é admin. Role atual:', user.role);
+                
+                // 🆕 CORREÇÃO: Testa se realmente não tem acesso a endpoint admin
+                try {
+                    const adminTestResponse = await fetch(`${this.apiBaseUrl}/api/admin/system/stats`, {
+                        method: 'HEAD',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (!adminTestResponse.ok) {
+                        console.log('🚫 Confirmado: usuário não tem acesso admin');
+                        throw new Error('User is not admin - confirmed by endpoint test');
+                    }
+                    
+                    console.log('⚠️ Role incorreta mas tem acesso admin - possível inconsistência');
+                } catch (testError) {
+                    console.log('🚫 Teste de acesso admin falhou:', testError.message);
+                    throw new Error('User is not admin');
+                }
             }
+            
+            // 3. 🆕 CORREÇÃO: Salva dados do usuário admin atual para verificação posterior
+            this.saveCurrentAdminData(user);
             
             // Atualiza o nome do admin na header
             const adminUsername = document.getElementById('admin-username');
@@ -80,29 +122,173 @@ class AdminDashboard {
                 adminUsername.textContent = user.username;
             }
 
-            console.log('✅ Acesso de admin confirmado');
+            console.log('✅ Acesso de admin confirmado para:', user.username);
             return true;
             
         } catch (error) {
             console.error('❌ Erro na verificação de admin:', error.message);
+            
+            // 🆕 CORREÇÃO: Limpa todos os dados se falhou na verificação
+            this.clearAllAuthData();
             return false;
         }
     }
 
-    redirectToLogin() {
-        // Limpa dados de autenticação inválidos
-        localStorage.removeItem('token');
-        sessionStorage.removeItem('token');
-        localStorage.removeItem('loggedIn');
-        sessionStorage.removeItem('loggedIn');
-        localStorage.removeItem('userData');
-        sessionStorage.removeItem('userData');
+    // 🆕 CORREÇÃO: Salva dados do admin atual para verificação posterior
+    saveCurrentAdminData(user) {
+        try {
+            const adminData = {
+                userId: user.id,
+                username: user.username,
+                role: user.role,
+                timestamp: Date.now()
+            };
+            
+            localStorage.setItem('currentAdminData', JSON.stringify(adminData));
+            sessionStorage.setItem('currentAdminData', JSON.stringify(adminData));
+        } catch (e) {
+            console.warn('Erro ao salvar dados do admin:', e);
+        }
+    }
+
+    // 🆕 CORREÇÃO: Verifica se o usuário atual ainda é o mesmo admin
+    isCurrentAdminValid() {
+        try {
+            const savedData = localStorage.getItem('currentAdminData') || sessionStorage.getItem('currentAdminData');
+            if (!savedData) return false;
+            
+            const adminData = JSON.parse(savedData);
+            
+            // Verifica se os dados não são muito antigos (máximo 1 hora)
+            const oneHour = 60 * 60 * 1000;
+            if (Date.now() - adminData.timestamp > oneHour) {
+                console.log('⚠️ Dados do admin expirados');
+                return false;
+            }
+            
+            // Compara com os dados atuais se disponíveis
+            if (this.currentUser) {
+                return this.currentUser.id === adminData.userId && 
+                       this.currentUser.role === 'ADMIN' &&
+                       this.currentUser.username === adminData.username;
+            }
+            
+            return true;
+        } catch (e) {
+            console.warn('Erro ao verificar admin atual:', e);
+            return false;
+        }
+    }
+
+    // 🆕 CORREÇÃO: Monitora autenticação periodicamente
+    startAuthMonitoring() {
+        // Verifica a cada 2 minutos se ainda é admin válido
+        this.authCheckInterval = setInterval(async () => {
+            console.log('🔍 Verificação periódica de autenticação admin...');
+            
+            if (!this.isCurrentAdminValid()) {
+                console.log('⚠️ Dados do admin inválidos - fazendo nova verificação');
+                
+                if (!await this.checkAdminAccess()) {
+                    console.log('🚫 Autenticação admin perdida - redirecionando');
+                    this.handleAuthLoss();
+                }
+            }
+        }, 2 * 60 * 1000); // 2 minutos
+
+        // 🆕 CORREÇÃO: Listener para mudanças de storage (troca de conta)
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'token' || e.key === 'loggedIn' || e.key === 'userData') {
+                console.log('📡 Mudança detectada no storage - verificando autenticação');
+                setTimeout(async () => {
+                    if (!await this.checkAdminAccess()) {
+                        this.handleAuthLoss();
+                    }
+                }, 1000);
+            }
+        });
+
+        // 🆕 CORREÇÃO: Listener para quando a página fica visível
+        document.addEventListener('visibilitychange', async () => {
+            if (!document.hidden) {
+                console.log('📡 Página visível - verificando autenticação');
+                if (!await this.checkAdminAccess()) {
+                    this.handleAuthLoss();
+                }
+            }
+        });
+    }
+
+    // 🆕 CORREÇÃO: Trata perda de autenticação admin
+    handleAuthLoss() {
+        console.log('🚨 Perda de autenticação admin detectada');
         
-        this.showMessage('Acesso negado. Apenas administradores podem acessar este painel.', 'error');
+        // Para o monitoramento
+        if (this.authCheckInterval) {
+            clearInterval(this.authCheckInterval);
+        }
+        
+        // Limpa tudo
+        this.clearAllAuthData();
+        
+        // Mostra mensagem e redireciona
+        this.showMessage('Sessão administrativa expirada. Redirecionando...', 'error');
         
         setTimeout(() => {
-            window.location.href = 'login.html';
-        }, 3000);
+            this.redirectToLogin('admin_session_expired');
+        }, 2000);
+    }
+
+    // 🆕 CORREÇÃO: Limpeza completa de dados de autenticação
+    clearAllAuthData() {
+        console.log('🧹 Limpando todos os dados de autenticação...');
+        
+        try {
+            // Remove dados de localStorage
+            localStorage.removeItem('token');
+            localStorage.removeItem('loggedIn');
+            localStorage.removeItem('userData');
+            localStorage.removeItem('currentAdminData');
+            
+            // Remove dados de sessionStorage
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('loggedIn');
+            sessionStorage.removeItem('userData');
+            sessionStorage.removeItem('currentAdminData');
+        } catch (e) {
+            console.warn('Erro ao limpar dados:', e);
+        }
+        
+        // Remove dados de memória
+        if (window.authData) {
+            delete window.authData;
+        }
+        
+        // Reset dados internos
+        this.currentUser = null;
+    }
+
+    redirectToLogin(reason = 'access_denied') {
+        // Para o monitoramento se estiver rodando
+        if (this.authCheckInterval) {
+            clearInterval(this.authCheckInterval);
+        }
+        
+        console.log('🔄 Redirecionando para login. Motivo:', reason);
+        
+        // 🆕 CORREÇÃO: URL com parâmetro para mostrar mensagem específica
+        const loginUrl = new URL('login.html', window.location.origin);
+        loginUrl.searchParams.set('reason', reason);
+        
+        // Força limpeza de dados
+        this.clearAllAuthData();
+        
+        // Dispara evento para atualizar botão de admin
+        if (window.authHandler) {
+            window.authHandler.forceLogout();
+        }
+        
+        window.location.href = loginUrl.toString();
     }
 
     setupEventListeners() {
@@ -114,7 +300,7 @@ class AdminDashboard {
             });
         });
 
-        // Logout button
+        // 🆕 CORREÇÃO: Logout melhorado
         const logoutBtn = document.getElementById('logout-btn');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', () => this.logout());
@@ -143,6 +329,13 @@ class AdminDashboard {
         document.getElementById('refresh-users')?.addEventListener('click', () => this.loadUsers());
         document.getElementById('refresh-questions')?.addEventListener('click', () => this.loadQuestions());
         document.getElementById('refresh-reports')?.addEventListener('click', () => this.loadReports());
+
+        // 🆕 CORREÇÃO: Listener para beforeunload
+        window.addEventListener('beforeunload', () => {
+            if (this.authCheckInterval) {
+                clearInterval(this.authCheckInterval);
+            }
+        });
     }
 
     setupUsersEventListeners() {
@@ -293,8 +486,11 @@ class AdminDashboard {
             });
 
             if (!response.ok) {
-                if (response.status === 403) {
-                    throw new Error('Acesso negado - privilégios de administrador necessários');
+                if (response.status === 403 || response.status === 401) {
+                    // 🆕 CORREÇÃO: Trata perda de privilégios imediatamente
+                    console.log('🚫 Privilégios de admin perdidos');
+                    this.handleAuthLoss();
+                    return;
                 }
                 throw new Error('Erro ao carregar usuários');
             }
@@ -1029,12 +1225,25 @@ class AdminDashboard {
         return localStorage.getItem('token') || sessionStorage.getItem('token');
     }
 
+    // 🆕 CORREÇÃO: Logout melhorado que limpa tudo
     logout() {
         if (confirm('Fazer logout do painel administrativo?')) {
-            localStorage.removeItem('token');
-            sessionStorage.removeItem('token');
-            localStorage.removeItem('loggedIn');
-            sessionStorage.removeItem('loggedIn');
+            console.log('🚪 Fazendo logout do admin dashboard...');
+            
+            // Para o monitoramento
+            if (this.authCheckInterval) {
+                clearInterval(this.authCheckInterval);
+            }
+            
+            // Limpa todos os dados
+            this.clearAllAuthData();
+            
+            // Integra com auth handler se disponível
+            if (window.authHandler) {
+                window.authHandler.forceLogout();
+            }
+            
+            // Redireciona
             window.location.href = 'index.html';
         }
     }
