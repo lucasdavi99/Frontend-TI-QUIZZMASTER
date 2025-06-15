@@ -1,19 +1,20 @@
 //Efeito Decoding
 const text = baffle("#titulo");
 text.set({
-  characters: '█/▓█ ▓█▒▒ ▓░▒ ▓▓▒▓ <▒█▒░ >█> ▓▒▓>▓ ░▓▒>/ ​​▓▓▓',
-  speed: 120
+  characters: '█▓▒░ ▓█▒░ ▓▒▓ ░▓▒',
+  speed: 80
 });
 text.start();
-text.reveal(2000);
+text.reveal(1500); // Reduzido para aparecer mais rápido
 
-const btn = baffle(".btn");
-btn.set({
-  characters: '█/▓█ ▓█▒▒ ▓░▒ ▓▓▒▓ <▒█▒░ >█> ▓▒▓>▓ ░▓▒>/ ​​▓▓▓',
-  speed: 120
-});
-btn.start();
-btn.reveal(50000);
+// Remover ou comentar efeitos nos botões se estiverem causando problemas
+// const btn = baffle(".btn");
+// btn.set({
+//   characters: '█/▓█ ▓█▒▒ ▓░▒ ▓▓▒▓ <▒█▒░ >█> ▓▒▓>▓ ░▓▒>/ ​​▓▓▓',
+//   speed: 120
+// });
+// btn.start();
+// btn.reveal(50000);
 
 const rank = baffle("#rank-title");
 rank.set({

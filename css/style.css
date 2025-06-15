@@ -36,8 +36,9 @@ html, body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  gap: 4rem;
   z-index: 10;
   padding: 2rem;
 }
@@ -47,8 +48,10 @@ html, body {
    ========================================================================== */
 
 .title-container {
-  margin-bottom: 4rem;
+  position: relative;
   text-align: center;
+  margin-bottom: 4rem;
+  z-index: 10;
 }
 
 #titulo {
@@ -687,4 +690,473 @@ html, body {
   .auth-notification.show {
     transform: translateY(0);
   }
+}
+
+/* ==========================================================================
+   PARTÍCULAS FLUTUANTES
+   ========================================================================== */
+
+.floating-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--primary-green);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--primary-green);
+  animation: particleFloat 15s infinite linear;
+}
+
+.particle:nth-child(1) {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+  animation-duration: 12s;
+}
+
+.particle:nth-child(2) {
+  top: 60%;
+  left: 80%;
+  animation-delay: -3s;
+  animation-duration: 18s;
+}
+
+.particle:nth-child(3) {
+  top: 30%;
+  left: 60%;
+  animation-delay: -6s;
+  animation-duration: 15s;
+}
+
+.particle:nth-child(4) {
+  top: 80%;
+  left: 20%;
+  animation-delay: -9s;
+  animation-duration: 20s;
+}
+
+.particle:nth-child(5) {
+  top: 50%;
+  left: 90%;
+  animation-delay: -12s;
+  animation-duration: 14s;
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(0px) translateX(0px) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(50px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   GRID CYBERPUNK
+   ========================================================================== */
+
+.cyberpunk-grid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.05;
+}
+
+.grid-lines-horizontal {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 98px,
+    var(--primary-green) 100px
+  );
+  animation: gridPulse 4s ease-in-out infinite alternate;
+}
+
+.grid-lines-vertical {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 98px,
+    var(--primary-green) 100px
+  );
+  animation: gridPulse 4s ease-in-out infinite alternate 2s;
+}
+
+.glow-spot {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 255, 65, 0.3) 0%, transparent 70%);
+  filter: blur(40px);
+  animation: glowPulse 6s ease-in-out infinite alternate;
+}
+
+.spot-1 {
+  top: 20%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.spot-2 {
+  top: 60%;
+  right: 20%;
+  animation-delay: 2s;
+}
+
+.spot-3 {
+  bottom: 20%;
+  left: 50%;
+  animation-delay: 4s;
+}
+
+@keyframes gridPulse {
+  0% { opacity: 0.05; }
+  100% { opacity: 0.15; }
+}
+
+@keyframes glowPulse {
+  0% { 
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  100% { 
+    opacity: 0.4;
+    transform: scale(1.2);
+  }
+}
+
+/* ==========================================================================
+   TÍTULO CORRIGIDO - SINGLE LINE
+   ========================================================================== */
+
+.title-container {
+  position: relative;
+  text-align: center;
+  margin-bottom: 4rem;
+  z-index: 10;
+}
+
+.title-background-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 150px;
+  background: radial-gradient(ellipse, rgba(0, 255, 65, 0.2) 0%, transparent 70%);
+  filter: blur(40px);
+  animation: titleGlowPulse 4s ease-in-out infinite alternate;
+  z-index: -1;
+}
+
+.enhanced-title {
+  position: relative;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: clamp(2rem, 8vw, 4rem);
+  color: var(--primary-green);
+  text-shadow: 
+    0 0 20px var(--primary-green),
+    0 0 40px var(--primary-green),
+    0 0 80px var(--primary-green);
+  animation: titlePulse 3s ease-in-out infinite alternate;
+  letter-spacing: 0.1em;
+  margin: 0;
+  padding: 1rem 0;
+  overflow: hidden;
+  /* Remove efeitos de glitch problemáticos */
+}
+
+/* Scanline Effect */
+.title-scanline {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.4), transparent);
+  animation: scanlineMove 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.title-subtitle {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.typing-text {
+  color: var(--secondary-green);
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.4rem, 2vw, 0.8rem);
+  letter-spacing: 0.1em;
+  display: inline-block;
+  border-right: 2px solid var(--primary-green);
+  animation: typeWriter 3s steps(25) 1s forwards, blink 1s infinite step-end;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+}
+
+/* Animações */
+@keyframes titlePulse {
+  0% {
+    text-shadow: 
+      0 0 20px var(--primary-green),
+      0 0 40px var(--primary-green),
+      0 0 80px var(--primary-green);
+  }
+  100% {
+    text-shadow: 
+      0 0 30px var(--primary-green),
+      0 0 60px var(--primary-green),
+      0 0 120px var(--primary-green);
+  }
+}
+
+@keyframes titleGlowPulse {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.6; }
+}
+
+@keyframes scanlineMove {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+@keyframes typeWriter {
+  0% { width: 0; }
+  100% { width: 100%; }
+}
+
+@keyframes blink {
+  0%, 50% { border-color: var(--primary-green); }
+  51%, 100% { border-color: transparent; }
+}
+
+/* Responsividade do Título */
+@media screen and (max-width: 768px) {
+  .enhanced-title {
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+    letter-spacing: 0.05em;
+  }
+  
+  .title-background-glow {
+    width: 400px;
+    height: 100px;
+  }
+  
+  .typing-text {
+    font-size: clamp(0.3rem, 1.5vw, 0.6rem);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .enhanced-title {
+    font-size: clamp(1.2rem, 5vw, 2rem);
+  }
+  
+  .title-background-glow {
+    width: 300px;
+    height: 80px;
+  }
+}
+
+/* ==========================================================================
+   BOTÕES MELHORADOS
+   ========================================================================== */
+
+.enhanced-btn {
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border: 2px solid var(--primary-green);
+  transition: all 0.3s ease;
+}
+
+.btn-icon {
+  margin-right: 0.8rem;
+  font-size: 1.2rem;
+  filter: drop-shadow(0 0 10px currentColor);
+}
+
+.btn-border-glow {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--primary-green), var(--neon-blue), var(--primary-green));
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  animation: borderRotate 4s linear infinite;
+}
+
+.enhanced-btn:hover .btn-border-glow {
+  opacity: 0.6;
+}
+
+@keyframes borderRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   ESTATÍSTICAS OVERLAY
+   ========================================================================== */
+
+.stats-overlay {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 100;
+}
+
+.stat-item {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid var(--primary-green);
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  backdrop-filter: blur(10px);
+  text-align: center;
+  min-width: 100px;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+}
+
+.stat-label {
+  display: block;
+  color: var(--secondary-green);
+  font-size: 0.4rem;
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.05em;
+  font-family: 'Press Start 2P', monospace;
+}
+
+.stat-value {
+  color: var(--primary-green);
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-shadow: 0 0 8px var(--primary-green);
+  font-family: 'Press Start 2P', monospace;
+}
+
+/* ==========================================================================
+   MELHORIAS VISUAIS GERAIS
+   ========================================================================== */
+
+/* Garantir que o container principal está bem posicionado */
+.container {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rem;
+  z-index: 10;
+  padding: 2rem;
+}
+
+/* Melhorar o grid cyberpunk para ser mais sutil */
+.cyberpunk-grid {
+  opacity: 0.05; /* Reduzido para não interferir na legibilidade */
+}
+
+/* Ajustar partículas para serem menos intrusivas */
+.floating-particles {
+  opacity: 0.7;
+}
+
+.particle {
+  width: 3px;
+  height: 3px;
+  box-shadow: 0 0 10px var(--primary-green);
+}
+
+/* Melhorar o contraste dos botões */
+.enhanced-btn {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border: 2px solid var(--primary-green);
+  transition: all 0.3s ease;
+}
+
+.enhanced-btn:hover {
+  background: rgba(0, 255, 65, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 255, 65, 0.4);
+}
+
+/* Melhorar as estatísticas */
+.stats-overlay {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 100;
+}
+
+.stat-item {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid var(--primary-green);
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  backdrop-filter: blur(10px);
+  text-align: center;
+  min-width: 100px;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+}
+
+.stat-label {
+  display: block;
+  color: var(--secondary-green);
+  font-size: 0.4rem;
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.05em;
+  font-family: 'Press Start 2P', monospace;
+}
+
+.stat-value {
+  color: var(--primary-green);
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-shadow: 0 0 8px var(--primary-green);
+  font-family: 'Press Start 2P', monospace;
 }

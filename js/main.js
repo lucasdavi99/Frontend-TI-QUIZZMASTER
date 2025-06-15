@@ -566,3 +566,110 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('✅ Controle do botão de perfil configurado');
   console.log('💡 Use debugProfileButton() no console para debug');
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Aguardar um pouco antes de iniciar as animações para evitar conflitos
+    setTimeout(() => {
+        // Simular estatísticas
+        animateCounter('online-users', 0, 42, 2000);
+        animateCounter('total-quizzes', 0, 1337, 3000);
+        
+        // Efeito de hover nos botões
+        enhanceButtonEffects();
+        
+        // Iniciar efeito de digitação no subtítulo
+        startTypingEffect();
+    }, 500);
+});
+
+function animateCounter(elementId, start, end, duration) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+    
+    const startTime = Date.now();
+    const range = end - start;
+    
+    function updateCounter() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const current = Math.floor(start + (range * progress));
+        
+        element.textContent = current.toString().padStart(2, '0');
+        
+        if (progress < 1) {
+            requestAnimationFrame(updateCounter);
+        }
+    }
+    
+    updateCounter();
+}
+
+function enhanceButtonEffects() {
+    const buttons = document.querySelectorAll('.enhanced-btn');
+    
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px) scale(1.05)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+        
+        button.addEventListener('click', function(e) {
+            // Efeito ripple
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}px;
+                top: ${y}px;
+                background: radial-gradient(circle, rgba(0, 255, 65, 0.6) 0%, transparent 70%);
+                border-radius: 50%;
+                transform: scale(0);
+                animation: rippleEffect 0.6s ease-out;
+                pointer-events: none;
+                z-index: 1;
+            `;
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+}
+
+// CSS para o efeito ripple
+const rippleStyle = document.createElement('style');
+rippleStyle.textContent = `
+    @keyframes rippleEffect {
+        0% {
+            transform: scale(0);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(2);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(rippleStyle);
+
+function startTypingEffect() {
+    const typingElement = document.querySelector('.typing-text');
+    if (typingElement) {
+        // Reiniciar a animação de digitação
+        typingElement.style.animation = 'none';
+        setTimeout(() => {
+            typingElement.style.animation = 'typeWriter 3s steps(25) forwards, blink 1s infinite step-end 3s';
+        }, 100);
+    }
+}
