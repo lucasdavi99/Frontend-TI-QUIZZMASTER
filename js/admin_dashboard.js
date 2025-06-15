@@ -369,21 +369,44 @@ class AdminDashboard {
     }
 
     setupQuestionsEventListeners() {
-        document.getElementById('add-question')?.addEventListener('click', () => {
-            this.showQuestionModal();
-        });
+        // Botão adicionar pergunta
+        const addQuestionBtn = document.getElementById('add-question');
+        if (addQuestionBtn) {
+            addQuestionBtn.addEventListener('click', () => {
+                this.showQuestionModal();
+            });
+        }
 
-        document.getElementById('question-cancel')?.addEventListener('click', () => {
-            this.closeModal(document.getElementById('question-modal'));
-        });
+        // Botão refresh perguntas
+        const refreshQuestionsBtn = document.getElementById('refresh-questions');
+        if (refreshQuestionsBtn) {
+            refreshQuestionsBtn.addEventListener('click', () => {
+                this.loadQuestions();
+            });
+        }
 
-        document.getElementById('question-save')?.addEventListener('click', () => {
-            this.saveQuestion();
-        });
+        // Modal de pergunta - botões
+        const questionSaveBtn = document.getElementById('question-save');
+        if (questionSaveBtn) {
+            questionSaveBtn.addEventListener('click', () => {
+                this.saveQuestion();
+            });
+        }
 
-        document.getElementById('question-modal-close')?.addEventListener('click', () => {
-            this.closeModal(document.getElementById('question-modal'));
-        });
+        const questionCancelBtn = document.getElementById('question-cancel');
+        const questionCloseBtn = document.getElementById('question-modal-close');
+        
+        if (questionCancelBtn) {
+            questionCancelBtn.addEventListener('click', () => {
+                this.closeModal(document.getElementById('question-modal'));
+            });
+        }
+
+        if (questionCloseBtn) {
+            questionCloseBtn.addEventListener('click', () => {
+                this.closeModal(document.getElementById('question-modal'));
+            });
+        }
     }
 
     setupReportsEventListeners() {
@@ -606,35 +629,48 @@ class AdminDashboard {
         if (questions.length === 0) {
             container.innerHTML = `
                 <div class="empty-content">
-                    Nenhuma pergunta encontrada
+                    <div class="empty-icon">❓</div>
+                    <h3>Nenhuma pergunta encontrada</h3>
+                    <p>Clique em "Nova Pergunta" para adicionar a primeira pergunta.</p>
                 </div>
             `;
             return;
         }
 
-        container.innerHTML = questions.map(question => `
-            <div class="question-item">
+        container.innerHTML = questions.map((question, index) => `
+            <div class="question-item" data-question-id="${question.id}">
                 <div class="question-header">
-                    <div class="question-content">${question.content}</div>
+                    <div class="question-number">#${question.id}</div>
+                    <div class="question-content">
+                        <h4>${this.escapeHtml(question.content)}</h4>
+                    </div>
                     <div class="question-actions">
-                        <button class="btn-small" onclick="adminDashboard.editQuestion(${question.id})">
+                        <button class="btn-small btn-edit" onclick="adminDashboard.editQuestion(${question.id})" title="Editar pergunta">
                             ✏️ Editar
                         </button>
-                        <button class="btn-small btn-delete" onclick="adminDashboard.deleteQuestion(${question.id})">
+                        <button class="btn-small btn-delete" onclick="adminDashboard.deleteQuestion(${question.id})" title="Deletar pergunta">
                             🗑️ Deletar
                         </button>
                     </div>
                 </div>
                 <div class="answers-list">
-                    ${question.answers.map(answer => `
-                        <div class="answer-item ${answer.isCorrect ? 'correct' : ''}">
-                            ${answer.content}
-                            ${answer.isCorrect ? ' ✓' : ''}
+                    ${question.answers.map((answer, answerIndex) => `
+                        <div class="answer-item ${answer.isCorrect ? 'correct' : 'incorrect'}">
+                            <span class="answer-label">${String.fromCharCode(65 + answerIndex)})</span>
+                            <span class="answer-content">${this.escapeHtml(answer.content)}</span>
+                            ${answer.isCorrect ? '<span class="correct-indicator">✓ Correta</span>' : ''}
                         </div>
                     `).join('')}
                 </div>
             </div>
         `).join('');
+    }
+
+    // Função auxiliar para escapar HTML
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     async loadReports() {
@@ -1055,13 +1091,22 @@ class AdminDashboard {
         const modal = document.getElementById('question-modal');
         const title = document.getElementById('question-modal-title');
         
-        title.textContent = questionData ? 'Editar Pergunta' : 'Nova Pergunta';
-        
         if (questionData) {
+            title.textContent = '✏️ Editar Pergunta';
+            modal.dataset.editMode = 'true';
+            modal.dataset.questionId = questionData.id;
+            
+            // Preencher campo da pergunta
             document.getElementById('question-content').value = questionData.content;
+            
+            // Preencher respostas
             const answerInputs = document.querySelectorAll('#answer-inputs input[type="text"]');
             const radioInputs = document.querySelectorAll('#answer-inputs input[type="radio"]');
             
+            // Limpar seleções anteriores
+            radioInputs.forEach(radio => radio.checked = false);
+            
+            // Preencher dados
             questionData.answers.forEach((answer, index) => {
                 if (answerInputs[index]) {
                     answerInputs[index].value = answer.content;
@@ -1071,6 +1116,9 @@ class AdminDashboard {
                 }
             });
         } else {
+            title.textContent = '➕ Nova Pergunta';
+            modal.dataset.editMode = 'false';
+            delete modal.dataset.questionId;
             document.getElementById('question-form').reset();
         }
 
@@ -1078,17 +1126,22 @@ class AdminDashboard {
     }
 
     async saveQuestion() {
-        const content = document.getElementById('question-content').value;
+        const modal = document.getElementById('question-modal');
+        const isEditMode = modal.dataset.editMode === 'true';
+        const questionId = modal.dataset.questionId;
+        
+        const content = document.getElementById('question-content').value.trim();
         const answerInputs = document.querySelectorAll('#answer-inputs input[type="text"]');
         const correctAnswer = document.querySelector('#answer-inputs input[type="radio"]:checked');
 
-        if (!content.trim()) {
-            this.showMessage('Digite o conteúdo da pergunta!', 'error');
+        // Validações
+        if (!content) {
+            this.showMessage('❌ Digite o conteúdo da pergunta!', 'error');
             return;
         }
 
         if (!correctAnswer) {
-            this.showMessage('Selecione a resposta correta!', 'error');
+            this.showMessage('❌ Selecione a resposta correta!', 'error');
             return;
         }
 
@@ -1098,15 +1151,29 @@ class AdminDashboard {
         }));
 
         if (answers.some(answer => !answer.content)) {
-            this.showMessage('Preencha todas as respostas!', 'error');
+            this.showMessage('❌ Preencha todas as respostas!', 'error');
+            return;
+        }
+
+        // Verificar se há exatamente uma resposta correta
+        const correctCount = answers.filter(answer => answer.isCorrect).length;
+        if (correctCount !== 1) {
+            this.showMessage('❌ Deve haver exatamente uma resposta correta!', 'error');
             return;
         }
 
         try {
-            this.showLoading('Salvando pergunta...');
+            const loadingText = isEditMode ? 'Atualizando pergunta...' : 'Salvando pergunta...';
+            this.showLoading(loadingText);
 
-            const response = await fetch(`${this.apiBaseUrl}/api/questions`, {
-                method: 'POST',
+            const url = isEditMode 
+                ? `${this.apiBaseUrl}/api/questions/${questionId}`
+                : `${this.apiBaseUrl}/api/questions`;
+            
+            const method = isEditMode ? 'PUT' : 'POST';
+
+            const response = await fetch(url, {
+                method: method,
                 headers: {
                     'Authorization': `Bearer ${this.getToken()}`,
                     'Content-Type': 'application/json'
@@ -1118,22 +1185,41 @@ class AdminDashboard {
             });
 
             if (!response.ok) {
-                throw new Error('Erro ao salvar pergunta');
+                if (response.status === 400) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Dados inválidos');
+                } else if (response.status === 403) {
+                    throw new Error('Acesso negado - apenas administradores podem gerenciar perguntas');
+                } else if (response.status === 404 && isEditMode) {
+                    throw new Error('Pergunta não encontrada');
+                }
+                throw new Error('Erro ao processar pergunta');
             }
 
             this.hideLoading();
-            this.closeModal(document.getElementById('question-modal'));
-            this.showMessage('Pergunta salva com sucesso!', 'success');
-            this.loadQuestions();
+            this.closeModal(modal);
+            
+            const successMessage = isEditMode 
+                ? '✅ Pergunta atualizada com sucesso!' 
+                : '✅ Pergunta criada com sucesso!';
+            
+            this.showMessage(successMessage, 'success');
+            
+            // Recarregar dados
+            await this.loadQuestions();
+            await this.loadStats();
 
         } catch (error) {
             this.hideLoading();
-            this.showMessage('Erro ao salvar pergunta: ' + error.message, 'error');
+            console.error('❌ Erro ao salvar pergunta:', error);
+            this.showMessage(`❌ Erro ao salvar pergunta: ${error.message}`, 'error');
         }
     }
 
     async deleteQuestion(questionId) {
-        if (!confirm('Deletar esta pergunta? Esta ação é irreversível!')) return;
+        if (!confirm('❌ Deletar esta pergunta?\n\nEsta ação é IRREVERSÍVEL e pode afetar quizzes em andamento!')) {
+            return;
+        }
 
         try {
             this.showLoading('Deletando pergunta...');
@@ -1147,22 +1233,65 @@ class AdminDashboard {
             });
 
             if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error('Pergunta não encontrada');
+                } else if (response.status === 403) {
+                    throw new Error('Acesso negado - apenas administradores podem deletar perguntas');
+                } else if (response.status === 409) {
+                    throw new Error('Não é possível deletar - pergunta está sendo usada em quizzes ativos');
+                }
                 throw new Error('Erro ao deletar pergunta');
             }
 
             this.hideLoading();
-            this.showMessage('Pergunta deletada com sucesso!', 'success');
-            this.loadQuestions();
+            this.showMessage('✅ Pergunta deletada com sucesso!', 'success');
+            
+            // Atualizar lista e estatísticas
+            await this.loadQuestions();
+            await this.loadStats();
 
         } catch (error) {
             this.hideLoading();
-            this.showMessage('Erro ao deletar pergunta: ' + error.message, 'error');
+            console.error('❌ Erro ao deletar pergunta:', error);
+            this.showMessage(`❌ Erro ao deletar pergunta: ${error.message}`, 'error');
         }
     }
 
-    editQuestion(questionId) {
-        // TODO: Carregar dados da pergunta e abrir modal de edição
-        this.showMessage('Funcionalidade em desenvolvimento', 'warning');
+    async editQuestion(questionId) {
+        try {
+            this.showLoading('Carregando pergunta...');
+
+            // Buscar dados da pergunta
+            const response = await fetch(`${this.apiBaseUrl}/api/questions/${questionId}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.getToken()}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error('Pergunta não encontrada');
+                }
+                throw new Error('Erro ao carregar pergunta');
+            }
+
+            const questionData = await response.json();
+            this.hideLoading();
+
+            // Preencher modal com dados da pergunta
+            this.showQuestionModal(questionData);
+            
+            // Marcar como edição
+            const modal = document.getElementById('question-modal');
+            modal.dataset.editMode = 'true';
+            modal.dataset.questionId = questionId;
+
+        } catch (error) {
+            this.hideLoading();
+            console.error('❌ Erro ao carregar pergunta:', error);
+            this.showMessage(`❌ Erro ao carregar pergunta: ${error.message}`, 'error');
+        }
     }
 
     // Export Methods
@@ -1242,28 +1371,34 @@ class AdminDashboard {
             if (window.authHandler) {
                 window.authHandler.forceLogout();
             }
-            
-            // Redireciona
+
+            // Redireciona para a página inicial
             window.location.href = 'index.html';
         }
     }
 
-    showModal(modal) {
-        modal.style.display = 'flex';
-    }
-
-    closeModal(modal) {
-        modal.style.display = 'none';
-    }
-
-    showLoading(text = 'Carregando...') {
-        const overlay = document.getElementById('loading-overlay');
-        const loadingText = document.getElementById('loading-text');
+    showMessage(message, type = 'info') {
+        const container = document.getElementById('status-container');
+        if (!container) return;
         
-        if (overlay && loadingText) {
-            loadingText.textContent = text;
-            overlay.style.display = 'flex';
+        // Limpa mensagem anterior se existir
+        const existingMessage = container.querySelector('.status-message');
+        if (existingMessage) {
+            existingMessage.remove();
         }
+        
+        // Cria nova mensagem
+        const messageDiv = document.createElement('div');
+        messageDiv.textContent = message;
+        messageDiv.className = `status-message ${type}`;
+        container.appendChild(messageDiv);
+        
+        // Remove mensagem após 5 segundos
+        setTimeout(() => {
+            if (messageDiv.parentNode) {
+                messageDiv.parentNode.removeChild(messageDiv);
+            }
+        }, 5000);
     }
 
     hideLoading() {
@@ -1273,24 +1408,30 @@ class AdminDashboard {
         }
     }
 
-    showMessage(message, type = 'info') {
-        const container = document.getElementById('status-container');
-        if (!container) return;
+    showLoading(text = 'Carregando...') {
+        const overlay = document.getElementById('loading-overlay');
+        const loadingText = document.getElementById('loading-text');
+        
+        if (overlay && loadingText) {
+            overlay.style.display = 'flex';
+            loadingText.textContent = text;
+        }
+    }
 
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `status-message ${type}`;
-        messageDiv.textContent = message;
+    closeModal(modal) {
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
 
-        container.appendChild(messageDiv);
-
-        // Remove message after 5 seconds
-        setTimeout(() => {
-            if (messageDiv.parentNode) {
-                messageDiv.parentNode.removeChild(messageDiv);
-            }
-        }, 5000);
+    showModal(modal) {
+        if (modal) {
+            modal.style.display = 'flex';
+        }
     }
 }
+
+const adminDashboard = new AdminDashboard();// Instância global
 
 // Initialize admin dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
