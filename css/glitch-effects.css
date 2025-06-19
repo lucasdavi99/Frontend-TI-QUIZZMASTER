@@ -21,7 +21,7 @@
   animation: glitch-skew 1s infinite linear alternate-reverse;
 }
 
-.glitch-title::before,
+/* .glitch-title::before,
 .glitch-title::after {
   content: attr(data-text);
   position: absolute;
@@ -41,7 +41,7 @@
   animation: glitch-anim-2 1s infinite linear alternate-reverse;
   color: var(--glitch-blue);
   z-index: -2;
-}
+} */
 
 .glitch-layer {
   position: absolute;
@@ -446,3 +446,23 @@
     animation: none;
   }
 }
+
+/* Comentar ou remover as regras problemáticas do título */
+/*
+.glitch-title::before,
+.glitch-title::after {
+  // Remover ou comentar estes pseudo-elementos
+}
+*/
+
+/* Manter apenas efeitos simples se necessário */
+.glitch-title {
+  /* Efeitos básicos apenas */
+  position: relative;
+}
+
+/* Aplicar glitch apenas nos botões se necessário */
+/* .btn.glitch-btn::before,
+.btn.glitch-btn::after {
+  /* Manter efeitos de glitch apenas para elementos específicos */
+/* } */

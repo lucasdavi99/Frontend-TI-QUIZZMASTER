@@ -1,76 +1,125 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon" />
-    
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="css/reset.css" />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/glitch-effects.css" />
-    <link rel="stylesheet" href="css/code_rain.css" />
-    
-    <!-- External Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-    
-    <!-- External Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
-    
-    <title>T.I QUIZZMASTER</title>
-  </head>
 
-  <body>
-    
-    <!-- Main Container -->
-    <div class="container">
-      <!-- Title with Glitch Effect -->
-      <div class="title-container">
-        <h1 id="titulo" class="glitch-title" data-text="T.I QUIZZMASTER">
-          <span class="glitch-layer">T.I QUIZZMASTER</span>
-        </h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="img/Vector 1.png" type="image/x-icon" />
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/glitch-effects.css" />
+  <link rel="stylesheet" href="css/code_rain.css" />
+
+  <!-- External Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+
+  <!-- External Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
+
+  <title>T.I QUIZZMASTER</title>
+</head>
+
+<body>
+  <!-- Matrix Rain Background -->
+  <canvas id="canvas"></canvas>
+  
+  <!-- Grid Cyberpunk -->
+  <div class="cyberpunk-grid">
+    <div class="grid-lines-horizontal"></div>
+    <div class="grid-lines-vertical"></div>
+    <div class="grid-glow-spots">
+      <div class="glow-spot spot-1"></div>
+      <div class="glow-spot spot-2"></div>
+      <div class="glow-spot spot-3"></div>
+    </div>
+  </div>
+
+  <!-- Partículas Flutuantes -->
+  <div class="floating-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Title with Glitch Effect -->
+    <div class="title-container">
+      <div class="title-background-glow"></div>
+      <h1 id="titulo" class="glitch-title enhanced-title" data-text="T.I QUIZZMASTER">
+        T.I QUIZZMASTER
+        <span class="title-scanline"></span>
+      </h1>
+      <div class="title-subtitle">
+        <span class="typing-text">Sistema de Quiz Interativo</span>
       </div>
-      
-      <!-- Navigation Buttons -->
-      <nav class="navigation">
-        <a class="btn btn-primary" href="questions.html">
-          <span class="btn-text">Começar</span>
-          <span class="btn-bg"></span>
-        </a>
-        <a class="btn btn-secondary" href="rank.html">
-          <span class="btn-text">Ranking</span>
-          <span class="btn-bg"></span>
-        </a>
-        <a class="btn btn-profile hidden" href="profile.html" id="profile-btn">
-          <span class="btn-text">Perfil</span>
-          <span class="btn-bg"></span>
-        </a>
-        <a class="btn btn-tertiary" href="credit.html">
-          <span class="btn-text">Creditos</span>
-          <span class="btn-bg"></span>
-        </a>
-      </nav>
     </div>
 
-    <!-- Login/Logout Button -->
-    <div class="auth-container">
-      <a href="login.html" id="login" class="auth-btn">
-        <img id="loginImage" src="img/login-image.png" alt="login" />
-        <span class="auth-tooltip">Login</span>
+    <!-- Navigation Buttons -->
+    <nav class="navigation enhanced-nav">
+      <a class="btn btn-primary enhanced-btn" href="questions.html">
+        <span class="btn-icon">▶</span>
+        <span class="btn-text">Começar</span>
+        <span class="btn-bg"></span>
+        <span class="btn-border-glow"></span>
       </a>
+      <a class="btn btn-secondary enhanced-btn" href="rank.html">
+        <span class="btn-icon">👑</span>
+        <span class="btn-text">Ranking</span>
+        <span class="btn-bg"></span>
+        <span class="btn-border-glow"></span>
+      </a>
+      <a class="btn btn-profile enhanced-btn hidden" href="profile.html" id="profile-btn">
+        <span class="btn-icon">👤</span>
+        <span class="btn-text">Perfil</span>
+        <span class="btn-bg"></span>
+        <span class="btn-border-glow"></span>
+      </a>
+      <a class="btn btn-tertiary enhanced-btn" href="credit.html">
+        <span class="btn-icon">ℹ</span>
+        <span class="btn-text">Creditos</span>
+        <span class="btn-bg"></span>
+        <span class="btn-border-glow"></span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Login/Logout Button -->
+  <div class="auth-container">
+    <a href="login.html" id="login" class="auth-btn">
+      <img id="loginImage" src="img/login-image.png" alt="login" />
+      <span class="auth-tooltip">Login</span>
+    </a>
+  </div>
+
+  <!-- Statistics Overlay -->
+  <div class="stats-overlay">
+    <div class="stat-item">
+      <span class="stat-label">Usuários Online</span>
+      <span class="stat-value" id="online-users">--</span>
     </div>
+    <div class="stat-item">
+      <span class="stat-label">Quizzes Realizados</span>
+      <span class="stat-value" id="total-quizzes">--</span>
+    </div>
+  </div>
 
-    <!-- Audio -->
-    <audio id="backgroundAudio" autoplay loop>
-      <source src="audio/Spektrem_Shine.mp3" />
-    </audio>
+  <!-- Audio -->
+  <audio id="backgroundAudio" autoplay loop>
+    <source src="audio/Spektrem_Shine.mp3" />
+  </audio>
 
-    <!-- JavaScript Files -->
-    <script src="js/rain_code.js"></script>
-    <script src="js/glitch-effects.js"></script>
-    <script src="js/auth-handler.js"></script>
-    <script src="js/main.js"></script>
-  </body>
+  <!-- JavaScript Files -->
+  <script src="js/rain_code.js"></script>
+  <script src="js/glitch-effects.js"></script>
+  <script src="js/auth-handler.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
 </html>

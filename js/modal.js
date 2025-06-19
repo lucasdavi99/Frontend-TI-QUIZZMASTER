@@ -1,7 +1,6 @@
 // 🔧 MODAL.JS 
 
 var modal = document.getElementById("myModal");
-var span = document.getElementsByClassName("close")[0];
 var modalText = document.getElementById("modalText");
 
 // 🔧 CORREÇÃO: Função para fechar o modal
@@ -9,8 +8,13 @@ function closeModal() {
   if (modal) {
     modal.style.display = "none";
     modal.classList.remove("active");
+    modal.classList.remove("game-end");
     
-    // 🔧 ADICIONADO: Remove qualquer timer de redirecionamento ativo
+    // 🔧 ADICIONADO: Limpar flags
+    window.gameEnded = false;
+    window.gameEndModalActive = false;
+    
+    // 🔧 ADICIONADO: Limpar timer se existir
     if (window.modalRedirectTimer) {
       clearTimeout(window.modalRedirectTimer);
       window.modalRedirectTimer = null;
@@ -18,31 +22,28 @@ function closeModal() {
   }
 }
 
-// Event listener para o botão X
-if (span) {
-  span.onclick = function() {
-    closeModal();
-  }
-}
-
 // Event listener para clique fora do modal
 window.onclick = function(event) {
   if (event.target == modal) {
-    closeModal();
-    
-    // 🔧 CORREÇÃO: Só redireciona se estiver no contexto de fim de jogo
-    if (window.gameEnded || (modalText && modalText.textContent.includes("Fim do jogo"))) {
-      // 🔧 ADICIONADO: Delay para permitir que o usuário veja que o modal fechou
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 500);
+    // 🔧 ADICIONADO: Não permitir fechar modal de fim de jogo clicando fora
+    if (window.gameEndModalActive) {
+      console.log('⚠️ Modal de fim de jogo não pode ser fechado manualmente');
+      return;
     }
+    
+    closeModal();
   }
 }
 
 // 🔧 ADICIONADO: Event listener para tecla ESC
 document.addEventListener('keydown', function(event) {
   if (event.key === 'Escape' && modal && modal.style.display === 'block') {
+    // 🔧 ADICIONADO: Não permitir fechar modal de fim de jogo com ESC
+    if (window.gameEndModalActive) {
+      console.log('⚠️ Modal de fim de jogo não pode ser fechado com ESC');
+      return;
+    }
+    
     closeModal();
   }
 });
@@ -53,15 +54,19 @@ function showModal(text, autoRedirect = false, redirectDelay = 5000) {
   
   if (!modal || !modalText) {
     console.error('❌ Elementos do modal não encontrados');
-    // Fallback para alert se o modal não estiver disponível
     alert(text);
+    if (autoRedirect) {
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, redirectDelay);
+    }
     return;
   }
   
   // Define o texto do modal
   modalText.textContent = text;
   
-  // 🔧 ADICIONADO: Garante que o modal tenha o z-index correto
+  // 🔧 ADICIONADO: Garantir z-index e posicionamento corretos
   modal.style.zIndex = "99999";
   modal.style.position = "fixed";
   modal.style.top = "0";
@@ -73,42 +78,68 @@ function showModal(text, autoRedirect = false, redirectDelay = 5000) {
   modal.style.display = "block";
   modal.classList.add("active");
   
-  // 🔧 ADICIONADO: Força o foco no modal para acessibilidade
+  // 🔧 ADICIONADO: Força o foco no modal
   modal.focus();
   
   console.log('✅ Modal exibido com sucesso');
   
-  // 🔧 ADICIONADO: Auto-redirecionamento opcional
+  // 🔧 CORREÇÃO: Auto-redirecionamento obrigatório
   if (autoRedirect) {
-    console.log(`⏱️ Auto-redirecionamento em ${redirectDelay/1000} segundos`);
+    console.log(`⏱️ Redirecionamento OBRIGATÓRIO em ${redirectDelay/1000} segundos`);
+    
+    // 🔧 ADICIONADO: Limpar timer anterior se existir
+    if (window.modalRedirectTimer) {
+      clearTimeout(window.modalRedirectTimer);
+    }
     
     window.modalRedirectTimer = setTimeout(() => {
-      console.log('🔄 Redirecionamento automático ativado');
+      console.log('🔄 Executando redirecionamento automático...');
+      
+      // 🔧 ADICIONADO: Limpar flags
+      window.gameEnded = false;
+      window.gameEndModalActive = false;
+      
+      // 🔧 ADICIONADO: Remover classe especial
+      if (modal) {
+        modal.classList.remove('game-end');
+      }
+      
       closeModal();
       window.location.href = "index.html";
     }, redirectDelay);
   }
 }
 
-// 🔧 ADICIONADO: Função específica para fim de jogo
+// 🔧 MODIFICADO: Função específica para fim de jogo com 7 segundos
 function showGameEndModal(message, score = null, isSuccess = false) {
-  let fullMessage = message;
-  
-  if (score !== null) {
-    fullMessage += ` Pontuação final: ${score}`;
-  }
-  
-  if (isSuccess) {
-    fullMessage += " 🎉";
-  }
-  
-  // Marca que o jogo terminou
-  window.gameEnded = true;
-  
-  // Mostra modal com redirecionamento automático
-  showModal(fullMessage, true, 5000);
-  
-  console.log('🏁 Modal de fim de jogo exibido');
+    let fullMessage = message;
+    
+    if (score !== null) {
+        fullMessage += ` Pontuação final: ${score}`;
+    }
+    
+    if (isSuccess) {
+        fullMessage += " 🎉";
+    }
+    
+    // 🔧 ADICIONADO: Adicionar informação sobre redirecionamento
+    fullMessage += "\n\nRedirecionando em 7 segundos...";
+    
+    // Marca que o jogo terminou
+    window.gameEnded = true;
+    
+    // 🔧 ADICIONADO: Aplicar classe especial ao modal
+    if (modal) {
+        modal.classList.add('game-end');
+    }
+    
+    // 🔧 CORREÇÃO: Desabilitar clique fora do modal para fim de jogo
+    window.gameEndModalActive = true;
+    
+    // Mostra modal com redirecionamento automático em 7 segundos
+    showModal(fullMessage, true, 7000);
+    
+    console.log('🏁 Modal de fim de jogo exibido - redirecionamento OBRIGATÓRIO em 7 segundos');
 }
 
 // 🔧 ADICIONADO: Função para mostrar modal de erro
@@ -152,9 +183,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   if (!modalText) {
     console.error('❌ Elemento modalText não encontrado');
-  }
-  if (!span) {
-    console.error('❌ Elemento close não encontrado');
   }
   
   // 🔧 ADICIONADO: Garante que o modal esteja oculto inicialmente

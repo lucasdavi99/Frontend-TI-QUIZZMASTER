@@ -19,7 +19,7 @@ function detectEnvironment() {
         return 'staging';
     }
     
-    // Ambiente de produção
+    // Ambiente de produção - ajuste conforme seu domínio
     return 'production';
 }
 
@@ -32,13 +32,14 @@ const ENVIRONMENT_CONFIG = {
         ENABLE_MOCK_DATA: true
     },
     staging: {
-        API_BASE_URL: 'https://api-staging.tisuizzmaster.com', // Substitua pela URL real
+        API_BASE_URL: 'https://api-staging.yourdomain.com', // Substitua pela URL real
         DEBUG: true,
         API_TIMEOUT: 15000,
         ENABLE_MOCK_DATA: false
     },
     production: {
-        API_BASE_URL: 'https://api.tisuizzmaster.com', // Substitua pela URL real de produção
+        // Para Docker Compose, o frontend acessa a API através do Nginx
+        API_BASE_URL: window.location.origin + '/api',
         DEBUG: false,
         API_TIMEOUT: 20000,
         ENABLE_MOCK_DATA: false
@@ -105,7 +106,11 @@ const CONFIG = {
         PROFILE_STATS: '/api/profile/stats',
         UPDATE_USERNAME: '/api/profile/username',
         UPDATE_PASSWORD: '/api/profile/password',
-        DELETE_ACCOUNT: '/api/profile/account'
+        DELETE_ACCOUNT: '/api/profile/account',
+
+        // Reset de Senha
+        FORGOT_PASSWORD: '/auth/forgot-password',
+        RESET_PASSWORD: '/auth/reset-password',
     },
     
     // Configurações de aparência
@@ -238,10 +243,9 @@ CONFIG.getEnvironmentInfo = function() {
     Object.freeze(CONFIG.THEME);
 })();
 
-// Compatibilidade para navegadores antigos
-if (typeof window !== 'undefined') {
-    window.CONFIG = CONFIG;
-}
+// 🆕 COMPATIBILIDADE: Exporta variáveis globais para retrocompatibilidade
+window.API_BASE_URL = CONFIG.API_BASE_URL;
+window.CONFIG = CONFIG;
 
 // Export para módulos (se necessário)
 if (typeof module !== 'undefined' && module.exports) {
